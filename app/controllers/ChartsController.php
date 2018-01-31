@@ -6,7 +6,7 @@ class ChartsController extends ControllerBase {
 	}
 	public function indexAction() {
 	}
-	public function uncalledAction() {
+	public function uncallAction() {
 		
 		/*
 		 * Method 1 also available;
