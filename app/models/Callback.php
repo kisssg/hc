@@ -1,0 +1,46 @@
+<?php
+use Phalcon\Mvc\Model;
+class Callback extends Model {
+	public $id;
+	public $type;
+	public $contract_no;
+	public $client_name;
+	public $contact_info;
+	public $contact_info2;
+	public $city;
+	public $visit_date;
+	public $responsible_person;
+	public $remark_phone;
+	public $remark_detail;
+	public $actual_paid_amt;
+	public $team_leader;
+	public $manager;
+	public $contact_person;
+	public $is_connected;
+	public $is_meet;
+	public $paid_date;
+	public $paid_method_q3;
+	public $paid_amt_q4;
+	public $is_contacted;
+	public $contact_type;
+	public $is_harassed;
+	public $harass_type;
+	public $issue_type;
+	public $complaint_obj;
+	public $harass_detail;
+	public $issue_time;
+	public $sensitive_word;
+	public $has_evidence;
+	public $evidence_channel;
+	public $has_paid;
+	public $paid_method;
+	public $paid_amount;
+	public $got_understood;
+	public $remark;
+	public $qc_name;
+	public $check_time;
+	public $delete_time;
+	public $actual_caller;
+	public $data_uploader;
+	public $upload_time;
+}

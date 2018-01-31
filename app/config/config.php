@@ -12,7 +12,7 @@ return new \Phalcon\Config([
         'host'        => 'dchs895',
         'username'    => 'qm_admin',
         'password'    => '523333',
-        'dbname'      => 'test',
+        'dbname'      => 'qm_oa',
         'charset'     => 'utf8mb4',
     ],
     'application' => [
