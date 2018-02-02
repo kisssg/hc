@@ -45,6 +45,36 @@ var SignIn = {
 	}
 }
 
+var Drawer = {
+	type : "bar",
+	drawChart : function(ctx, title, label, labels, data) {
+		return new Chart(ctx, {
+			type : this.type,
+			data : {
+				labels : labels,
+				datasets : [ {
+					label : label,
+					data : data,
+					borderWidth : 1
+				} ]
+			},
+			options : {
+				title : {
+					display : true,
+					text : title
+				},
+				scales : {
+					yAxes : [ {
+						ticks : {
+							beginAtZero : true
+						}
+					} ]
+				}
+			}
+		})
+	}
+}
+
 $(document).ready(
 		function() {
 			/*
@@ -58,48 +88,13 @@ $(document).ready(
 					counts[i] = res[i].count;
 				}
 				var ctx = document.getElementById("uncall").getContext('2d');
-				var myChart = new Chart(ctx, {
-					type : 'bar',
-					data : {
-						labels : qcs,
-						datasets : [ {
-							label : '# uncall',
-							data : counts,
-							backgroundColor : [ 'rgba(255, 99, 132, 0.2)',
-									'rgba(54, 162, 235, 0.2)',
-									'rgba(255, 206, 86, 0.2)',
-									'rgba(75, 192, 192, 0.2)',
-									'rgba(153, 102, 255, 0.2)',
-									'rgba(255, 159, 64, 0.2)',
-									'rgba(255, 99, 132, 0.2)' ],
-							borderColor : [ 'rgba(255,99,132,1)',
-									'rgba(54, 162, 235, 1)',
-									'rgba(255, 206, 86, 1)',
-									'rgba(75, 192, 192, 1)',
-									'rgba(153, 102, 255, 1)',
-									'rgba(255, 159, 64, 1)',
-									'rgba(255,99,132,1)' ],
-							borderWidth : 1
-						} ]
-					},
-					options : {
-						scales : {
-							yAxes : [ {
-								ticks : {
-									beginAtZero : true
-								}
-							} ]
-						}
-					}
-				});
+				Drawer.drawChart(ctx,"Uncall counts in hand","uncall",qcs,counts);
 
 			})
-			
-			
+
 			/*
 			 * AJAX fetch the totalCalled statics and show in bar chart.
 			 */
-
 			$.post("charts/totalcalled", "", function(data) {
 				var qcs = [], counts = [];
 				res = JSON.parse(data);
@@ -107,28 +102,9 @@ $(document).ready(
 					qcs[i] = res[i].qc;
 					counts[i] = res[i].count;
 				}
-				var ctx = document.getElementById("totalcalled").getContext(
-						'2d');
-				var myChart = new Chart(ctx, {
-					type : 'bar',
-					data : {
-						labels : qcs,
-						datasets : [ {
-							label : '# TotalCalled',
-							data : counts,
-							borderWidth : 1
-						} ]
-					},
-					options : {
-						scales : {
-							yAxes : [ {
-								ticks : {
-									beginAtZero : true
-								}
-							} ]
-						}
-					}
-				});
-
+				var ctx = $("#totalcalled");
+				var dr=Drawer;
+				dr.type="bar";
+				dr.drawChart(ctx,"Total called count", "totalcalled", qcs, counts);
 			})
 		})
