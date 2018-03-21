@@ -2,16 +2,15 @@ var SignUp = {
 	name : "SignUp",
 	description : "",
 	check : function(id) {
-		if ($.trim($("#" + id)[0].value) == '') {
+		if ($.trim($("#" + id)[0].val()) == '') {
 			$("#" + id)[0].focus();
 			return false;
 		}
 		;
-
 		return true;
 	},
 	validate : function() {
-		if (SignUp.check("name") == false) {
+		if (SignUp.check("username") == false) {
 			return false;
 		}
 		if (SignUp.check("email") == false) {
@@ -23,7 +22,7 @@ var SignUp = {
 			return false;
 		}
 		url = "signup/register";
-		name = $("#name")[0].value;
+		name = $("#username")[0].value;
 		email = $("#email")[0].value;
 		args = {
 			"name" : name,
@@ -75,36 +74,41 @@ var Drawer = {
 	}
 }
 
-$(document).ready(
-		function() {
-			/*
-			 * AJAX fetch the unCall statics and show in bar chart.
-			 */
-			$.post("charts/uncall", "", function(data) {
-				var qcs = [], counts = [];
-				res = JSON.parse(data);
-				for (i = 0; i < res.length; i++) {
-					qcs[i] = res[i].qc;
-					counts[i] = res[i].count;
-				}
-				var ctx = document.getElementById("uncall").getContext('2d');
-				Drawer.drawChart(ctx,"Uncall counts in hand","uncall",qcs,counts);
+var Charts = {
+	/*
+	 * AJAX fetch the unCall statics and show in bar chart.
+	 */
+	showUncall : function() {
+		$.post("uncall", "", function(data) {
+			var qcs = [], counts = [], res = JSON.parse(data);
+			for (i = 0; i < res.length; i++) {
+				qcs[i] = res[i].qc;
+				counts[i] = res[i].count;
+			}
+			var ctx = document.getElementById("uncall").getContext('2d');
+			Drawer.drawChart(ctx, "Uncall counts in hand", "uncall", qcs,
+					counts);
+			// alert(qcs);
 
-			})
+		});
+	},
 
-			/*
-			 * AJAX fetch the totalCalled statics and show in bar chart.
-			 */
-			$.post("charts/totalcalled", "", function(data) {
-				var qcs = [], counts = [];
-				res = JSON.parse(data);
-				for (i = 0; i < res.length; i++) {
-					qcs[i] = res[i].qc;
-					counts[i] = res[i].count;
-				}
-				var ctx = $("#totalcalled");
-				var dr=Drawer;
-				dr.type="bar";
-				dr.drawChart(ctx,"Total called count", "totalcalled", qcs, counts);
-			})
-		})
+	/*
+	 * AJAX fetch the totalCalled statics and show in bar chart.
+	 */
+	showCalled : function() {
+		$.post("totalcalled", "",
+				function(data) {
+					var qcs = [], counts = [], res = JSON.parse(data);
+					for (i = 0; i < res.length; i++) {
+						qcs[i] = res[i].qc;
+						counts[i] = res[i].count;
+					}
+					var ctx = $("#totalcalled");
+					var dr = Drawer;
+					dr.type = "bar";
+					dr.drawChart(ctx, "Total called count", "totalcalled", qcs,
+							counts);
+				});
+	}
+}

@@ -13,7 +13,6 @@
     <body>
         {{ content() }}
         {{ javascript_include('js/jquery-1.11.3.min.js') }}
-        {{ javascript_include('js/json.js') }}
         {{ javascript_include('js/bootstrap.min.js') }}
         {{ javascript_include('js/Chart.bundle.min.js') }}        
         {{ javascript_include('js/ajax.js') }}

@@ -1,5 +1,7 @@
 <?php
 use Phalcon\Di\FactoryDefault;
+use Phalcon\Mvc\Dispatcher;
+use Phalcon\Events\Manager as EventsManager;
 
 error_reporting(E_ALL);
 
@@ -13,6 +15,39 @@ try {
      * the services that provide a full stack framework.
      */
     $di = new FactoryDefault();
+    
+    $di->set(
+    		'dispatcher',
+    		function () {
+    			// Create an events manager
+    			$eventsManager = new EventsManager();
+    			
+    			// Listen for events produced in the dispatcher using the Security plugin
+    			/* $eventsManager->attach(
+    					'dispatch:beforeExecuteRoute',
+    					new MytestPlugin()
+    					); */
+    			
+    			// Listen for events produced in the dispatcher using the Security plugin
+    			$eventsManager->attach(
+    					'dispatch:beforeExecuteRoute',
+    					new SecurityPlugin()
+    					);
+    			
+    			// Handle exceptions and not-found exceptions using NotFoundPlugin
+    			$eventsManager->attach(
+    					'dispatch:beforeException',
+    					new NotFoundPlugin()
+    					);
+    			
+    			$dispatcher = new Dispatcher();
+    			
+    			// Assign the events manager to the dispatcher
+    			$dispatcher->setEventsManager($eventsManager);
+    			
+    			return $dispatcher;
+    		}
+    		);
 
     /**
      * Handle routes

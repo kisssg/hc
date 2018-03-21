@@ -5,7 +5,13 @@ class ChartsController extends ControllerBase {
 		parent::initialize ();
 	}
 	public function indexAction() {
+		echo "dd";
 	}
+	public function signinAction(){
+		$this->session->set('auth', [
+				'id' => 1,
+				'name' => 'sucre'
+		]);}
 	public function uncallAction() {
 		
 		/*

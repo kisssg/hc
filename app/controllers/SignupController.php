@@ -11,7 +11,7 @@ class SignupController extends ControllerBase {
 		
 		// Store and check for errors
 		$success = $user->save ( $this->request->getPost (), [ 
-				"name",
+				"username",
 				"email", 
 		] );
 		
