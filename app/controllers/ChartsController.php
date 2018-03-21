@@ -27,7 +27,8 @@ class ChartsController extends ControllerBase {
 		$callback = Callback::find ( [ 
 				"columns" => "distinct(qc_name) as qc,count(is_connected) as count",
 				"conditions" => "(is_connected='' or is_connected='24小时跟踪回拨') and qc_name not in('已删除','sucre xu','scarlett deng')",
-				"group" => "qc_name" 
+				"group" => "qc_name",
+				"order" => "count desc"
 		] );
 		echo JSON_encode ( $callback );
 		
@@ -38,7 +39,8 @@ class ChartsController extends ControllerBase {
 		$callback = Callback::find ( [ 
 				"columns" => "distinct(qc_name) as qc,count(is_connected) as count",
 				"conditions" => "is_connected !='' and is_connected !='24小时跟踪回拨' and qc_name not in('fcqc qc','已删除','sucre xu','scarlett deng')",
-				"group" => "qc_name" 
+				"group" => "qc_name" ,
+				"order" => "count"
 		] );
 		echo JSON_encode ( $callback );
 		$this->view->disable ();

@@ -45,7 +45,7 @@ var SignIn = {
 }
 
 var Drawer = {
-	type : "bar",
+	type : 'horizontalBar',
 	drawChart : function(ctx, title, label, labels, data) {
 		return new Chart(ctx, {
 			type : this.type,
@@ -106,7 +106,7 @@ var Charts = {
 					}
 					var ctx = $("#totalcalled");
 					var dr = Drawer;
-					dr.type = "bar";
+					dr.type = 'horizontalBar';
 					dr.drawChart(ctx, "Total called count", "totalcalled", qcs,
 							counts);
 				});
