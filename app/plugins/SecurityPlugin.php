@@ -46,7 +46,7 @@ class SecurityPlugin extends Plugin
 
 			//Private area resources
 			$privateResources = [
-				'charts'    => ['index', 'uncall', 'totalcalled'],
+				'charts'    => ['signin'],
 				'invoices'     => ['index', 'profile']
 			];
 			foreach ($privateResources as $resource => $actions) {
@@ -60,7 +60,7 @@ class SecurityPlugin extends Plugin
 				'errors'     => ['show401', 'show404', 'show500'],
 				'session'    => ['index', 'register', 'start', 'end'],
 				'index'    => ['index'],
-				'charts'	 => ['index','signin']
+				'charts'	 => ['index','uncall', 'totalcalled']
 			];
 			foreach ($publicResources as $resource => $actions) {
 				$acl->addResource(new Resource($resource), $actions);

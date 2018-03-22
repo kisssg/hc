@@ -45,8 +45,15 @@ var SignIn = {
 }
 
 var Drawer = {
-	type : 'horizontalBar',
-	drawChart : function(ctx, title, label, labels, data) {
+	type : 'horizontalBar',	
+	colorArr:function(length,shade){
+		var colors=[];
+		for(i=0;i<length;i++){
+			colors[i]='rgba('+Math.ceil(Math.random()*255) +', '+Math.ceil(Math.random()*255) +','+Math.ceil(Math.random()*255) +', '+shade+')';
+		}
+		return colors;
+	},
+	drawChart : function(ctx, title, label, labels, data) {		
 		return new Chart(ctx, {
 			type : this.type,
 			data : {
@@ -54,7 +61,10 @@ var Drawer = {
 				datasets : [ {
 					label : label,
 					data : data,
-					borderWidth : 1
+					borderWidth : 1,
+					backgroundColor:this.colorArr(data.length,0.3),
+					borderColor:this.colorArr(data.length,0.6)
+
 				} ]
 			},
 			options : {
@@ -68,7 +78,7 @@ var Drawer = {
 							beginAtZero : true
 						}
 					} ]
-				}
+				},
 			}
 		})
 	}
@@ -88,7 +98,6 @@ var Charts = {
 			var ctx = document.getElementById("uncall").getContext('2d');
 			Drawer.drawChart(ctx, "Uncall counts in hand", "uncall", qcs,
 					counts);
-			// alert(qcs);
 
 		});
 	},

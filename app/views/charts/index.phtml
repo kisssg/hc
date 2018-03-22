@@ -56,7 +56,7 @@
 			<canvas id="totalcalled" width="100%" height="50%"></canvas>
 
 		<button class='btn btn-default' onclick='return Charts.showCalled();'>Show called</button>
-		<a class='btn btn-default' href='signin' target='_blank'>SignIn</a>
+		<?= $this->tag->linkTo(['charts/signin', 'SignIn', 'class' => 'btn btn-default','target'=>'_blank']) ?>
 		
 	
 
