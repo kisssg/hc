@@ -20,9 +20,10 @@ echo $this->tag->tagHtml ( "input",[
 										"class" => "btn btn-default",
 										"onclick"=>"return SignIn.login();"								
 								] )
-								?>
-        
+								?>        
     </p>
 
 </form>
 
+<?php echo $this->tag->javascriptInclude('js/signup.js');
+?>

@@ -2,7 +2,7 @@
 
 use Phalcon\Mvc\Model;
 
-class User extends Model{
+class Users extends Model{
 	public $id;
 	public $username;
 	public $email;

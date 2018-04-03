@@ -11,7 +11,9 @@ class ChartsController extends ControllerBase {
 		$this->session->set('auth', [
 				'id' => 1,
 				'name' => 'sucre'
-		]);}
+		]);
+		echo $this->tag->linkto(["../qmtest/test.php","test"]);
+	}
 	public function uncallAction() {
 		
 		/*
