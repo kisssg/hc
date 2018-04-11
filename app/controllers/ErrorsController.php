@@ -5,26 +5,19 @@
  *
  * Manage errors
  */
-class ErrorsController extends ControllerBase
-{
-    public function initialize()
-    {
-        $this->tag->setTitle('Oops!');
-        parent::initialize();
-    }
-
-    public function show404Action()
-    {
-
-    }
-
-    public function show401Action()
-    {
-
-    }
-
-    public function show500Action()
-    {
-
-    }
+class ErrorsController extends ControllerBase {
+	public function initialize() {
+		$this->tag->setTitle ( 'Oops!' );
+		parent::initialize ();
+	}
+	public function show404Action() {
+	}
+	public function show40101Action() {
+		echo '{"result":"Unauthorized"}';
+		$this->view->disable ();
+	}
+	public function show401Action() {
+	}
+	public function show500Action() {
+	}
 }

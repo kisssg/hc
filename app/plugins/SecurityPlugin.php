@@ -28,7 +28,7 @@ class SecurityPlugin extends Plugin {
 			// Register roles
 			$roles = [ 
 					'users' => new Role ( 'Users', 'Member privileges, granted after sign in.' ),
-					'admins' => new Role('Administrators','Admin privileges, granted after sign in.'),
+					'admins' => new Role ( 'Administrators', 'Admin privileges, granted after sign in.' ),
 					'guests' => new Role ( 'Guests', 'Anyone browsing the site who is not signed in is considered to be a "Guest".' ) 
 			];
 			
@@ -47,9 +47,9 @@ class SecurityPlugin extends Plugin {
 							'done',
 							'delete',
 							'deletebybatch',
-							'get' ,
+							'get',
 							'grant',
-							'getstatus'
+							'getstatus' 
 					],
 					'invoices' => [ 
 							'index',
@@ -72,6 +72,7 @@ class SecurityPlugin extends Plugin {
 					],
 					'errors' => [ 
 							'show401',
+							'show40101',
 							'show404',
 							'show500' 
 					],
@@ -92,6 +93,10 @@ class SecurityPlugin extends Plugin {
 					],
 					'mysterymonitor' => [ 
 							'index' 
+					],
+					'workstatus' => [ 
+							'items',
+							'getpermission' 
 					] 
 			];
 			foreach ( $publicResources as $resource => $actions ) {
@@ -152,6 +157,14 @@ class SecurityPlugin extends Plugin {
 		
 		$allowed = $acl->isAllowed ( $role, $controller, $action );
 		if (! $allowed) {
+			if ($controller === "workstatus") {
+				
+				$dispatcher->forward ( [ 
+						'controller' => 'errors',
+						'action' => 'show40101' 
+				] );
+				return false;
+			}
 			$dispatcher->forward ( [ 
 					'controller' => 'errors',
 					'action' => 'show401' 

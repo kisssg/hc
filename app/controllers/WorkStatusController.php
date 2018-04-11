@@ -1,10 +1,13 @@
 <?php
+use Phalcon\Paginator\Adapter\Model as PaginatorModel;
 class WorkStatusController extends ControllerBase {
 	protected function initialize() {
 		$this->tag->setTitle ( "WorkStatus" );
 	}
 	public function indexAction() {
-		// $this->view->disable();
+		$this->dispatcher->forward ( [ 
+				'action' => 'items' 
+		] );
 	}
 	/*
 	 * create a work status
@@ -142,7 +145,7 @@ class WorkStatusController extends ControllerBase {
 	/*
 	 * get a work status' status through qc,work,batch
 	 */
-	public function getStatusAction($qc = null, $work = null, $batch = null) {
+	public function getPermissionAction($qc = null, $work = null, $batch = null) {
 		try {
 			if ($qc === null || $work === null || $batch === null) {
 				throw new exception ( "Parameters not enough" );
@@ -155,14 +158,14 @@ class WorkStatusController extends ControllerBase {
 							"batch" => "$batch" 
 					] 
 			] );
-			if($w===false){
-				throw new exception("reject");
+			if ($w === false) {
+				throw new exception ( "reject" );
 			}
 			$rightNow = date ( "Y-m-d H:i:s" );
 			if ($rightNow < $w->grantDeadLine || $w->status == "doing") {
 				echo "permit"; // if status is 'doing' or grantDeadline not expired grant permit
-			}else{
-				throw new exception("reject");
+			} else {
+				throw new exception ( "reject" );
 			}
 		} catch ( exception $e ) {
 			echo $e->getMessage ();
@@ -188,6 +191,12 @@ class WorkStatusController extends ControllerBase {
 	 */
 	public function grantAction($id = null, $grantDeadline = null) {
 		try {
+			
+			// check if user is allowed to do the grant action;
+			$level = $this->session->auth ['level'];
+			if ($level < 11) {
+				throw new exception ( "Not authorized" );
+			}
 			if ($id == null || $grantDeadline == null) {
 				throw new exception ( "Parameters not enough" );
 			}
@@ -205,5 +214,75 @@ class WorkStatusController extends ControllerBase {
 			echo '{"result":"' . $e->getmessage () . '"}';
 		}
 		$this->view->disable ();
-	}	
+	}
+	public function itemsAction($work = null, $batch = null) {
+		try {
+			// Current page to show
+			// In a controller/component this can be:
+			// $this->request->getQuery("page", "int"); // GET
+			// $this->request->getPost("page", "int"); // POST
+			$currentPage = $this->request->getQuery ( "page", "int" );
+			if ($work == null || $batch == null) {
+				throw new exception ( "parameters not enough" );
+			}
+		} catch ( exception $e ) {
+			echo $e->getmessage ();
+			$this->view->disable ();
+		}
+		$criteria = [ 
+				"work = :work: AND batch = :batch:",
+				"bind" => [ 
+						"work" => "$work",
+						"batch" => "$batch" 
+				] 
+		];
+		
+		// The data set to paginate
+		
+		$workstatus = WorkStatus::find ( $criteria );
+		// Create a Model paginator, show 10 rows by page starting from $currentPage
+		$paginator = new PaginatorModel ( [ 
+				"data" => $workstatus,
+				"limit" => 20,
+				"page" => $currentPage 
+		] );
+		
+		// Get the paginated results
+		$page = $paginator->getPaginate ();
+		echo "<table class='contracts' style='width:auto;'>
+		<tr>
+		<th>ID</th>
+		<th>qc</th>
+		<th>work</th>
+		<th>batch</th>
+		<th>status</th>
+		<th>action</th>
+		</tr>";
+		
+		foreach ( $page->items as $item ) {
+			if ($item->grantDeadLine > date ( "Y-m-d H:i:s" )) {
+				$status = "granting";
+			} else {
+				$status = $item->status;
+			}
+			echo "<tr>
+        <td>" . $item->id . "</td>" . "
+        <td>" . $item->qc . "</td>
+        <td>" . $item->work . "</td>
+        <td>" . $item->batch . "</td>
+		<td>" . $status . "</td>
+		<td><button class='btn btn-default btn-xs' onclick='return WorkStatus.grant(" . $item->id . ")'>Grant</button></td>
+    	</tr>";
+		}
+		echo "</table>";
+		echo '<div class="clearfix pagination">
+	<a class="number" href="?page=1">&laquo;</a>' . '
+	<a class="number" href="?page=' . $page->before . '">&lsaquo;</a>
+	<a class="number" href="?page=' . $page->next . '">&rsaquo;</a>
+	<a class="number" href="?page=' . $page->last . '">&raquo;</a>
+	</div>
+	' . $page->current, "/", $page->total_pages;
+		echo $this->tag->javascriptInclude ( 'js/moment.min.js' );
+		echo $this->tag->javascriptInclude ( 'js/workstatus.js' );
+	}
 }

@@ -5,6 +5,7 @@
         {{ get_title() }}
         {{ stylesheet_link('css/bootstrap.min.css') }}
         {{ stylesheet_link('css/bootstrap-theme.min.css') }}
+        {{ stylesheet_link('css/min.css') }}
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
         <meta name="description" content="Your invoices">
