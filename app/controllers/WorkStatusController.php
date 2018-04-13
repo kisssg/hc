@@ -233,8 +233,9 @@ class WorkStatusController extends ControllerBase {
 				"work = :work: AND batch = :batch:",
 				"bind" => [ 
 						"work" => "$work",
-						"batch" => "$batch" 
-				] 
+						"batch" => "$batch"
+				] ,
+				"order" => "status,donetime"
 		];
 		
 		// The data set to paginate
@@ -243,7 +244,7 @@ class WorkStatusController extends ControllerBase {
 		// Create a Model paginator, show 10 rows by page starting from $currentPage
 		$paginator = new PaginatorModel ( [ 
 				"data" => $workstatus,
-				"limit" => 20,
+				"limit" => 50,
 				"page" => $currentPage 
 		] );
 		
@@ -251,26 +252,29 @@ class WorkStatusController extends ControllerBase {
 		$page = $paginator->getPaginate ();
 		echo "<table class='contracts' style='width:auto;'>
 		<tr>
-		<th>ID</th>
-		<th>qc</th>
-		<th>work</th>
-		<th>batch</th>
-		<th>status</th>
-		<th>action</th>
+		<th>No.</th>
+		<th>QC</th>
+		<th>Work</th>
+		<th>Batch</th>
+		<th>Status</th>
+		<th>DoneTime</th>
+		<th>Action</th>
 		</tr>";
-		
+		$i=0;
 		foreach ( $page->items as $item ) {
 			if ($item->grantDeadLine > date ( "Y-m-d H:i:s" )) {
 				$status = "granting";
 			} else {
 				$status = $item->status;
 			}
+			$i++;
 			echo "<tr>
-        <td>" . $item->id . "</td>" . "
+        <td>" . $i. "</td>" . "
         <td>" . $item->qc . "</td>
         <td>" . $item->work . "</td>
         <td>" . $item->batch . "</td>
 		<td>" . $status . "</td>
+		<td>" . $item->donetime . "</td>
 		<td><button class='btn btn-default btn-xs' onclick='return WorkStatus.grant(" . $item->id . ")'>Grant</button></td>
     	</tr>";
 		}
