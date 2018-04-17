@@ -58,7 +58,10 @@ class WorkStatusController extends ControllerBase {
 					] 
 			] );
 			if ($w === false) {
-				throw new exception ( "Work status not exists" );
+				$this->addAction($qc,$work,$batch);
+				$this->doneAction($qc,$work,$batch);
+				return;
+				//throw new exception ( "Work status not exists" );
 			}
 			if ($w->status === "done") {
 				throw new exception ( "Already done:)" );
