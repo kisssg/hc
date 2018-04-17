@@ -60,6 +60,7 @@ class WorkStatusController extends ControllerBase {
 			if ($w === false) {
 				$this->addAction($qc,$work,$batch);
 				$this->doneAction($qc,$work,$batch);
+				echo '{"result":"ok","reason":"ok"}';
 				return;
 				//throw new exception ( "Work status not exists" );
 			}
