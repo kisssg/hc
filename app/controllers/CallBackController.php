@@ -109,7 +109,7 @@ class CallBackController extends ControllerBase
             if ($cb->create() === false) {
                 throw new exception("something wrong");
             } else {
-                echo '{"result":"success","msg":"' . $cb->id . '"}';
+                echo '{"result":"success","msg":"' . $cb->id . '","date":"'.$upload_batch.'"}';
             }
         } catch (exception $e) {
             echo '{"result":"failed","msg":"' . $e->getmessage() . '"}';
