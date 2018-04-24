@@ -39,8 +39,11 @@ class Callback extends Model {
 	public $remark;
 	public $qc_name;
 	public $check_time;
+	public $check_date;
 	public $delete_time;
 	public $actual_caller;
 	public $data_uploader;
 	public $upload_time;
+	public $upload_batch;
+	public $create_type;
 }

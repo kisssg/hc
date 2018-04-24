@@ -54,6 +54,9 @@ class SecurityPlugin extends Plugin {
 					'invoices' => [ 
 							'index',
 							'profile' 
+					],
+					'callback' =>[
+						'add'
 					] 
 			];
 			foreach ( $privateResources as $resource => $actions ) {
