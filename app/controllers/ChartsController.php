@@ -67,4 +67,7 @@ class ChartsController extends ControllerBase
         echo JSON_encode($callback);
         $this->view->disable();
     }
+    public function dingcheckedAction(){
+        
+    }
 }
