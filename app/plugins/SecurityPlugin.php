@@ -100,7 +100,8 @@ class SecurityPlugin extends Plugin
                             'index',
                             'uncall',
                             'totalcalled',
-                            'signin'
+                            'signin',
+                    		'dingchecked'
                     ],
                     'mysterymonitor' => [
                             'index'

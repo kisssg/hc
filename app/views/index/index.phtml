@@ -1,6 +1,63 @@
-<?php
-echo "<h1>Hello!</h1>";
-echo PHP_EOL;
-echo PHP_EOL;
 
-echo $this->tag->linkTo ( "mysterymonitor", "mysteryMonitor" );
+<!-- 为ECharts准备一个具备大小（宽高）的Dom -->
+<div id="main" style="width: 600px; height: 100px;"></div>
+<button id='increase'
+	onclick="javascript:(document.getElementById('main').setAttribute('style','width: 600px; height: 500px;'));return c.draw();return c.test();">+++</button>
+<script type="text/javascript">
+var c={
+ draw:function(){var myChart = echarts.init(document.getElementById('main'));
+
+        option = {
+    title: {
+        text: '领用核查情况',
+        subtext: ''
+    },
+    tooltip: {
+        trigger: 'axis',
+        axisPointer: {
+            type: 'shadow'
+        }
+    },
+    legend: {
+        data: ['领取', '已查']
+    },
+    grid: {
+        left: '3%',
+        right: '4%',
+        bottom: '3%',
+        containLabel: true
+    },
+    xAxis: {
+        type: 'value',
+        boundaryGap: [0, 0.01]
+    },
+    yAxis: {
+        type: 'category',
+        data: ['Fangzhi','Roug','Ye','Jane','Tita','总计']
+    },
+    series: [
+        {
+            name: '领取',
+            type: 'bar',
+            data: [450, 234, 294, 100, 134, 3300]
+        },
+        {
+            name: '已查',
+            type: 'bar',
+            data: [325, 231, 210, 99, 131, 2180]
+        },
+        {
+            name: '剩余',
+            type: 'bar',
+            data: [325, 231, 210, 99, 131, 2180]
+        }
+    ]
+};
+
+        myChart.setOption(option);
+},
+test:function(){
+	alert($("#main").text());
+}
+}
+    </script>
