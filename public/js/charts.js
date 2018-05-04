@@ -10,45 +10,64 @@ var Drawer = {
 	randomColor: function (shade) {
 		return 'rgba(' + Math.ceil(Math.random() * 255) + ', ' + Math.ceil(Math.random() * 255) + ',' + Math.ceil(Math.random() * 255) + ', ' + shade + ')';
 	},
-	drawChart: function (ctx, title, label, labels, data) {
-		return new Chart(ctx, {
-			type: this.type,
-			data: {
-				labels: labels,
-				datasets: [{
-					label: label,
-					data: data,
-					borderWidth: 1,
-					backgroundColor: this.randomColor(0.8),
-					borderColor: this.randomColor(0.9)
-
-				}]
-			},
-			options: {
-				title: {
-					display: true,
-					text: title
-				}
-			}
-		})
+	drawChart: function (ctx, options) {
+		return new Chart(ctx, options);
 	}
 }
 
 var Charts = {
 	/*
-	 * AJAX fetch the unCall statics and show in bar chart.
+	 * AJAX fetch the unCall statics and show in chart.
 	 */
+	resetCanvas: function () {
+		$("#canvasDiv").text("");
+	},
 	showUncall: function () {
-		$.post("uncall", "", function (data) {
+		var startDate = $("#startDate").val(),
+			endDate = $("#endDate").val();
+
+		var args = {
+			"startDate": startDate,
+			"endDate": endDate
+		};
+
+		$.post("uncall", args, function (data) {
 			var qcs = [], counts = [], res = JSON.parse(data);
 			for (i = 0; i < res.length; i++) {
 				qcs[i] = res[i].qc;
 				counts[i] = res[i].count;
 			}
-			var ctx = document.getElementById("chartCanvas").getContext('2d');
-			ctx.restore();
-			ctx.clearRect(0, 0,ctx.canvas.width, ctx.canvas.height);
-			Drawer.drawChart(ctx, "Uncall counts in hand", "uncall", qcs,counts).update();
+			var canvasHeight=res.length * 7;
+			var rndnum = Math.ceil(Math.random() * 100);
+			var canvasID = "newChartCanvas" + rndnum;
+			$("#canvasDiv").append("<canvas id='" + canvasID + "' height='" + canvasHeight + "px'></canvas>");
+			var ctx = document.getElementById(canvasID).getContext('2d');
+
+			var dr = Drawer;
+			var options = {
+				type: "horizontalBar",
+				data: {
+					labels: qcs,
+					datasets: [{
+						label: "uncall",
+						data: counts,
+						borderWidth: 1,
+						backgroundColor: dr.randomColor(0.8),
+					}]
+				},
+				options: {
+					title: {
+						display: true,
+						text: "Uncall counts in hand"
+					},
+					scales: {
+						yAxes: [{
+							beginAtZero: true
+						}]
+					}
+				}
+			};
+			dr.drawChart(ctx, options).update();
 		});
 	},
 
@@ -56,19 +75,70 @@ var Charts = {
 	 * AJAX fetch the totalCalled statics and show in bar chart.
 	 */
 	showCalled: function () {
-		$.post("totalcalled", "",
+		var startDate = $("#startDate").val(), endDate = $("#endDate").val();
+		var args = {
+			"startDate": startDate,
+			"endDate": endDate
+		}
+		$.post("totalcalled", args,
 			function (data) {
-				var qcs = [], counts = [], counts1 = [], res = JSON.parse(data);
+				var qcs = [], called = [], total = [], uncall = [], res = JSON.parse(data);
 				for (i = 0; i < res.length; i++) {
 					qcs[i] = res[i].qc;
-					counts[i] = res[i].called;
-					//counts1[i] = res[i].uncall;
+					called[i] = res[i].called;
+					total[i] = res[i].total;
+					uncall[i] = total[i] - called[i];
 				}
-				var ctx = document.getElementById("chartCanvas").getContext('2d');
-				ctx.restore();
+
+				var canvasHeight=res.length * 15;
+				
+				var rndnum = Math.ceil(Math.random() * 100);
+				var canvasID = "newChartCanvas" + rndnum;
+				$("#canvasDiv").append("<canvas id='" + canvasID + "' height='" + canvasHeight + "px'></canvas>");
+				var ctx = document.getElementById(canvasID).getContext('2d');
 				var dr = Drawer;
-				dr.type = 'horizontalBar';
-				dr.drawChart(ctx, "Total called count", "called", qcs,counts).update();
+				var options = {
+					type: "horizontalBar",
+					data: {
+						labels: qcs,
+						datasets: [{
+							label: "called",
+							data: called,
+							borderWidth: 1,
+							stack: "stack 0",
+							backgroundColor: dr.randomColor(0.8),
+						}, {
+							label: "uncall",
+							data: uncall,
+							borderWidth: 1,
+							stack: "stack 0",
+							backgroundColor: dr.randomColor(0.8),
+						}, {
+							label: "total",
+							data: total,
+							borderWidth: 1,
+							stack: "stack 1",
+							backgroundColor: dr.randomColor(0.8),
+						}]
+					},
+					options: {
+						title: {
+							display: true,
+							text: "called & total counts:" +startDate + " - " + endDate
+						},
+						scales: {
+							xAxes: [{
+								stacked: true,
+								beginAtZero: true
+							}],
+							yAxes: [{
+								stacked: true
+							}]
+						}
+
+					}
+				};
+				dr.drawChart(ctx, options).update();
 			});
 	}
 }

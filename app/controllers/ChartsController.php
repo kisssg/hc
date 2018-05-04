@@ -27,23 +27,36 @@ class ChartsController extends ControllerBase {
 		 *
 		 * but we use this, it's more simple and readable:)
 		 */
+		$startDate=$this->request->getPost("startDate");
+		$endDate=$this->request->getPost("endDate");
+		
 		$callback = Callback::find ( [ 
 				"columns" => "distinct(qc_name) as qc,count(is_connected) as count",
-				"conditions" => "(is_connected='' or is_connected='24小时跟踪回拨') and qc_name not in('已删除','sucre xu','scarlett deng')",
+				"conditions" => "upload_time between :startDate: and :endDate: and (is_connected='' or is_connected='24小时跟踪回拨') and qc_name not in('已删除','sucre xu','scarlett deng')",
 				"group" => "qc_name",
-				"order" => "count desc" 
+				"order" => "count desc",
+				"bind" =>[
+						"startDate" => "$startDate",
+						"endDate" => "$endDate"
+				] 
 		] );
 		echo JSON_encode ( $callback );
 		
 		// disable the html code, so only get the JSON string above:)
 		$this->view->disable ();
 	}
-	public function totalcalledAction() {
+	public function totalcalledAction() {		
+		$startDate=$this->request->getPost("startDate");
+		$endDate=$this->request->getPost("endDate");
 		$callback = Callback::find ( [ 
-				"columns" => "distinct(qc_name) as qc,COUNT(NULLIF('', is_connected)) as called",
-				"conditions" => "qc_name not in('fcqc qc','已删除','sucre xu','scarlett deng')",
+				"columns" => "distinct(qc_name) as qc,COUNT(NULLIF('', is_connected)) as called,count(*) as total",
+				"conditions" => "upload_time between :startDate: and :endDate: and qc_name not in('fcqc qc','已删除','sucre xu','scarlett deng')",
 				"group" => "qc_name",
-				"order" => "called" 
+				"order" => "called",
+				"bind" =>[
+						"startDate" => "$startDate",
+						"endDate" => "$endDate"
+				] 
 		] );
 		echo JSON_encode ( $callback );
 		$this->view->disable ();
