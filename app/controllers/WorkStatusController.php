@@ -198,7 +198,7 @@ class WorkStatusController extends ControllerBase {
 			
 			// check if user is allowed to do the grant action;
 			$level = $this->session->auth ['level'];
-			if ($level < 11) {
+			if ($level < 10) {
 				throw new exception ( "Not authorized" );
 			}
 			if ($id == null || $grantDeadline == null) {
