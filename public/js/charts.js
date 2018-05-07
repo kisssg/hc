@@ -37,7 +37,7 @@ var Charts = {
 				qcs[i] = res[i].qc;
 				counts[i] = res[i].count;
 			}
-			var canvasHeight=res.length * 7;
+			var canvasHeight = res.length * 7;
 			var rndnum = Math.ceil(Math.random() * 100);
 			var canvasID = "newChartCanvas" + rndnum;
 			$("#canvasDiv").append("<canvas id='" + canvasID + "' height='" + canvasHeight + "px'></canvas>");
@@ -76,22 +76,29 @@ var Charts = {
 	 */
 	showCalled: function () {
 		var startDate = $("#startDate").val(), endDate = $("#endDate").val();
+		if (startDate == "" || endDate == "") {
+			alert("Select batch range first.");
+			return;
+		};
 		var args = {
 			"startDate": startDate,
 			"endDate": endDate
 		}
 		$.post("totalcalled", args,
 			function (data) {
-				var qcs = [], called = [], total = [], uncall = [], res = JSON.parse(data);
+				var qcs = [], called = [], total = [], uncall = [], unconnected = [], connected = [], connectRate = [], res = JSON.parse(data);
 				for (i = 0; i < res.length; i++) {
 					qcs[i] = res[i].qc;
 					called[i] = res[i].called;
 					total[i] = res[i].total;
 					uncall[i] = total[i] - called[i];
+					unconnected[i] = res[i].unconnected - uncall[i];
+					connected[i] = called[i] - unconnected[i];
+					connectRate[i] = connected[i] / (connected[i] + unconnected[i]);
 				}
 
-				var canvasHeight=res.length * 15;
-				
+				var canvasHeight = res.length * 15;
+
 				var rndnum = Math.ceil(Math.random() * 100);
 				var canvasID = "newChartCanvas" + rndnum;
 				$("#canvasDiv").append("<canvas id='" + canvasID + "' height='" + canvasHeight + "px'></canvas>");
@@ -102,8 +109,14 @@ var Charts = {
 					data: {
 						labels: qcs,
 						datasets: [{
-							label: "called",
-							data: called,
+							label: "connected",
+							data: connected,
+							borderWidth: 1,
+							stack: "stack 0",
+							backgroundColor: dr.randomColor(0.8),
+						}, {
+							label: "unconnected",
+							data: unconnected,
 							borderWidth: 1,
 							stack: "stack 0",
 							backgroundColor: dr.randomColor(0.8),
@@ -113,18 +126,12 @@ var Charts = {
 							borderWidth: 1,
 							stack: "stack 0",
 							backgroundColor: dr.randomColor(0.8),
-						}, {
-							label: "total",
-							data: total,
-							borderWidth: 1,
-							stack: "stack 1",
-							backgroundColor: dr.randomColor(0.8),
 						}]
 					},
 					options: {
 						title: {
 							display: true,
-							text: "called & total counts:" +startDate + " - " + endDate
+							text: "called & total counts:" + startDate + " - " + endDate
 						},
 						scales: {
 							xAxes: [{
@@ -133,7 +140,8 @@ var Charts = {
 							}],
 							yAxes: [{
 								stacked: true
-							}]
+
+							},]
 						}
 
 					}

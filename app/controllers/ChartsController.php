@@ -49,7 +49,7 @@ class ChartsController extends ControllerBase {
 		$startDate=$this->request->getPost("startDate");
 		$endDate=$this->request->getPost("endDate");
 		$callback = Callback::find ( [ 
-				"columns" => "distinct(qc_name) as qc,COUNT(NULLIF('', is_connected)) as called,count(*) as total",
+				"columns" => "distinct(qc_name) as qc,COUNT(NULLIF('', is_connected)) as called,count(*) as total,count(nullif('接通',is_connected)) as unconnected",
 				"conditions" => "upload_time between :startDate: and :endDate: and qc_name not in('fcqc qc','已删除','sucre xu','scarlett deng')",
 				"group" => "qc_name",
 				"order" => "called",
@@ -71,5 +71,8 @@ class ChartsController extends ControllerBase {
 		foreach ( $group as $row ) {
 			echo "The count of qc ", $row->qc_name, " is ", $row->rowcount, "<br/>";
 		}
+	}
+	public function connectedCallAction(){
+				
 	}
 }
