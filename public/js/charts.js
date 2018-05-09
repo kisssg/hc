@@ -97,7 +97,7 @@ var Charts = {
 					connectRate[i] = connected[i] / (connected[i] + unconnected[i]);
 				}
 
-				var canvasHeight = res.length * 15;
+				var canvasHeight = res.length * 8;
 
 				var rndnum = Math.ceil(Math.random() * 100);
 				var canvasID = "newChartCanvas" + rndnum;
