@@ -64,8 +64,11 @@ class ChartsController extends ControllerBase {
 	public function dingCheckedAction($visitDate) {
 		$group = Journals::count ( [ 
 				"column" => "qc_name",
-				"conditions" => "visit_date='$visitDate' and validity!=''",
-				"group" => "qc_name" 
+				"conditions" => "visit_date= :visitDate: and validity!=''",
+				"group" => "qc_name",
+				"bind"=>[
+						"visitDate"=>"$visitDate"
+				]
 		] );
 		echo json_encode ( $group );
 		$this->view->disable ();
@@ -73,10 +76,22 @@ class ChartsController extends ControllerBase {
 	public function dingUncheckedAction($visitDate) {
 		$group = Journals::count ( [ 
 				"column" => "qc_name",
-				"conditions" => "visit_date='$visitDate' and validity =''",
-				"group" => "qc_name"
+				"conditions" => "visit_date= :visitDate: and validity =''",
+				"group" => "qc_name",
+				"bind"=>[
+						"visitDate"=>"$visitDate"
+				]
 		] );
 		echo json_encode ( $group );
 		$this->view->disable ();
+	}
+	public function  harassRateAction(){		
+		$startDate = $this->request->getPost ( "startDate" );
+		$endDate = $this->request->getPost ( "endDate" );
+		$group=Callback::count([
+				"column"=>"qc_name",
+				"conditions"=>"check_time between :startDate: and :endDate:",
+				"group"=>"qc_name"
+		]);
 	}
 }

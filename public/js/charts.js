@@ -94,10 +94,10 @@ var Charts = {
 					uncall[i] = total[i] - called[i];
 					unconnected[i] = res[i].unconnected - uncall[i];
 					connected[i] = called[i] - unconnected[i];
-					connectRate[i] = connected[i] / (connected[i] + unconnected[i]);
+					connectRate[i] = (connected[i] / (connected[i] + unconnected[i])) * 100;
 				}
 
-				var canvasHeight = res.length * 8;
+				var canvasHeight = res.length * 10;
 
 				var rndnum = Math.ceil(Math.random() * 100);
 				var canvasID = "newChartCanvas" + rndnum;
@@ -111,32 +111,62 @@ var Charts = {
 						datasets: [{
 							label: "connected",
 							data: connected,
+							xAxisID: 'x-axis-1',
 							borderWidth: 1,
 							stack: "stack 0",
 							backgroundColor: dr.randomColor(0.8),
 						}, {
 							label: "unconnected",
 							data: unconnected,
+							xAxisID: 'x-axis-1',
 							borderWidth: 1,
 							stack: "stack 0",
 							backgroundColor: dr.randomColor(0.8),
 						}, {
 							label: "uncall",
 							data: uncall,
+							xAxisID: 'x-axis-1',
 							borderWidth: 1,
 							stack: "stack 0",
+							backgroundColor: dr.randomColor(0.8),
+						}, {
+							label: "connectRate%",
+							data: connectRate,
+							xAxisID: 'x-axis-2',
+							borderWidth: 1,
+							stack: "stack 1",
 							backgroundColor: dr.randomColor(0.8),
 						}]
 					},
 					options: {
 						title: {
 							display: true,
-							text: "called & total counts:" + startDate + " - " + endDate
+							text: "call volumn overview:" + startDate + " - " + endDate
 						},
 						scales: {
 							xAxes: [{
 								stacked: true,
-								beginAtZero: true
+								beginAtZero: true,
+								type: 'linear', // only linear but allow scale type registration. This allows extensions to exist solely for log scale for instance
+								display: true,
+								position: 'bottom',
+								id: 'x-axis-1',
+								scaleLabel: {
+									display: true,
+									labelString: 'Volume'
+								},
+							}, {
+								type: 'linear', // only linear but allow scale type registration. This allows extensions to exist solely for log scale for instance
+								display: true,
+								position: 'top',
+								id: 'x-axis-2',
+								scaleLabel: {
+									display: true,
+									labelString: 'Percentage'
+								},
+								gridLines: {
+									drawOnChartArea: false
+								}
 							}],
 							yAxes: [{
 								stacked: true
