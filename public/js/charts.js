@@ -173,7 +173,6 @@ var Charts = {
 
 							},]
 						}
-
 					}
 				};
 				dr.drawChart(ctx, options).update();
