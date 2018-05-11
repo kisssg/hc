@@ -61,14 +61,18 @@ class ChartsController extends ControllerBase {
 		echo JSON_encode ( $callback );
 		$this->view->disable ();
 	}
-	public function dingCheckedAction($visitDate) {
-		$group = Journals::count ( [ 
-				"column" => "qc_name",
-				"conditions" => "visit_date= :visitDate: and validity!=''",
+	public function dingCheckAction() {
+		$startDate = $this->request->getPost ( "startDate" );
+		$endDate = $this->request->getPost ( "endDate" );
+		$group = Journals::find ( [ 
+				"columns" => "distinct(qc_name) as qc,count(qc_name) as total,count(nullif('',validity)) as checked, count(nullif('A',validity)) as NA,count(nullif('B',validity)) as NB,count(nullif('C',validity)) as NC,count(nullif('D',validity)) as ND",
+				"conditions" => "visit_date between :startDate: and :endDate: and qc_name != 'tool'",
 				"group" => "qc_name",
-				"bind"=>[
-						"visitDate"=>"$visitDate"
-				]
+				"order"=>"total",
+				"bind" => [ 
+						"startDate" => "$startDate",
+						"endDate"=>"$endDate"
+				] 
 		] );
 		echo json_encode ( $group );
 		$this->view->disable ();
@@ -78,20 +82,33 @@ class ChartsController extends ControllerBase {
 				"column" => "qc_name",
 				"conditions" => "visit_date= :visitDate: and validity =''",
 				"group" => "qc_name",
-				"bind"=>[
-						"visitDate"=>"$visitDate"
-				]
+				"bind" => [ 
+						"visitDate" => "$visitDate" 
+				] 
 		] );
 		echo json_encode ( $group );
 		$this->view->disable ();
 	}
-	public function  harassRateAction(){		
-		$startDate = $this->request->getPost ( "startDate" );
-		$endDate = $this->request->getPost ( "endDate" );
-		$group=Callback::count([
-				"column"=>"qc_name",
-				"conditions"=>"check_time between :startDate: and :endDate:",
-				"group"=>"qc_name"
-		]);
+	public function harassRecieveRateAction() {
+		
+		/*
+		 * $startDate = $this->request->getPost ( "startDate" );
+		 * $endDate = $this->request->getPost ( "endDate" );
+		 */
+		$startDate = '2018-05-01';
+		$endDate = '2018-05-09';
+		$group = Callback::find ( [ 
+				"columns" => "distinct(qc_name),COUNT(*),count(nullif('Y 是',is_harassed))",
+				"conditions" => "(check_time between :startDate: and :endDate:)",
+				"group" => "qc_name",
+				"bind" => [ 
+						"startDate" => "$startDate",
+						"endDate" => "$endDate" 
+				] 
+		] );
+		echo json_encode ( $group );
+		$this->view->disable ();
+	}
+	public function visitCheckAction() {
 	}
 }

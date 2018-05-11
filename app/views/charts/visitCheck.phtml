@@ -33,9 +33,9 @@
 			</ul>
 			-->
 				<ul class="nav navbar-nav navbar-right">
-					<li><a href="visitCheck">DingCheck</a></li>
+					<li class="active"><a href="#">DingCheck</a></li>
 					<li><a href="#">OSV monitor</a></li>
-					<li class="active"><a href="#">Call back<span class="sr-only">(current)</span></a></li>
+					<li><a href="index">Call back</a></li>
 				</ul>
 			</div>
 			<!--/.nav-collapse -->
@@ -44,16 +44,14 @@
 </div>
 <div class="container" style="position: relative; top: 50px;">
 
-	<h1>Data Charts of call back</h1>
-	<p>All the call back process data charts</p>
+	<h1>DingCheck overview</h1>
 	
 	<div id='canvasDiv' style="width: 100%; height: 100%">
 	</div>
-	Upload batch:<input type='text' class='datetimepicker' id='startDate'
+	Visit Date:<input type='text' class='datepicker' id='startDate'
 		value='' placeholder='startDate' />-<input type='text'
-		class='datetimepicker' id='endDate' value='' placeholder='endDate' />
-	<button class='btn-xs' onclick='return Charts.showCalled();'>Show/refresh called</button>
-	<!-- <button class='btn-xs' onclick='return Charts.showUncall();'>Show/refresh uncall</button> -->
+		class='datepicker' id='endDate' value='' placeholder='endDate' />
+	<button class='btn-xs' onclick='return Charts.visitOverview();'>Show/refresh visit overview</button>
 	<button class='btn-xs' onclick='return Charts.resetCanvas();'>Clear Charts</button>
 	<!--$this->tag->linkTo(['charts/signin', 'SignIn', 'class' => 'btn btn-default','target'=>'_blank']) -->
 

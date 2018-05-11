@@ -22,7 +22,7 @@ var Charts = {
 	resetCanvas: function () {
 		$("#canvasDiv").text("");
 	},
-	showUncall: function () {
+	visitOverview: function () {
 		var startDate = $("#startDate").val(),
 			endDate = $("#endDate").val();
 
@@ -31,11 +31,18 @@ var Charts = {
 			"endDate": endDate
 		};
 
-		$.post("uncall", args, function (data) {
-			var qcs = [], counts = [], res = JSON.parse(data);
+		$.post("dingCheck", args, function (data) {
+			console.log(data);
+			var qcs = [], A = [], B = [], C = [], D = [], total = [], checked = [], uncheck = [], res = JSON.parse(data);
 			for (i = 0; i < res.length; i++) {
 				qcs[i] = res[i].qc;
-				counts[i] = res[i].count;
+				total[i] = res[i].total;
+				checked[i] = res[i].checked;
+				uncheck[i] = total[i] - checked[i];
+				A[i] = checked[i] - res[i].NA;
+				B[i] = checked[i] - res[i].NB;
+				C[i] = checked[i] - res[i].NC;
+				D[i] = checked[i] - res[i].ND;
 			}
 			var canvasHeight = res.length * 7;
 			var rndnum = Math.ceil(Math.random() * 100);
@@ -49,21 +56,51 @@ var Charts = {
 				data: {
 					labels: qcs,
 					datasets: [{
-						label: "uncall",
-						data: counts,
+						label: "A",
+						data: A,
 						borderWidth: 1,
+						stack: "stack 0",
+						backgroundColor: dr.randomColor(0.8),
+					}, {
+						label: "B",
+						data: B,
+						borderWidth: 1,
+						stack: "stack 0",
+						backgroundColor: dr.randomColor(0.8),
+					}, {
+						label: "C",
+						data: C,
+						borderWidth: 1,
+						stack: "stack 0",
+						backgroundColor: dr.randomColor(0.8),
+					}, {
+						label: "D",
+						data: D,
+						borderWidth: 1,
+						stack: "stack 0",
+						backgroundColor: dr.randomColor(0.8),
+					}, {
+						label: "uncheck",
+						data: uncheck,
+						borderWidth: 1,
+						stack: "stack 0",
 						backgroundColor: dr.randomColor(0.8),
 					}]
 				},
 				options: {
 					title: {
 						display: true,
-						text: "Uncall counts in hand"
+						text: "Dingcheck overview :" +startDate + " - " + endDate
 					},
 					scales: {
 						yAxes: [{
-							beginAtZero: true
-						}]
+							beginAtZero: true,
+							stacked: true
+						}],
+						xAxes: [{
+							stacked: true
+
+						},]
 					}
 				}
 			};
@@ -178,4 +215,5 @@ var Charts = {
 				dr.drawChart(ctx, options).update();
 			});
 	}
+
 }
