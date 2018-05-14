@@ -32,6 +32,10 @@ var Charts = {
 		};
 
 		$.post("dingCheck", args, function (data) {
+			if (data == '[]') {//no data.
+				alert("无可显示数据！");
+				return;
+			}
 			console.log(data);
 			var qcs = [], A = [], B = [], C = [], D = [], total = [], checked = [], uncheck = [], res = JSON.parse(data);
 			for (i = 0; i < res.length; i++) {
@@ -39,10 +43,10 @@ var Charts = {
 				total[i] = res[i].total;
 				checked[i] = res[i].checked;
 				uncheck[i] = total[i] - checked[i];
-				A[i] = checked[i] - res[i].NA;
-				B[i] = checked[i] - res[i].NB;
-				C[i] = checked[i] - res[i].NC;
-				D[i] = checked[i] - res[i].ND;
+				A[i] = total[i] - res[i].NA;
+				B[i] = total[i] - res[i].NB;
+				C[i] = total[i] - res[i].NC;
+				D[i] = total[i] - res[i].ND;
 			}
 			var canvasHeight = res.length * 7;
 			var rndnum = Math.ceil(Math.random() * 100);
@@ -90,7 +94,7 @@ var Charts = {
 				options: {
 					title: {
 						display: true,
-						text: "Dingcheck overview :" +startDate + " - " + endDate
+						text: "Dingcheck overview :" + startDate + " - " + endDate
 					},
 					scales: {
 						yAxes: [{
@@ -123,6 +127,10 @@ var Charts = {
 		}
 		$.post("totalcalled", args,
 			function (data) {
+				if (data == '[]') {//no data.
+					alert("无可显示数据！");
+					return;
+				}
 				var qcs = [], called = [], total = [], uncall = [], unconnected = [], connected = [], connectRate = [], res = JSON.parse(data);
 				for (i = 0; i < res.length; i++) {
 					qcs[i] = res[i].qc;
