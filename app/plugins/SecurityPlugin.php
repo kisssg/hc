@@ -100,12 +100,11 @@ class SecurityPlugin extends Plugin
                             'index',
                             'uncall',
                             'totalcalled',
-                    		'harassRecieveRate',
+                    		'harassRecieved',
                             'signin',
-                    		'dingChecked',
-                    		'dingUnchecked',
                     		'visitCheck',
-                    		'dingCheck'
+                    		'dingCheck',
+                    		'workStatus'
                     ],
                     'mysterymonitor' => [
                             'index'

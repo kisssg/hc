@@ -49,10 +49,11 @@
 	
 	<div id='canvasDiv' style="width: 100%; height: 100%">
 	</div>
-	Upload batch:<input type='text' class='datetimepicker' id='startDate'
+	Upload batch range/check time range:<input type='text' class='datetimepicker' id='startDate'
 		value='' placeholder='startDate' />-<input type='text'
 		class='datetimepicker' id='endDate' value='' placeholder='endDate' />
-	<button class='btn-xs' onclick='return Charts.showCalled();'>Show/refresh called</button>
+	<button class='btn-xs' onclick='return Charts.batchOverview();'>Batch overview</button>
+	<button class='btn-xs' onclick='return Charts.showHarass();'>Harass Rate</button>
 	<!-- <button class='btn-xs' onclick='return Charts.showUncall();'>Show/refresh uncall</button> -->
 	<button class='btn-xs' onclick='return Charts.resetCanvas();'>Clear Charts</button>
 	<!--$this->tag->linkTo(['charts/signin', 'SignIn', 'class' => 'btn btn-default','target'=>'_blank']) -->
@@ -60,5 +61,6 @@
 </div>
 <!-- /container -->
 <?php
+echo $this->tag->javascriptInclude ( 'js/moment.min.js' );
 echo $this->tag->javascriptInclude ( 'js/charts.js?t=0514' );
 ?>

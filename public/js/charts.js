@@ -115,7 +115,7 @@ var Charts = {
 	/*
 	 * AJAX fetch the totalCalled statics and show in bar chart.
 	 */
-	showCalled: function () {
+	batchOverview: function () {
 		var startDate = $("#startDate").val(), endDate = $("#endDate").val();
 		if (startDate == "" || endDate == "") {
 			alert("Select batch range first.");
@@ -222,6 +222,105 @@ var Charts = {
 				};
 				dr.drawChart(ctx, options).update();
 			});
+	},
+	showHarass: function () {		
+		var startDate = $("#startDate").val(), endDate = $("#endDate").val();
+		if (startDate == "" || endDate == "") {
+			alert("Select range first.");
+			return;
+		};
+		var args = {
+			"startDate": startDate,
+			"endDate": endDate
+		}
+		$.post("harassRecieved", args,
+			function (data) {
+				if (data == '[]') {//no data.
+					alert("无可显示数据！");
+					return;
+				}
+				var qcs = [], total = [], noharass = [],harass=[], rate=[], res = JSON.parse(data);
+				for (i = 0; i < res.length; i++) {
+					qcs[i] = res[i].qc;
+					total[i]=res[i].total;
+					noharass[i]=res[i].noharass;
+					harass[i]=total[i] - noharass[i];
+					rate[i]=harass[i]/total[i];
+				}
+
+				var canvasHeight = res.length * 10;
+
+				var rndnum = Math.ceil(Math.random() * 100);
+				var canvasID = "newChartCanvas" + rndnum;
+				$("#canvasDiv").append("<canvas id='" + canvasID + "' height='" + canvasHeight + "px'></canvas>");
+				var ctx = document.getElementById(canvasID).getContext('2d');
+				var dr = Drawer;
+				var options = {
+					type: "horizontalBar",
+					data: {
+						labels: qcs,
+						datasets: [{
+							label: "cnt_harass",
+							data: harass,
+							xAxisID: 'x-axis-1',
+							borderWidth: 1,
+							stack: "stack 0",
+							backgroundColor: dr.randomColor(0.8),
+						}, {
+							label: "cnt_normal",
+							data: noharass,
+							xAxisID: 'x-axis-1',
+							borderWidth: 1,
+							stack: "stack 0",
+							backgroundColor: dr.randomColor(0.8),
+						},  {
+							label: "HarassRecieve%",
+							data: rate,
+							xAxisID: 'x-axis-2',
+							borderWidth: 1,
+							stack: "stack 1",
+							backgroundColor: dr.randomColor(0.8),
+						}]
+					},
+					options: {
+						title: {
+							display: true,
+							text: "Harass recieved overview:" + startDate + " - " + endDate
+						},
+						scales: {
+							xAxes: [{
+								stacked: true,
+								beginAtZero: true,
+								type: 'linear', // only linear but allow scale type registration. This allows extensions to exist solely for log scale for instance
+								display: true,
+								position: 'bottom',
+								id: 'x-axis-1',
+								scaleLabel: {
+									display: true,
+									labelString: 'Volume'
+								},
+							}, {
+								type: 'linear', // only linear but allow scale type registration. This allows extensions to exist solely for log scale for instance
+								display: true,
+								position: 'top',
+								id: 'x-axis-2',
+								scaleLabel: {
+									display: true,
+									labelString: 'Percentage'
+								},
+								gridLines: {
+									drawOnChartArea: false
+								}
+							}],
+							yAxes: [{
+								stacked: true
+
+							},]
+						}
+					}
+				};
+				dr.drawChart(ctx, options).update();
+			});		
 	}
 
 }

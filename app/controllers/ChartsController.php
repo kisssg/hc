@@ -25,7 +25,7 @@ class ChartsController extends ControllerBase {
 		 * $statics = $result->fetchAll ( $sql );
 		 * echo JSON_encode ( $statics );
 		 *
-		 * but we use this, it's more simple and readable:)
+		 * but we use this, it's more readable:)
 		 */
 		$startDate = $this->request->getPost ( "startDate" );
 		$endDate = $this->request->getPost ( "endDate" );
@@ -77,29 +77,12 @@ class ChartsController extends ControllerBase {
 		echo json_encode ( $group );
 		$this->view->disable ();
 	}
-	public function dingUncheckedAction($visitDate) {
-		$group = Journals::count ( [ 
-				"column" => "qc_name",
-				"conditions" => "visit_date= :visitDate: and validity =''",
-				"group" => "qc_name",
-				"bind" => [ 
-						"visitDate" => "$visitDate" 
-				] 
-		] );
-		echo json_encode ( $group );
-		$this->view->disable ();
-	}
-	public function harassRecieveRateAction() {
-		
-		/*
-		 * $startDate = $this->request->getPost ( "startDate" );
-		 * $endDate = $this->request->getPost ( "endDate" );
-		 */
-		$startDate = '2018-05-01';
-		$endDate = '2018-05-09';
+	public function harassRecievedAction() {		
+		$startDate = $this->request->getPost ( "startDate" );
+		$endDate = $this->request->getPost ( "endDate" );
 		$group = Callback::find ( [ 
-				"columns" => "distinct(qc_name),COUNT(*),count(nullif('Y 是',is_harassed))",
-				"conditions" => "(check_time between :startDate: and :endDate:)",
+				"columns" => "distinct(qc_name) as qc,COUNT(*) as total,count(nullif('Y 是',is_harassed)) as noharass",
+				"conditions" => "(check_time between :startDate: and :endDate:) and qc_name not in('已删除')",
 				"group" => "qc_name",
 				"bind" => [ 
 						"startDate" => "$startDate",
@@ -109,6 +92,23 @@ class ChartsController extends ControllerBase {
 		echo json_encode ( $group );
 		$this->view->disable ();
 	}
-	public function visitCheckAction() {
+	public function workStatusAction($batch){
+		
+		/*
+		 * $startDate = $this->request->getPost ( "startDate" );
+		 * $endDate = $this->request->getPost ( "endDate" );
+		 */
+		$group=WorkStatus::find([
+				"columns"=>"qc,createtime,donetime,remark",
+				"conditions"=>"batch = :batch:",
+				"group"=>"qc",
+				"bind"=>[
+						"batch"=>"$batch"
+				]
+		]);
+		echo json_encode($group);
+		$this->view->disable();
+	}
+	public function visitCheckAction(){
 	}
 }
