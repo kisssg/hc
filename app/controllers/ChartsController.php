@@ -5,7 +5,7 @@ class ChartsController extends ControllerBase {
 		parent::initialize ();
 	}
 	public function indexAction() {
-		echo "dd";
+		$this->view->setTemplateBefore('public');
 	}
 	public function signinAction() {
 		echo $this->tag->linkto ( [ 
@@ -110,5 +110,25 @@ class ChartsController extends ControllerBase {
 		$this->view->disable();
 	}
 	public function visitCheckAction(){
+		$this->view->setTemplateBefore('public');
+	}
+	public function issuesAction(){
+		$this->view->setTemplateBefore('public');
+	}
+	public function issueTypeAction(){
+		$startDate = $this->request->getPost ( "startDate" );
+		$endDate = $this->request->getPost ( "endDate" );
+		$group=Issues::find([
+				"columns"=>"distinct(issue) as type,count(issue) as count",
+				"conditions"=>"add_time between :startDate: and :endDate: and result != '无效'",
+				"group"=>"type",
+				"order"=>"count",
+				"bind"=>[
+						"startDate"=>"$startDate",
+						"endDate"=>"$endDate"
+				]
+		]);
+		echo json_encode($group);
+		$this->view->disable();
 	}
 }

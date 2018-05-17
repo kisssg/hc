@@ -104,7 +104,9 @@ class SecurityPlugin extends Plugin
                             'signin',
                     		'visitCheck',
                     		'dingCheck',
-                    		'workStatus'
+                    		'workStatus',
+                    		'issues',
+                    		'issueType',
                     ],
                     'mysterymonitor' => [
                             'index'
@@ -174,8 +176,7 @@ class SecurityPlugin extends Plugin
         
         $allowed = $acl->isAllowed($role, $controller, $action);
         if (! $allowed) {
-            if ($controller === "workstatus") {
-                
+            if ($controller === "workstatus") {                
                 $dispatcher->forward(
                         [
                                 'controller' => 'errors',
