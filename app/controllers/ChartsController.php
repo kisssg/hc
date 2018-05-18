@@ -5,7 +5,7 @@ class ChartsController extends ControllerBase {
 		parent::initialize ();
 	}
 	public function indexAction() {
-		$this->view->setTemplateBefore('public');
+		$this->view->setTemplateBefore ( 'public' );
 	}
 	public function signinAction() {
 		echo $this->tag->linkto ( [ 
@@ -68,16 +68,16 @@ class ChartsController extends ControllerBase {
 				"columns" => "distinct(qc_name) as qc,count(qc_name) as total,count(nullif('',validity)) as checked, count(nullif('A',validity)) as NA,count(nullif('B',validity)) as NB,count(nullif('C',validity)) as NC,count(nullif('D',validity)) as ND",
 				"conditions" => "visit_date between :startDate: and :endDate: and qc_name != 'tool'",
 				"group" => "qc_name",
-				"order"=>"total",
+				"order" => "total",
 				"bind" => [ 
 						"startDate" => "$startDate",
-						"endDate"=>"$endDate"
+						"endDate" => "$endDate" 
 				] 
 		] );
 		echo json_encode ( $group );
 		$this->view->disable ();
 	}
-	public function harassRecievedAction() {		
+	public function harassRecievedAction() {
 		$startDate = $this->request->getPost ( "startDate" );
 		$endDate = $this->request->getPost ( "endDate" );
 		$group = Callback::find ( [ 
@@ -92,43 +92,93 @@ class ChartsController extends ControllerBase {
 		echo json_encode ( $group );
 		$this->view->disable ();
 	}
-	public function workStatusAction($batch){
+	public function workStatusAction($batch) {
 		
 		/*
 		 * $startDate = $this->request->getPost ( "startDate" );
 		 * $endDate = $this->request->getPost ( "endDate" );
 		 */
-		$group=WorkStatus::find([
-				"columns"=>"qc,createtime,donetime,remark",
-				"conditions"=>"batch = :batch:",
-				"group"=>"qc",
-				"bind"=>[
-						"batch"=>"$batch"
-				]
-		]);
-		echo json_encode($group);
-		$this->view->disable();
+		$group = WorkStatus::find ( [ 
+				"columns" => "qc,createtime,donetime,remark",
+				"conditions" => "batch = :batch:",
+				"group" => "qc",
+				"bind" => [ 
+						"batch" => "$batch" 
+				] 
+		] );
+		echo json_encode ( $group );
+		$this->view->disable ();
 	}
-	public function visitCheckAction(){
-		$this->view->setTemplateBefore('public');
+	public function visitCheckAction() {
+		$this->view->setTemplateBefore ( 'public' );
 	}
-	public function issuesAction(){
-		$this->view->setTemplateBefore('public');
+	public function issuesAction() {
+		$this->view->setTemplateBefore ( 'public' );
 	}
-	public function issueTypeAction(){
+	public function issueTypeAction() {
 		$startDate = $this->request->getPost ( "startDate" );
 		$endDate = $this->request->getPost ( "endDate" );
-		$group=Issues::find([
-				"columns"=>"distinct(issue) as type,count(issue) as count",
-				"conditions"=>"add_time between :startDate: and :endDate: and result != '无效'",
-				"group"=>"type",
-				"order"=>"count",
-				"bind"=>[
-						"startDate"=>"$startDate",
-						"endDate"=>"$endDate"
+		$group = Issues::find ( [ 
+				"columns" => "distinct(issue) as type,count(issue) as count",
+				"conditions" => "add_time between :startDate: and :endDate: and result != '无效'",
+				"group" => "type",
+				"order" => "count",
+				"bind" => [ 
+						"startDate" => "$startDate",
+						"endDate" => "$endDate" 
+				] 
+		] );
+		echo json_encode ( $group );
+		$this->view->disable ();
+	}
+	public function harassmentTypeAction() {
+		$startDate = $this->request->getPost ( "startDate" );
+		$endDate = $this->request->getPost ( "endDate" );
+		$group = Issues::find ( [ 
+				"columns" => "distinct(harassment_type) as type,count(issue) as count",
+				"conditions" => "add_time between :startDate: and :endDate: and result != '无效'",
+				"group" => "type",
+				"order" => "count",
+				"bind" => [ 
+						"startDate" => "$startDate",
+						"endDate" => "$endDate" 
+				] 
+		] );
+		echo json_encode ( $group );
+		$this->view->disable ();
+	}
+	public function issueQCOverviewAction() {
+		$startDate = $this->request->getPost ( "startDate" );
+		$endDate = $this->request->getPost ( "endDate" );
+		$group = Issues::find ( [ 
+				"columns" => "distinct(qc_name) as type,count(issue) as count",
+				"conditions" => "add_time between :startDate: and :endDate: and result != '无效'",
+				"group" => "type",
+				"order" => "count",
+				"bind" => [ 
+						"startDate" => "$startDate",
+						"endDate" => "$endDate" 
+				] 
+		] );
+		echo json_encode ( $group );
+		$this->view->disable ();
+	}
+	public function checkEfficiencyAction(){
+		$startDate = $this->request->getPost ( "startDate" );
+		$endDate = $this->request->getPost ( "endDate" );
+		$startDate='2018-05-01';
+		$endDate='2018-05-05';
+		$group = Journals::find ( [
+				"columns" => "distinct(qc_name) as qc,validity,avg(checking_time) as secCost",
+				"conditions" => "visit_date between :startDate: and :endDate: and qc_name != 'tool'",
+				"group" => "qc_name,validity",
+				"order" => "qc_name,validity",
+				"bind" => [
+						"startDate" => "$startDate",
+						"endDate" => "$endDate"
 				]
-		]);
-		echo json_encode($group);
-		$this->view->disable();
+		] );
+		echo json_encode ( $group );
+		$this->view->disable ();
 	}
 }

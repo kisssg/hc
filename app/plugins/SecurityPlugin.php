@@ -107,6 +107,9 @@ class SecurityPlugin extends Plugin
                     		'workStatus',
                     		'issues',
                     		'issueType',
+                    		'harassmentType',
+                    		'issueQCOverview',
+                    		'checkEfficiency'
                     ],
                     'mysterymonitor' => [
                             'index'

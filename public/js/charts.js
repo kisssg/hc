@@ -113,6 +113,8 @@ var Charts = {
 				}
 			};
 			dr.drawChart(ctx, options).update();
+			scrollHeight = document.body.offsetHeight - canvasHeight;
+			window.scrollTo(0, scrollHeight);
 		});
 	},
 
@@ -225,6 +227,8 @@ var Charts = {
 					}
 				};
 				dr.drawChart(ctx, options).update();
+				scrollHeight = document.body.offsetHeight - canvasHeight;
+				window.scrollTo(0, scrollHeight);
 			});
 	},
 	showHarass: function () {
@@ -337,7 +341,7 @@ var Charts = {
 		var args = {
 			"startDate": startDate,
 			"endDate": endDate
-		};$.post("issueType", args,
+		}; $.post("issueType", args,
 			function (data) {
 				if (data == '[]') {//no data.
 					alert("No data to show.");
@@ -366,7 +370,7 @@ var Charts = {
 							xAxisID: 'x-axis-1',
 							borderWidth: 1,
 							stack: "stack 0",
-							backgroundColor: dr.colorArr(res.length,1),
+							backgroundColor: dr.colorArr(res.length, 1),
 						}]
 					},
 					options: {
@@ -380,7 +384,112 @@ var Charts = {
 				scrollHeight = document.body.offsetHeight - canvasHeight;
 				window.scrollTo(0, scrollHeight);
 			});
-		
+	},
+	harassTypeOverview: function () {
+		var startDate = $("#startDate").val(), endDate = $("#endDate").val();
+		if (startDate == "" || endDate == "") {
+			alert("Select range first.");
+			return;
+		};
+		var args = {
+			"startDate": startDate,
+			"endDate": endDate
+		}; $.post("harassmentType", args,
+			function (data) {
+				if (data == '[]') {//no data.
+					alert("No data to show.");
+					return;
+				}
+				var types = [], counts = [], res = JSON.parse(data);
+				for (i = 0; i < res.length; i++) {
+					types[i] = res[i].type;
+					counts[i] = res[i].count;
+				}
+
+				var canvasHeight = "220";
+
+				var rndnum = Math.ceil(Math.random() * 100);
+				var canvasID = "newChartCanvas" + rndnum;
+				$("#canvasDiv").append("<canvas id='" + canvasID + "' height='" + canvasHeight + "px'></canvas>");
+				var ctx = document.getElementById(canvasID).getContext('2d');
+				var dr = Drawer;
+				var options = {
+					type: 'doughnut',
+					data: {
+						labels: types,
+						datasets: [{
+							label: "counts",
+							data: counts,
+							xAxisID: 'x-axis-1',
+							borderWidth: 1,
+							stack: "stack 0",
+							backgroundColor: dr.colorArr(res.length, 1),
+						}]
+					},
+					options: {
+						title: {
+							display: true,
+							text: "Harassment type overview(valid and under investigation):" + startDate + " - " + endDate
+						}
+					}
+				};
+				dr.drawChart(ctx, options).update();
+				scrollHeight = document.body.offsetHeight - canvasHeight;
+				window.scrollTo(0, scrollHeight);
+			});
+	},
+	issueQCOverview:function(){
+		var startDate = $("#startDate").val(), endDate = $("#endDate").val();
+		if (startDate == "" || endDate == "") {
+			alert("Select range first.");
+			return;
+		};
+		var args = {
+			"startDate": startDate,
+			"endDate": endDate
+		}; $.post("issueQCOverview", args,
+			function (data) {
+				if (data == '[]') {//no data.
+					alert("No data to show.");
+					return;
+				}
+				var types = [], counts = [], res = JSON.parse(data);
+				for (i = 0; i < res.length; i++) {
+					types[i] = res[i].type;
+					counts[i] = res[i].count;
+				}
+
+				var canvasHeight = "220";
+
+				var rndnum = Math.ceil(Math.random() * 100);
+				var canvasID = "newChartCanvas" + rndnum;
+				$("#canvasDiv").append("<canvas id='" + canvasID + "' height='" + canvasHeight + "px'></canvas>");
+				var ctx = document.getElementById(canvasID).getContext('2d');
+				var dr = Drawer;
+				var options = {
+					type: 'doughnut',
+					data: {
+						labels: types,
+						datasets: [{
+							label: "counts",
+							data: counts,
+							xAxisID: 'x-axis-1',
+							borderWidth: 1,
+							stack: "stack 0",
+							backgroundColor: dr.colorArr(res.length, 1),
+						}]
+					},
+					options: {
+						title: {
+							display: true,
+							text: "Harassment type overview(valid and under investigation):" + startDate + " - " + endDate
+						}
+					}
+				};
+				dr.drawChart(ctx, options).update();
+				scrollHeight = document.body.offsetHeight - canvasHeight;
+				window.scrollTo(0, scrollHeight);
+			});		
 	}
 
 }
