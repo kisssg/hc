@@ -122,7 +122,7 @@ class ChartsController extends ControllerBase {
 				"columns" => "distinct(issue) as type,count(issue) as count",
 				"conditions" => "add_time between :startDate: and :endDate: and result != '无效'",
 				"group" => "type",
-				"order" => "count",
+				"order" => "count desc",
 				"bind" => [ 
 						"startDate" => "$startDate",
 						"endDate" => "$endDate" 
@@ -166,10 +166,8 @@ class ChartsController extends ControllerBase {
 	public function checkEfficiencyAction(){
 		$startDate = $this->request->getPost ( "startDate" );
 		$endDate = $this->request->getPost ( "endDate" );
-		$startDate='2018-05-01';
-		$endDate='2018-05-05';
 		$group = Journals::find ( [
-				"columns" => "distinct(qc_name) as qc,validity,avg(checking_time) as secCost",
+				"columns" => "distinct(qc_name) as qc,validity,avg(checking_time) as avgSecCost",
 				"conditions" => "visit_date between :startDate: and :endDate: and qc_name != 'tool'",
 				"group" => "qc_name,validity",
 				"order" => "qc_name,validity",
@@ -181,4 +179,5 @@ class ChartsController extends ControllerBase {
 		echo json_encode ( $group );
 		$this->view->disable ();
 	}
+	
 }
