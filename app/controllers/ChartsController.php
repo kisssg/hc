@@ -111,6 +111,8 @@ class ChartsController extends ControllerBase {
 	}
 	public function visitCheckAction() {
 		$this->view->setTemplateBefore ( 'public' );
+		$this->tag->setTitle('Visit Check');
+		
 	}
 	public function issuesAction() {
 		$this->view->setTemplateBefore ( 'public' );
@@ -179,5 +181,7 @@ class ChartsController extends ControllerBase {
 		echo json_encode ( $group );
 		$this->view->disable ();
 	}
-	
+	public function outsourcingAction(){
+		$this->view->setTemplateBefore ( 'public' );		
+	}
 }

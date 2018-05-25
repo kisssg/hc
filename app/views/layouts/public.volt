@@ -23,7 +23,7 @@
 
             {%- set menus = [
               'DingCheck': 'charts/visitCheck',
-              'OSV monitor': 'charts/#',
+              'OSV monitor': 'charts/outsourcing',
               'Call back':'charts/index',
               'Issues':'charts/issues'
             ] -%}

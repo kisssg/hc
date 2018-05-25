@@ -19,7 +19,7 @@
 				<li><a href="/qm" target="_blank">Home</a></li>				
       </ul>
       
-          <ul class="nav navbar-nav navbar-right"><?php $menus = ['DingCheck' => 'charts/visitCheck', 'OSV monitor' => 'charts/#', 'Call back' => 'charts/index', 'Issues' => 'charts/issues']; ?><?php foreach ($menus as $key => $value) { ?>
+          <ul class="nav navbar-nav navbar-right"><?php $menus = ['DingCheck' => 'charts/visitCheck', 'OSV monitor' => 'charts/outsourcing', 'Call back' => 'charts/index', 'Issues' => 'charts/issues']; ?><?php foreach ($menus as $key => $value) { ?>
               <?php if ($value == $this->dispatcher->getControllerName() . '/' . $this->dispatcher->getActionName()) { ?>
               <li class="active"><?= $this->tag->linkTo([$value, $key]) ?></li>
               <?php } else { ?>
