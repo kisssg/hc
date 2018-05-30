@@ -64,7 +64,9 @@ class SecurityPlugin extends Plugin
                     ],
                     'callback' => [
                             'add',
-                            'update'
+                            'update',
+                    		'markDeletion',
+                    		'restoreDeletion'
                     ]
             ];
             foreach ($privateResources as $resource => $actions) {
