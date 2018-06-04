@@ -1,6 +1,15 @@
 <?php
+use Phalcon\Paginator\Adapter\Model as PaginatorModel;
 class CallBackController extends ControllerBase {
 	protected function initialize() {
+	}
+	public function indexAction() {
+		$this->dispatcher->forward ( [ 
+				"controller" => 'callback',
+				"action" => "delete" 
+		] );
+	}
+	public function deleteAction() {
 	}
 	public function addAction() {
 		try {
@@ -150,21 +159,66 @@ class CallBackController extends ControllerBase {
 			$column_name = $this->request->getPost ( 'column_name' );
 			$value = $this->request->getPost ( 'value' );
 			// test variables
-			$column_name = "id";
-			$value = 4556;
+			if ($column_name == "qc") {
+				$column_name = "qc_name";
+			} elseif ($column_name == "agency") {
+				$column_name = "responsible_person";
+			}
 			
 			$items = Callback::find ( [ 
 					"conditions" => "$column_name = :value:  and is_connected='' and action_id is null",
 					"bind" => [ 
 							"value" => "$value" 
 					] 
-			] );			
+			] );
+			$action_id = date ( "YmdHis" );
 			$count = 0;
 			foreach ( $items as $item ) {
 				$item->post_qc = $item->qc_name;
 				$item->qc_name = '已删除';
 				$item->delete_user = $this->session->get ( 'auth' ) ['name'];
-				$item->action_id = date ( "YmdHis" );
+				$item->action_id = $action_id;
+				$item->update ();
+				$count ++;
+			}
+			echo '{"result":"success","msg":"' . $count . '"}';
+		} catch ( Exception $e ) {
+			echo '{"result":"failed","msg":"' . $e->getMessage () . '"}';
+		}
+		$this->view->disable ();
+	}
+	public function transferAction() {
+		try {
+			$ids = $this->request->getPost ( 'ids' );
+			$receiver = $this->request->getPost ( 'to' );
+			$receiver = str_replace ( " ", ".", $receiver );
+			if ($receiver !== "已删除") {
+				$exist_user = Users::count ( [ 
+						"username = :username:",
+						"bind" => [ 
+								"username" => "$receiver" 
+						] 
+				] );
+				if ($exist_user == 0) {
+					throw new exception ( "User not exist" );
+				}
+			}
+			$receiver = str_replace ( "。", " ", $receiver );
+			
+			$items = Callback::find ( [ 
+					"conditions" => "id in ({ids:array})  and is_connected='' and action_id is null",
+					"bind" => [ 
+							"ids" => $ids 
+					] 
+			] );
+			// @FIXME it can transfer only one record while there actually are multiple;
+			$action_id = date ( "YmdHis" );
+			$count = 0;
+			foreach ( $items as $item ) {
+				$item->post_qc = $item->qc_name;
+				$item->qc_name = $receiver;
+				$item->delete_user = $this->session->get ( 'auth' ) ['name'];
+				$item->action_id = $action_id;
 				$item->update ();
 				$count ++;
 			}
@@ -176,8 +230,15 @@ class CallBackController extends ControllerBase {
 	}
 	public function restoreDeletionAction() {
 		try {
+			// check if user is allowed to do the grant action;
+			$level = $this->session->auth ['level'];
+			if ($level < 10) {
+				throw new exception ( "Not authorized" );
+			}
 			$action_id = $this->request->getPost ( 'action_id' );
-			$action_id='20180530145938';
+			if ($action_id == "") {
+				throw new exception ( "Action ID not valid" );
+			}
 			$connection = $this->db;
 			$sql = "update `callback` set qc_name=post_qc,post_qc=null, action_id=null where action_id='$action_id'";
 			$result = $connection->query ( $sql );
@@ -190,5 +251,63 @@ class CallBackController extends ControllerBase {
 			echo '{"result":"failed","msg":"' . $e->getMessage () . '"}';
 		}
 		$this->view->disable ();
+	}
+	public function recycleBinAction() {
+		try {
+			// check if user is allowed to do the grant action;
+			$level = $this->session->auth ['level'];
+			if ($level < 10) {
+				throw new exception ( "Not authorized" );
+			}
+			
+			$list = Callback::find ( [ 
+					"columns" => "distinct(action_id) as action_id,count(action_id) as count,delete_user as operator,qc_name as currentQC",
+					"conditions" => "action_id is not null",
+					"group" => "action_id" 
+			] );
+			// Create a Model paginator, show 10 rows by page starting from $currentPage
+			$currentPage = $this->request->getQuery ( "page", "int" );
+			
+			$paginator = new PaginatorModel ( [ 
+					"data" => $list,
+					"limit" => 50,
+					"page" => $currentPage 
+			] );
+			
+			// Get the paginated results
+			$page = $paginator->getPaginate ();
+			echo "<table class='contracts' style='width:auto;'>
+		<tr>
+		<th>No.</th>
+		<th>Action ID</th>
+		<th>Operator</th>
+		<th>CurrentOwner</th>
+		<th>Count</th>
+		<th>Action</th>
+		</tr>";
+			$i = 0;
+			foreach ( $page->items as $item ) {
+				$i ++;
+				echo "<tr>
+        <td>" . $i . "</td>" . "
+        <td>" . $item->action_id . "</td>
+        <td>" . $item->operator . "</td>
+        <td>" . $item->currentQC . "</td>
+		<td>" . $item->count . "</td>
+		<td><button class='btn btn-default btn-xs' onclick='return Callback.restore(" . $item->action_id . ")'>restore</button></td>
+    	</tr>";
+			}
+			echo "</table>";
+			echo '<div class="clearfix pagination">
+	<a class="number" href="?page=1">&laquo;</a>' . '
+	<a class="number" href="?page=' . $page->before . '">&lsaquo;</a>
+	<a class="number" href="?page=' . $page->next . '">&rsaquo;</a>
+	<a class="number" href="?page=' . $page->last . '">&raquo;</a>
+	</div>
+	' . $page->current, "/", $page->total_pages;
+			echo $this->tag->javascriptInclude ( 'js/callback.js' );
+		} catch ( Exception $e ) {
+			echo $e->getMessage ();
+		}
 	}
 }
