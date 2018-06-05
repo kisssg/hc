@@ -203,7 +203,7 @@ class CallBackController extends ControllerBase {
 					throw new exception ( "User not exist" );
 				}
 			}
-			$receiver = str_replace ( "。", " ", $receiver );
+			$receiver = str_replace ( ".", " ", $receiver );
 			
 			$items = Callback::find ( [ 
 					"conditions" => "id in ({ids:array})  and is_connected='' and action_id is null",
