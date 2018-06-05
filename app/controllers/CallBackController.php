@@ -191,8 +191,8 @@ class CallBackController extends ControllerBase {
 		try {
 			$ids = $this->request->getPost ( 'ids' );
 			$receiver = $this->request->getPost ( 'to' );
-			$receiver = str_replace ( " ", ".", $receiver );
-			if ($receiver !== "已删除") {
+			$receiver = str_replace ( " ", ".", $receiver ); //need to check if object user exists, so replace those input username separated by space with dot. 
+			if ($receiver !== "已删除") {//if need to delete data, transfer to '已删除'
 				$exist_user = Users::count ( [ 
 						"username = :username:",
 						"bind" => [ 
@@ -203,7 +203,7 @@ class CallBackController extends ControllerBase {
 					throw new exception ( "User not exist" );
 				}
 			}
-			$receiver = str_replace ( ".", " ", $receiver );
+			$receiver = str_replace ( ".", " ", $receiver );//data owner in the call back table username separate with blank character
 			
 			$items = Callback::find ( [ 
 					"conditions" => "id in ({ids:array})  and is_connected='' and action_id is null",
