@@ -108,7 +108,11 @@ class SecurityPlugin extends Plugin {
 							'harassmentType',
 							'issueQCOverview',
 							'checkEfficiency',
-							'outsourcing' 
+							'outsourcing',
+							'checkEfficiencyAll',
+							'cntRecording',
+							'cntContracts',
+							
 					],
 					'mysterymonitor' => [ 
 							'index' 

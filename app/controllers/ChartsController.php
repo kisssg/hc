@@ -181,7 +181,55 @@ class ChartsController extends ControllerBase {
 		echo json_encode ( $group );
 		$this->view->disable ();
 	}
+	public function checkEfficiencyAllAction(){
+		$startDate=$this->request->getPost("startDate");
+		$endDate=$this->request->getPost("endDate");//"2018-06-05";//
+		$group= Journals::find([
+				"columns"=>"distinct(validity) as validity,avg(checking_time) as avgSecCost",
+				"conditions"=>"visit_date between :startDate: and :endDate: and qc_name != 'tool'",
+				"group"=>"validity",
+				"order"=>"validity",
+				"bind"=>[
+						"startDate"=>"$startDate",
+						"endDate"=>"$endDate"
+				]
+		]);
+		echo json_encode($group);
+		$this->view->disable();
+	}
+	
 	public function outsourcingAction(){
 		$this->view->setTemplateBefore ( 'public' );		
+	}
+	public function cntRecordingAction(){
+		$startDate=$this->request->getPost("startDate");
+		$endDate=$this->request->getPost("endDate");//"2018-06-05";//
+		$group=SilentMonitorAssessments::find([
+				"columns"=>"distinct(QC) as qc,count(QC) as count,FORMAT(avg(seconds),2) as avgDuration",
+				"conditions"=>"create_time between :startDate: and :endDate:",
+				"group"=>"QC",
+				"order"=>"count",
+				"bind"=>[
+						"startDate"=>"$startDate",
+						"endDate"=>"$endDate"
+				]
+		]);
+		echo json_encode($group);
+		$this->view->disable();
+	}
+	public function cntContractsAction(){
+		$startDate="2018-06-01";//
+		$endDate="2018-06-06";//
+		$group=SilentMonitorContracts::find([
+				"columns"=>"distinct(qc_name) as qc, count(*) as count,count(nullif(0,assess_count)) as checked ",
+				"conditions"=>"checking_date between :startDate: and :endDate:",
+				"group"=>"qc",
+				"bind"=>[
+						"startDate"=>"$startDate",
+						"endDate"=>"$endDate"
+				]
+		]);
+		echo json_encode($group);
+		$this->view->disable();
 	}
 }

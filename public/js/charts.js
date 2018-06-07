@@ -757,5 +757,240 @@ var Charts = {
 	    scrollHeight = document.body.offsetHeight - canvasHeight;
 	    window.scrollTo(0, scrollHeight);
 	});
+    },
+    overAllAvgSecCost:function(){
+	var startDate = $("#startDate").val(), endDate = $("#endDate").val();
+	if (startDate == "" || endDate == "") {
+	    alert("Select range first.");
+	    return;
+	}
+	;
+	var args = {
+	    "startDate" : startDate,
+	    "endDate" : endDate
+	};
+	$.post("checkEfficiencyAll",args,function(data){
+	    if (data == '[]') {// no data.
+		alert("No data to show.");
+		return;
+	    }
+	    var types = [], counts = [], res = JSON.parse(data);
+	    for (i = 0; i < res.length; i++) {
+		types[i] = res[i].validity;
+		counts[i] = res[i].avgSecCost;
+	    }
+
+	    var canvasHeight = (res.length + 1) * 10;
+
+	    var rndnum = Math.ceil(Math.random() * 100);
+	    var canvasID = "newChartCanvas" + rndnum;
+	    $("#canvasDiv").append(
+		    "<canvas id='" + canvasID + "' height='"
+			    + canvasHeight + "px'></canvas>");
+	    var ctx = document.getElementById(canvasID)
+		    .getContext('2d');
+	    var dr = Drawer;
+	    var options = {
+		type : 'horizontalBar',
+		data : {
+		    labels : types,
+		    datasets : [ {
+			label : "AvgSecCost",
+			data : counts,
+			xAxisID : 'x-axis-1',
+			borderWidth : 1,
+			stack : "stack 0",
+			backgroundColor : dr.randomColor(0.8),
+		    } ]
+		},
+		options : {
+		    title : {
+			display : true,
+			text : "Team log check avgSecCost:"
+				+ startDate + " - " + endDate
+		    },
+		    scales : {
+			xAxes : [ {
+			    stacked : true,
+			    beginAtZero : true,
+			    type : 'linear',
+			    display : true,
+			    position : 'bottom',
+			    id : 'x-axis-1',
+			    scaleLabel : {
+				display : false,
+				labelString : 'Volume'
+			    },
+			} ],
+			yAxes : [ {
+			    stacked : true
+
+			}, ]
+		    }
+		}
+	    };
+	    dr.drawChart(ctx, options).update();
+	    scrollHeight = document.body.offsetHeight
+		    - canvasHeight;
+	    window.scrollTo(0, scrollHeight);
+	})
+    },
+    cntRecording:function(){
+
+	var startDate = $("#startDate").val(), endDate = $("#endDate").val();
+	if (startDate == "" || endDate == "") {
+	    alert("Select range first.");
+	    return;
+	}
+	;
+	var args = {
+	    "startDate" : startDate,
+	    "endDate" : endDate
+	};
+	$.post("cntRecording",args,function(data){
+	    if (data == '[]') {// no data.
+		alert("No data to show.");
+		return;
+	    }
+	    var types = [], counts = [], res = JSON.parse(data);
+	    for (i = 0; i < res.length; i++) {
+		types[i] = res[i].qc;
+		counts[i] = res[i].count;
+	    }
+
+	    var canvasHeight = (res.length + 1) * 10;
+
+	    var rndnum = Math.ceil(Math.random() * 100);
+	    var canvasID = "newChartCanvas" + rndnum;
+	    $("#canvasDiv").append(
+		    "<canvas id='" + canvasID + "' height='"
+			    + canvasHeight + "px'></canvas>");
+	    var ctx = document.getElementById(canvasID)
+		    .getContext('2d');
+	    var dr = Drawer;
+	    var options = {
+		type : 'horizontalBar',
+		data : {
+		    labels : types,
+		    datasets : [ {
+			label : "cntRecording",
+			data : counts,
+			xAxisID : 'x-axis-1',
+			borderWidth : 1,
+			stack : "stack 0",
+			backgroundColor : dr.randomColor(0.8),
+		    } ]
+		},
+		options : {
+		    title : {
+			display : true,
+			text : "cntRecording:"
+				+ startDate + " - " + endDate
+		    },
+		    scales : {
+			xAxes : [ {
+			    stacked : true,
+			    beginAtZero : true,
+			    type : 'linear',
+			    display : true,
+			    position : 'bottom',
+			    id : 'x-axis-1',
+			    scaleLabel : {
+				display : false,
+				labelString : 'Volume'
+			    },
+			} ],
+			yAxes : [ {
+			    stacked : true
+
+			}, ]
+		    }
+		}
+	    };
+	    dr.drawChart(ctx, options).update();
+	    scrollHeight = document.body.offsetHeight
+		    - canvasHeight;
+	    window.scrollTo(0, scrollHeight);
+	})
+    },
+    recDuration:function(){
+
+	var startDate = $("#startDate").val(), endDate = $("#endDate").val();
+	if (startDate == "" || endDate == "") {
+	    alert("Select range first.");
+	    return;
+	}
+	;
+	var args = {
+	    "startDate" : startDate,
+	    "endDate" : endDate
+	};
+	$.post("cntRecording",args,function(data){
+	    if (data == '[]') {// no data.
+		alert("No data to show.");
+		return;
+	    }
+	    var types = [], counts = [], res = JSON.parse(data);
+	    for (i = 0; i < res.length; i++) {
+		types[i] = res[i].qc;
+		counts[i] = res[i].avgDuration;
+	    }
+
+	    var canvasHeight = (res.length + 1) * 10;
+
+	    var rndnum = Math.ceil(Math.random() * 100);
+	    var canvasID = "newChartCanvas" + rndnum;
+	    $("#canvasDiv").append(
+		    "<canvas id='" + canvasID + "' height='"
+			    + canvasHeight + "px'></canvas>");
+	    var ctx = document.getElementById(canvasID)
+		    .getContext('2d');
+	    var dr = Drawer;
+	    var options = {
+		type : 'horizontalBar',
+		data : {
+		    labels : types,
+		    datasets : [ {
+			label : "recDuration",
+			data : counts,
+			xAxisID : 'x-axis-1',
+			borderWidth : 1,
+			stack : "stack 0",
+			backgroundColor : dr.randomColor(0.8),
+		    } ]
+		},
+		options : {
+		    title : {
+			display : true,
+			text : "Average recording duration(seconds):"
+				+ startDate + " - " + endDate
+		    },
+		    scales : {
+			xAxes : [ {
+			    stacked : true,
+			    beginAtZero : true,
+			    type : 'linear',
+			    display : true,
+			    position : 'bottom',
+			    id : 'x-axis-1',
+			    scaleLabel : {
+				display : false,
+				labelString : 'Volume'
+			    },
+			} ],
+			yAxes : [ {
+			    stacked : true
+
+			}, ]
+		    }
+		}
+	    };
+	    dr.drawChart(ctx, options).update();
+	    scrollHeight = document.body.offsetHeight
+		    - canvasHeight;
+	    window.scrollTo(0, scrollHeight);
+	})
+	
     }
+    
 }
