@@ -6,6 +6,7 @@ class ChartsController extends ControllerBase {
 	}
 	public function indexAction() {
 		$this->view->setTemplateBefore ( 'public' );
+		$this->tag->setTitle('Call Back');
 	}
 	public function signinAction() {
 		echo $this->tag->linkto ( [ 
@@ -116,6 +117,7 @@ class ChartsController extends ControllerBase {
 	}
 	public function issuesAction() {
 		$this->view->setTemplateBefore ( 'public' );
+		$this->tag->setTitle('Issue Overview');
 	}
 	public function issueTypeAction() {
 		$startDate = $this->request->getPost ( "startDate" );
@@ -200,6 +202,7 @@ class ChartsController extends ControllerBase {
 	
 	public function outsourcingAction(){
 		$this->view->setTemplateBefore ( 'public' );		
+		$this->tag->setTitle('OSV Charts');
 	}
 	public function cntRecordingAction(){
 		$startDate=$this->request->getPost("startDate");
