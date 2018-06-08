@@ -1147,5 +1147,167 @@ var Charts = {
 	    window.scrollTo(0, scrollHeight);
 	})
     },
+    cntMysteryContracts:function(){
+
+	var startDate = $("#startDate").val(), endDate = $("#endDate").val();
+	if (startDate == "" || endDate == "") {
+	    alert("Select range first.");
+	    return;
+	}
+	;
+	var args = {
+	    "startDate" : startDate,
+	    "endDate" : endDate
+	};
+	$.post("mysteryContracts", args, function(data) {
+	    if (data == '[]') {// no data.
+		alert("No data to show.");
+		return;
+	    }
+	    var types = [], counts = [], checked = [], uncheck = [], res = JSON
+		    .parse(data);
+	    for (i = 0; i < res.length; i++) {
+		types[i] = res[i].qc;
+		counts[i] = res[i].count;
+		checked[i] = res[i].checked;
+		uncheck[i] = counts[i] - checked[i];
+	    }
+
+	    var canvasHeight = (res.length + 1) * 10;
+
+	    var rndnum = Math.ceil(Math.random() * 100);
+	    var canvasID = "newChartCanvas" + rndnum;
+	    $("#canvasDiv").append(
+		    "<canvas id='" + canvasID + "' height='" + canvasHeight
+			    + "px'></canvas>");
+	    var ctx = document.getElementById(canvasID).getContext('2d');
+	    var dr = Drawer;
+	    var options = {
+		type : 'horizontalBar',
+		data : {
+		    labels : types,
+		    datasets : [ {
+			label : "checked",
+			data : checked,
+			xAxisID : 'x-axis-1',
+			borderWidth : 1,
+			stack : "stack 0",
+			backgroundColor : dr.randomColor(0.8),
+		    }, {
+			label : "uncheck",
+			data : uncheck,
+			xAxisID : 'x-axis-1',
+			borderWidth : 1,
+			stack : "stack 0",
+			backgroundColor : dr.randomColor(0.8),
+		    } ]
+		},
+		options : {
+		    title : {
+			display : true,
+			text : "Mystery contracts count"
+		    },
+		    scales : {
+			xAxes : [ {
+			    stacked : true,
+			    beginAtZero : true,
+			    type : 'linear',
+			    display : true,
+			    position : 'bottom',
+			    id : 'x-axis-1',
+			    scaleLabel : {
+				display : false,
+				labelString : 'Volume'
+			    },
+			} ],
+			yAxes : [ {
+			    stacked : true
+
+			}, ]
+		    }
+		}
+	    };
+	    dr.drawChart(ctx, options).update();
+	    scrollHeight = document.body.offsetHeight - canvasHeight;
+	    window.scrollTo(0, scrollHeight);
+	})
+    },
+    cntMyteryAssess:function(){
+
+	var startDate = $("#startDate").val(), endDate = $("#endDate").val();
+	if (startDate == "" || endDate == "") {
+	    alert("Select range first.");
+	    return;
+	}
+	;
+	var args = {
+	    "startDate" : startDate,
+	    "endDate" : endDate
+	};
+	$.post("mysteryAssess", args, function(data) {
+	    if (data == '[]') {// no data.
+		alert("No data to show.");
+		return;
+	    }
+	    var types = [], counts = [] , res = JSON
+		    .parse(data);
+	    for (i = 0; i < res.length; i++) {
+		types[i] = res[i].qc;
+		counts[i] = res[i].count;
+	    }
+
+	    var canvasHeight = (res.length + 1) * 10;
+
+	    var rndnum = Math.ceil(Math.random() * 100);
+	    var canvasID = "newChartCanvas" + rndnum;
+	    $("#canvasDiv").append(
+		    "<canvas id='" + canvasID + "' height='" + canvasHeight
+			    + "px'></canvas>");
+	    var ctx = document.getElementById(canvasID).getContext('2d');
+	    var dr = Drawer;
+	    var options = {
+		type : 'horizontalBar',
+		data : {
+		    labels : types,
+		    datasets : [ {
+			label : "count",
+			data : counts,
+			xAxisID : 'x-axis-1',
+			borderWidth : 1,
+			stack : "stack 0",
+			backgroundColor : dr.randomColor(0.8),
+		    } ]
+		},
+		options : {
+		    title : {
+			display : true,
+			text : "Mystery scores count:"
+				+ startDate + " - " + endDate
+		    },
+		    scales : {
+			xAxes : [ {
+			    stacked : true,
+			    beginAtZero : true,
+			    type : 'linear',
+			    display : true,
+			    position : 'bottom',
+			    id : 'x-axis-1',
+			    scaleLabel : {
+				display : false,
+				labelString : 'Volume'
+			    },
+			} ],
+			yAxes : [ {
+			    stacked : true
+
+			}, ]
+		    }
+		}
+	    };
+	    dr.drawChart(ctx, options).update();
+	    scrollHeight = document.body.offsetHeight - canvasHeight;
+	    window.scrollTo(0, scrollHeight);
+	})
+    }
 
 }

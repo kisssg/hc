@@ -266,8 +266,8 @@ class ChartsController extends ControllerBase {
 	public function cntContractsAllAction(){		
 		$startDate=$this->request->getPost("startDate");
 		$endDate=$this->request->getPost("endDate");//"2018-06-05";//
-		$startDate="2018-06-01";//
-		$endDate="2018-06-09";//
+		/* $startDate="2018-06-01";
+		$endDate="2018-06-09"; */
 		$group=SilentMonitorContracts::find([
 		"columns"=>"count(*) as count,count(nullif(0,assess_count)) as checked ",
 		"conditions"=>"checking_date between :startDate: and :endDate: and qc_name != 'public.osv'",
@@ -278,5 +278,36 @@ class ChartsController extends ControllerBase {
 		]);
 		echo json_encode($group);
 		$this->view->disable();		
+	}
+	public function mysteryContractsAction(){
+		/* $startDate="2018-06-01";
+		 $endDate="2018-06-09"; */
+		$group=FakeContracts::find([
+				"columns"=>"distinct(qc) as qc,count(*) as count,count(nullif(0,assess_count)) as checked ",
+				"group"=>"qc",
+				"order"=>"count",
+				"conditions"=>"qc != 'public.osv'"
+		]);
+		echo json_encode($group);
+		$this->view->disable();				
+	}
+	PUBLIC function mysteryAssessAction(){
+		$startDate=$this->request->getPost("startDate");
+		$endDate=$this->request->getPost("endDate");//"2018-06-05";//
+		/* $startDate="2018-06-01";
+		$endDate="2018-06-09"; */
+		$group=MysteryScores::find([
+				"columns"=>"distinct(qc) as qc,count(*) as count",
+				"conditions"=>"create_time between :startDate: and :endDate: and qc != 'public.osv'",
+				"group"=>"qc",
+				"order"=>"count desc",
+				"bind"=>[
+						"startDate"=>"$startDate",
+						"endDate"=>"$endDate"
+				]
+		]);
+		echo json_encode($group);
+		$this->view->disable();		
+		
 	}
 }

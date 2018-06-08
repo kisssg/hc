@@ -113,7 +113,9 @@ class SecurityPlugin extends Plugin {
 							'cntRecording',
 							'cntRecordingAll',
 							'cntContracts',
-							'cntContractsAll' 
+							'cntContractsAll',
+							'mysteryContracts',
+							'mysteryAssess'
 					
 					],
 					'mysterymonitor' => [ 
