@@ -203,10 +203,13 @@ class ChartsController extends ControllerBase {
 	}
 	public function cntRecordingAction(){
 		$startDate=$this->request->getPost("startDate");
-		$endDate=$this->request->getPost("endDate");//"2018-06-05";//
+		$endDate=$this->request->getPost("endDate");
+		/* test value
+		$startDate="2018-06-01";
+		$endDate="2018-06-05";*/
 		$group=SilentMonitorAssessments::find([
 				"columns"=>"distinct(QC) as qc,count(QC) as count,FORMAT(avg(seconds),2) as avgDuration",
-				"conditions"=>"create_time between :startDate: and :endDate:",
+				"conditions"=>"create_time between :startDate: and :endDate: and qc != 'public.osv'",
 				"group"=>"QC",
 				"order"=>"count",
 				"bind"=>[
@@ -214,15 +217,43 @@ class ChartsController extends ControllerBase {
 						"endDate"=>"$endDate"
 				]
 		]);
-		echo json_encode($group);
+		$value1=[
+				"qc"=>"team",
+				"count"=>100,
+				"avgDuration"=>150
+		];
+		$arr=array();
+		foreach($group as $item){
+			$arr1=(array)$item;
+			array_push($arr,$arr1);
+		}
+		$result=$this->cntRecordingTeam($startDate, $endDate);
+		array_push($arr, $result);
+		echo json_encode($arr);
 		$this->view->disable();
 	}
+	private function cntRecordingTeam($startDate,$endDate){
+		$group=SilentMonitorAssessments::find([
+				"columns"=>"count(*) as count,FORMAT(avg(seconds),2) as avgDuration",
+				"conditions"=>"create_time between :startDate: and :endDate:  and QC != 'public.osv'",
+				"order"=>"count",
+				"bind"=>[
+						"startDate"=>"$startDate",
+						"endDate"=>"$endDate"
+				]
+		]);
+		foreach($group as $item){
+			$result=(array)$item;
+		}
+		$result['qc']="Team";
+		return($result);
+	}
 	public function cntContractsAction(){
-		$startDate="2018-06-01";//
-		$endDate="2018-06-06";//
+		$startDate=$this->request->getPost("startDate");
+		$endDate=$this->request->getPost("endDate");//"2018-06-05";//
 		$group=SilentMonitorContracts::find([
 				"columns"=>"distinct(qc_name) as qc, count(*) as count,count(nullif(0,assess_count)) as checked ",
-				"conditions"=>"checking_date between :startDate: and :endDate:",
+				"conditions"=>"checking_date between :startDate: and :endDate:  and qc_name != 'public.osv'",
 				"group"=>"qc",
 				"bind"=>[
 						"startDate"=>"$startDate",
@@ -231,5 +262,21 @@ class ChartsController extends ControllerBase {
 		]);
 		echo json_encode($group);
 		$this->view->disable();
+	}
+	public function cntContractsAllAction(){		
+		$startDate=$this->request->getPost("startDate");
+		$endDate=$this->request->getPost("endDate");//"2018-06-05";//
+		$startDate="2018-06-01";//
+		$endDate="2018-06-09";//
+		$group=SilentMonitorContracts::find([
+		"columns"=>"count(*) as count,count(nullif(0,assess_count)) as checked ",
+		"conditions"=>"checking_date between :startDate: and :endDate: and qc_name != 'public.osv'",
+		"bind"=>[
+				"startDate"=>"$startDate",
+				"endDate"=>"$endDate"
+		]
+		]);
+		echo json_encode($group);
+		$this->view->disable();		
 	}
 }

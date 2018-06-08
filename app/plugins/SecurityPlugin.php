@@ -62,7 +62,7 @@ class SecurityPlugin extends Plugin {
 							'update',
 							'markDeletion',
 							'restoreDeletion',
-							'transfer'
+							'transfer' 
 					] 
 			];
 			foreach ( $privateResources as $resource => $actions ) {
@@ -111,8 +111,10 @@ class SecurityPlugin extends Plugin {
 							'outsourcing',
 							'checkEfficiencyAll',
 							'cntRecording',
+							'cntRecordingAll',
 							'cntContracts',
-							
+							'cntContractsAll' 
+					
 					],
 					'mysterymonitor' => [ 
 							'index' 
@@ -124,8 +126,8 @@ class SecurityPlugin extends Plugin {
 					'callback' => [ 
 							'index',
 							'delete',
-							'recycleBin'
-					]
+							'recycleBin' 
+					] 
 			];
 			foreach ( $publicResources as $resource => $actions ) {
 				$acl->addResource ( new Resource ( $resource ), $actions );
