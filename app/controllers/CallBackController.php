@@ -263,6 +263,7 @@ class CallBackController extends ControllerBase {
 			$list = Callback::find ( [ 
 					"columns" => "distinct(action_id) as action_id,count(action_id) as count,delete_user as operator,qc_name as currentQC",
 					"conditions" => "action_id is not null",
+					"order"=>"action_id desc",
 					"group" => "action_id" 
 			] );
 			// Create a Model paginator, show 10 rows by page starting from $currentPage
