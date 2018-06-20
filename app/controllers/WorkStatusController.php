@@ -325,4 +325,5 @@ class WorkStatusController extends ControllerBase {
 			echo "reject:" . $undoneBatch;
 		}
 	}
+	$this->view->disable();
 }
