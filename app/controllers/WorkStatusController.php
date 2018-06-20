@@ -304,7 +304,7 @@ class WorkStatusController extends ControllerBase {
 		}
 		$ws = WorkStatus::find ( [ 
 				"column" => "batch",
-				"conditions" => "qc=:qc: and status='done'",
+				"conditions" => "qc=:qc: and status='doing'",
 				"order" => "batch",
 				"limit" => "1",
 				"bind" => [ 
