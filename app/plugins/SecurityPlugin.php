@@ -123,7 +123,8 @@ class SecurityPlugin extends Plugin {
 					],
 					'workstatus' => [ 
 							'items',
-							'getpermission' 
+							'getpermission' ,
+							'pickPermission'
 					],
 					'callback' => [ 
 							'index',

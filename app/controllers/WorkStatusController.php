@@ -58,11 +58,11 @@ class WorkStatusController extends ControllerBase {
 					] 
 			] );
 			if ($w === false) {
-				$this->addAction($qc,$work,$batch);
-				$this->doneAction($qc,$work,$batch);
+				$this->addAction ( $qc, $work, $batch );
+				$this->doneAction ( $qc, $work, $batch );
 				echo '{"result":"ok","reason":"ok"}';
 				return;
-				//throw new exception ( "Work status not exists" );
+				// throw new exception ( "Work status not exists" );
 			}
 			if ($w->status === "done") {
 				throw new exception ( "Already done:)" );
@@ -237,9 +237,9 @@ class WorkStatusController extends ControllerBase {
 				"work = :work: AND batch = :batch:",
 				"bind" => [ 
 						"work" => "$work",
-						"batch" => "$batch"
-				] ,
-				"order" => "status,donetime"
+						"batch" => "$batch" 
+				],
+				"order" => "status,donetime" 
 		];
 		
 		// The data set to paginate
@@ -264,16 +264,16 @@ class WorkStatusController extends ControllerBase {
 		<th>DoneTime</th>
 		<th>Action</th>
 		</tr>";
-		$i=0;
+		$i = 0;
 		foreach ( $page->items as $item ) {
 			if ($item->grantDeadLine > date ( "Y-m-d H:i:s" )) {
 				$status = "granting";
 			} else {
 				$status = $item->status;
 			}
-			$i++;
+			$i ++;
 			echo "<tr>
-        <td>" . $i. "</td>" . "
+        <td>" . $i . "</td>" . "
         <td>" . $item->qc . "</td>
         <td>" . $item->work . "</td>
         <td>" . $item->batch . "</td>
@@ -292,5 +292,37 @@ class WorkStatusController extends ControllerBase {
 	' . $page->current, "/", $page->total_pages;
 		echo $this->tag->javascriptInclude ( 'js/moment.min.js' );
 		echo $this->tag->javascriptInclude ( 'js/workstatus.js' );
+	}
+	public function pickPermissionAction($qc=null, $batch=null) {
+		/*
+		 * $qc= $this->session->get ( 'auth' ) ['name']; // $this->request->getPost('qc_name_add');
+		 * $qc="sucre.xu";
+		 */
+		if($qc==null || $batch==null){
+			echo "reject:arguments not enough";
+			return;
+		}
+		$ws = WorkStatus::find ( [ 
+				"column" => "batch",
+				"conditions" => "qc=:qc: and status='done'",
+				"order" => "batch",
+				"limit" => "1",
+				"bind" => [ 
+						"qc" => "$qc" 
+				] 
+		] );
+		if (count ( $ws ) == 0) {
+			echo "permit";
+			return;
+		}
+		
+		foreach ( $ws as $item ) {
+			$undoneBatch = $item->batch;
+		}
+		if ($undoneBatch == null || $batch == $undoneBatch) {
+			echo "permit";
+		} else {
+			echo "reject:" . $undoneBatch;
+		}
 	}
 }
