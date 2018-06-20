@@ -323,7 +323,7 @@ class WorkStatusController extends ControllerBase {
 			echo "permit";
 		} else {
 			echo "reject:" . $undoneBatch;
-		}
+		}		
+		$this->view->disable();
 	}
-	$this->view->disable();
 }
