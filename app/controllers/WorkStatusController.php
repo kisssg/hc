@@ -298,6 +298,7 @@ class WorkStatusController extends ControllerBase {
 		 * $qc= $this->session->get ( 'auth' ) ['name']; // $this->request->getPost('qc_name_add');
 		 * $qc="sucre.xu";
 		 */
+		$this->view->disable();
 		if($qc==null || $batch==null){
 			echo "reject:arguments not enough";
 			return;
@@ -324,6 +325,6 @@ class WorkStatusController extends ControllerBase {
 		} else {
 			echo "reject:" . $undoneBatch;
 		}		
-		$this->view->disable();
+		
 	}
 }
