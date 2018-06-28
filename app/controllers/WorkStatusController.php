@@ -1,7 +1,7 @@
 <?php
 use Phalcon\Paginator\Adapter\Model as PaginatorModel;
 class WorkStatusController extends ControllerBase {
-	protected function initialize() {
+	public function initialize() {
 		$this->tag->setTitle ( "WorkStatus" );
 	}
 	public function indexAction() {

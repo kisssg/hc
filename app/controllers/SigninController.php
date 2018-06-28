@@ -1,6 +1,6 @@
 <?php
 class SigninController extends ControllerBase {
-	protected function initialize() {
+	public function initialize() {
 		$this->tag->setTitle ( "SignIn" );
 		parent::initialize ();
 	}

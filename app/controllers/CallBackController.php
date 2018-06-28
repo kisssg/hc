@@ -1,7 +1,7 @@
 <?php
 use Phalcon\Paginator\Adapter\Model as PaginatorModel;
 class CallBackController extends ControllerBase {
-	protected function initialize() {
+	public function initialize() {
 	}
 	public function indexAction() {
 		$this->dispatcher->forward ( [ 

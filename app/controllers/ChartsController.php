@@ -1,6 +1,6 @@
 <?php
 class ChartsController extends ControllerBase {
-	protected function initialize() {
+	public function initialize() {
 		$this->tag->setTitle ( "Data Chart" );
 		parent::initialize ();
 	}

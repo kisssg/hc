@@ -27,6 +27,8 @@ class Issues extends Model {
 	public $edit_log;
 	public $source;
 	public $harassment_type;
+	public $upload_time;
+	public $uploader;
 	public function initialize() {
 		$this->setSource ( "fc_issue" );
 	}

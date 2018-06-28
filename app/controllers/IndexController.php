@@ -2,7 +2,7 @@
 
 class IndexController extends ControllerBase
 {
-	protected function initialize(){
+	public function initialize(){
 		$this->tag->setTitle("Home");
 		parent::initialize();
 	}
@@ -13,6 +13,5 @@ class IndexController extends ControllerBase
     public function phpAction(){
     	phpinfo();
     }
-
 }
 
