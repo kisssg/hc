@@ -172,7 +172,7 @@ class ChartsController extends ControllerBase {
 		$endDate = $this->request->getPost ( "endDate" );
 		$group = Journals::find ( [
 				"columns" => "distinct(qc_name) as qc,validity,avg(checking_time) as avgSecCost",
-				"conditions" => "visit_date between :startDate: and :endDate: and qc_name != 'tool' and checking_time<600",
+				"conditions" => "visit_date between :startDate: and :endDate: and qc_name != 'tool' ",
 				"group" => "qc_name,validity",
 				"order" => "qc_name,validity",
 				"bind" => [
