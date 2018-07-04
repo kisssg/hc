@@ -199,6 +199,25 @@ class ChartsController extends ControllerBase {
 		echo json_encode($group);
 		$this->view->disable();
 	}
+	public function sumTimeCostAction(){		
+		$startDate=$this->request->getPost("startDate");
+		$endDate=$this->request->getPost("endDate");//"2018-06-05";//
+		/* // test value
+		  $startDate="2018-06-01";
+		 $endDate="2018-06-05"; */
+		$group= Journals::find([
+				"columns"=>"distinct(qc_name) as QC,sum(checking_time)/60 as sumTimeCost",
+				"conditions"=>"visit_date between :startDate: and :endDate: and qc_name != 'tool'",
+				"group"=>"QC",
+				"order"=>"sumTimeCost desc",
+				"bind"=>[
+						"startDate"=>"$startDate",
+						"endDate"=>"$endDate"
+				]
+		]);
+		echo json_encode($group);
+		$this->view->disable();
+	}
 	
 	public function outsourcingAction(){
 		$this->view->setTemplateBefore ( 'public' );		

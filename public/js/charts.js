@@ -264,6 +264,88 @@ var Charts = {
 			    window.scrollTo(0, scrollHeight);
 			});
     },
+    showSumTimeCost : function() {
+	var startDate = $("#startDate").val(), endDate = $("#endDate").val();
+	if (startDate == "" || endDate == "") {
+	    alert("Select range first.");
+	    return;
+	}
+	var args = {
+	    "startDate" : startDate,
+	    "endDate" : endDate
+	}
+	$
+		.post(
+			"sumTimeCost",
+			args,
+			function(data) {
+			    if (data == '[]') {// no data.
+				alert("无可显示数据！");
+				return;
+			    }
+			    var qcs = [], total = [], res = JSON
+				    .parse(data);
+			    for (i = 0; i < res.length; i++) {
+				qcs[i] = res[i].QC;
+				total[i] = res[i].sumTimeCost;
+			    }
+
+			    var canvasHeight = (res.length + 1) * 10;
+
+			    var rndnum = Math.ceil(Math.random() * 100);
+			    var canvasID = "newChartCanvas" + rndnum;
+			    $("#canvasDiv").append(
+				    "<canvas id='" + canvasID + "' height='"
+					    + canvasHeight + "px'></canvas>");
+			    var ctx = document.getElementById(canvasID)
+				    .getContext('2d');
+			    var dr = Drawer;
+			    var options = {
+				type : "horizontalBar",
+				data : {
+				    labels : qcs,
+				    datasets : [ {
+					label : "sumTimeCost(m)",
+					data : total,
+					xAxisID : 'x-axis-1',
+					borderWidth : 1,
+					stack : "stack 0",
+					backgroundColor : dr.randomColor(0.8),
+				    }]
+				},
+				options : {
+				    title : {
+					display : true,
+					text : "Sum Time Cost(minutes):"
+						+ startDate + " - " + endDate
+				    },
+				    scales : {
+					xAxes : [ {
+					    stacked : true,
+					    beginAtZero : true,
+					    type : 'linear', 
+					    display : true,
+					    position : 'bottom',
+					    id : 'x-axis-1',
+					    scaleLabel : {
+						display : true,
+						labelString : 'Minutes'
+					    },
+					},],
+					yAxes : [ {
+					    stacked : true
+
+					}, ]
+				    }
+				}
+			    };
+			    dr.drawChart(ctx, options).update();
+			    scrollHeight = document.body.offsetHeight
+				    - canvasHeight;
+			    window.scrollTo(0, scrollHeight);
+			});
+
+    },
     showHarass : function() {
 	var startDate = $("#startDate").val(), endDate = $("#endDate").val();
 	if (startDate == "" || endDate == "") {
@@ -1042,8 +1124,8 @@ var Charts = {
 		options : {
 		    title : {
 			display : true,
-			text : "Contracts batch range:"
-				+ startDate + " - " + endDate
+			text : "Contracts batch range:" + startDate + " - "
+				+ endDate
 		    },
 		    scales : {
 			xAxes : [ {
@@ -1070,7 +1152,7 @@ var Charts = {
 	    window.scrollTo(0, scrollHeight);
 	})
     },
-    cntContractsOverall:function(){
+    cntContractsOverall : function() {
 	var startDate = $("#startDate").val(), endDate = $("#endDate").val();
 	if (startDate == "" || endDate == "") {
 	    alert("Select range first.");
@@ -1081,73 +1163,79 @@ var Charts = {
 	    "startDate" : startDate,
 	    "endDate" : endDate
 	};
-	$.post("cntContractsAll", args, function(data) {
-	    if (data == '[]') {// no data.
-		alert("No data to show.");
-		return;
-	    }
-	    var types = ['Checked','Uncheck'], counts = [], checked = [], uncheck = [], res = JSON
-		    .parse(data);
-	    for (i = 0; i < res.length; i++) {
-		counts[i] = res[i].count;
-		checked[i] = res[i].checked;
-		uncheck[i] = counts[i] - checked[i];
-	    }
+	$
+		.post(
+			"cntContractsAll",
+			args,
+			function(data) {
+			    if (data == '[]') {// no data.
+				alert("No data to show.");
+				return;
+			    }
+			    var types = [ 'Checked', 'Uncheck' ], counts = [], checked = [], uncheck = [], res = JSON
+				    .parse(data);
+			    for (i = 0; i < res.length; i++) {
+				counts[i] = res[i].count;
+				checked[i] = res[i].checked;
+				uncheck[i] = counts[i] - checked[i];
+			    }
 
-	    var canvasHeight = (res.length + 1) * 50;
+			    var canvasHeight = (res.length + 1) * 50;
 
-	    var rndnum = Math.ceil(Math.random() * 100);
-	    var canvasID = "newChartCanvas" + rndnum;
-	    $("#canvasDiv").append(
-		    "<canvas id='" + canvasID + "' height='" + canvasHeight
-			    + "px'></canvas>");
-	    var ctx = document.getElementById(canvasID).getContext('2d');
-	    var dr = Drawer;
-	    var options = {
-		type : 'doughnut',
-		data : {
-		    labels : types,
-		    datasets : [ {
-			label : "",
-			data : [checked,uncheck],
-			xAxisID : 'x-axis-1',
-			borderWidth : 1,
-			stack : "stack 0",
-			backgroundColor : dr.colorArr(2,1),
-		    }, ]
-		},
-		options : {
-		    title : {
-			display : true,
-			text : "Silent Monitor Check Contracts Team Overview Batch:"
-				+ startDate + " - " + endDate
-		    },
-		    scales : {
-			xAxes : [ {
-			    stacked : true,
-			    beginAtZero : true,
-			    type : 'linear',
-			    display : true,
-			    position : 'bottom',
-			    id : 'x-axis-1',
-			    scaleLabel : {
-				display : false,
-				labelString : 'Volume'
-			    },
-			} ],
-			yAxes : [ {
-			    stacked : true
+			    var rndnum = Math.ceil(Math.random() * 100);
+			    var canvasID = "newChartCanvas" + rndnum;
+			    $("#canvasDiv").append(
+				    "<canvas id='" + canvasID + "' height='"
+					    + canvasHeight + "px'></canvas>");
+			    var ctx = document.getElementById(canvasID)
+				    .getContext('2d');
+			    var dr = Drawer;
+			    var options = {
+				type : 'doughnut',
+				data : {
+				    labels : types,
+				    datasets : [ {
+					label : "",
+					data : [ checked, uncheck ],
+					xAxisID : 'x-axis-1',
+					borderWidth : 1,
+					stack : "stack 0",
+					backgroundColor : dr.colorArr(2, 1),
+				    }, ]
+				},
+				options : {
+				    title : {
+					display : true,
+					text : "Silent Monitor Check Contracts Team Overview Batch:"
+						+ startDate + " - " + endDate
+				    },
+				    scales : {
+					xAxes : [ {
+					    stacked : true,
+					    beginAtZero : true,
+					    type : 'linear',
+					    display : true,
+					    position : 'bottom',
+					    id : 'x-axis-1',
+					    scaleLabel : {
+						display : false,
+						labelString : 'Volume'
+					    },
+					} ],
+					yAxes : [ {
+					    stacked : true
 
-			}, ]
-		    }
-		}
-	    };
-	    dr.drawChart(ctx, options).update();
-	    scrollHeight = document.body.offsetHeight - canvasHeight;
-	    window.scrollTo(0, scrollHeight);
-	})
+					}, ]
+				    }
+				}
+			    };
+			    dr.drawChart(ctx, options).update();
+			    scrollHeight = document.body.offsetHeight
+				    - canvasHeight;
+			    window.scrollTo(0, scrollHeight);
+			})
     },
-    cntMysteryContracts:function(){
+    cntMysteryContracts : function() {
 
 	var startDate = $("#startDate").val(), endDate = $("#endDate").val();
 	if (startDate == "" || endDate == "") {
@@ -1232,7 +1320,7 @@ var Charts = {
 	    window.scrollTo(0, scrollHeight);
 	})
     },
-    cntMyteryAssess:function(){
+    cntMyteryAssess : function() {
 
 	var startDate = $("#startDate").val(), endDate = $("#endDate").val();
 	if (startDate == "" || endDate == "") {
@@ -1249,8 +1337,7 @@ var Charts = {
 		alert("No data to show.");
 		return;
 	    }
-	    var types = [], counts = [] , res = JSON
-		    .parse(data);
+	    var types = [], counts = [], res = JSON.parse(data);
 	    for (i = 0; i < res.length; i++) {
 		types[i] = res[i].qc;
 		counts[i] = res[i].count;
@@ -1281,8 +1368,8 @@ var Charts = {
 		options : {
 		    title : {
 			display : true,
-			text : "Mystery scores count:"
-				+ startDate + " - " + endDate
+			text : "Mystery scores count:" + startDate + " - "
+				+ endDate
 		    },
 		    scales : {
 			xAxes : [ {

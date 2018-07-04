@@ -115,8 +115,8 @@ class SecurityPlugin extends Plugin {
 							'cntContracts',
 							'cntContractsAll',
 							'mysteryContracts',
-							'mysteryAssess'
-					
+							'mysteryAssess',
+							'sumTimeCost',					
 					],
 					'mysterymonitor' => [ 
 							'index' 
