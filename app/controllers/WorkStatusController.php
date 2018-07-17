@@ -64,8 +64,19 @@ class WorkStatusController extends ControllerBase {
 				return;
 				// throw new exception ( "Work status not exists" );
 			}
+			
 			if ($w->status === "done") {
-				throw new exception ( "Already done:)" );
+				if ($w->grantDeadLine == null) {
+					throw new exception ( "Already done:)" );
+				}else{
+					$w->grantDeadLine=null;
+					$w->donetime = date ( "Y-m-d H:i:s" );
+					if($w->update()===false){
+						throw new exception("Failed setting work status to done");
+					}
+					echo '{"result":"ok","reason":"end granting"}';
+					return;
+				}
 			}
 			$w->status = "done";
 			$w->donetime = date ( "Y-m-d H:i:s" );
@@ -293,13 +304,13 @@ class WorkStatusController extends ControllerBase {
 		echo $this->tag->javascriptInclude ( 'js/moment.min.js' );
 		echo $this->tag->javascriptInclude ( 'js/workstatus.js' );
 	}
-	public function pickPermissionAction($qc=null, $batch=null) {
+	public function pickPermissionAction($qc = null, $batch = null) {
 		/*
 		 * $qc= $this->session->get ( 'auth' ) ['name']; // $this->request->getPost('qc_name_add');
 		 * $qc="sucre.xu";
 		 */
-		$this->view->disable();
-		if($qc==null || $batch==null){
+		$this->view->disable ();
+		if ($qc == null || $batch == null) {
 			echo "reject:arguments not enough";
 			return;
 		}
@@ -324,7 +335,6 @@ class WorkStatusController extends ControllerBase {
 			echo "permit";
 		} else {
 			echo "reject:" . $undoneBatch;
-		}		
-		
+		}
 	}
 }
