@@ -7,7 +7,7 @@ class MysterymonitorController extends ControllerBase {
 	public function getLCSAction() {
 		$this->view->disable ();
 		$agency = $this->request->getPost ( "agency" );
-		$agency = 'dechuangrong';
+		//$agency = 'dechuangrong';
 		$LCS = Agencies::findFirst ( [ 
 				"agency= :agency:",
 				"bind" => [ 
@@ -16,6 +16,8 @@ class MysterymonitorController extends ControllerBase {
 		] );
 		if ($LCS) {
 			echo $LCS->LCS;
+		}else{
+			echo "无匹配";
 		}
 	}
 }
