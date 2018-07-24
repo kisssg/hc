@@ -119,7 +119,8 @@ class SecurityPlugin extends Plugin {
 							'sumTimeCost',					
 					],
 					'mysterymonitor' => [ 
-							'index' 
+							'index' ,
+							'getLCS'
 					],
 					'workstatus' => [ 
 							'items',
