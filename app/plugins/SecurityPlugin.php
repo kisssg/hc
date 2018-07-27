@@ -63,7 +63,7 @@ class SecurityPlugin extends Plugin {
 							'markDeletion',
 							'restoreDeletion',
 							'transfer' 
-					] 
+					]
 			];
 			foreach ( $privateResources as $resource => $actions ) {
 				$acl->addResource ( new Resource ( $resource ), $actions );
@@ -131,7 +131,11 @@ class SecurityPlugin extends Plugin {
 							'index',
 							'delete',
 							'recycleBin' 
-					] 
+					],
+					'journals'=>[
+							'index',
+							'search',
+					]
 			];
 			foreach ( $publicResources as $resource => $actions ) {
 				$acl->addResource ( new Resource ( $resource ), $actions );

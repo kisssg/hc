@@ -8,7 +8,7 @@ class IndexController extends ControllerBase
 	}
     public function indexAction()
     {
-		
+    	header('Location: /');
     }
     public function phpAction(){
     	phpinfo();
