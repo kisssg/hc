@@ -3,6 +3,7 @@ use Phalcon\Mvc\Model\Criteria;
 use Phalcon\Paginator\Adapter\Model as Paginator;
 class JournalsController extends ControllerBase {
 	public function initialize() {
+		$this->tag->setTitle('外访日志搜索');
 	}
 	public function indexAction() {
 	}
