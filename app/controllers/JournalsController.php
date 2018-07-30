@@ -11,33 +11,39 @@ class JournalsController extends ControllerBase {
 		if ($this->request->isPost ()) {
 			$visit_date= $this->request->getPost ('visit_date','string');
 			$journal_creator= $this->request->getPost ('journal_creator','string');
+			$contract_no= $this->request->getPost ('contract_no','string');
 			$query=new Criteria;
-			$query->setDI($this->di);
 			$query->setModelName("Journals");
-			$query->where("visit_date=:visit_date: ",["visit_date"=>"$visit_date"]);
-			if($journal_creator){
-				echo "journal_creator";
-				$query->andWhere("journal_creator = :journal_creator:",["journal_creator"=>"$journal_creator"]);
+			$query->where("1=1");
+			$hasRequest=false;
+			if($visit_date){
+				$query->andWhere("visit_date=:visit_date: ",["visit_date"=>"$visit_date"]);
+				$hasRequest=true;				
 			}
-			//$query = Criteria::fromInput ( $this->di, "Journals", $this->request->getPost () );
-			//at first I was trying to use above method to create the criteria, it works fine,
-			//but seems no way to change the "like" to "=", it's slow.
-			$this->persistent->SearchParams = $query->getParams ();
-		} else {
+			if($journal_creator){
+				$query->andWhere("journal_creator like :journal_creator:",["journal_creator"=>"$journal_creator%"]);
+				$hasRequest=true;
+			}
+			if($contract_no){
+				$query->andWhere("contract_no = :contract_no:",["contract_no"=>"$contract_no"]);
+				$hasRequest=true;
+			}
+			//$query1 = Criteria::fromInput ( $this->di, "Journals", $this->request->getPost () );
+			$this->persistent->searchParams = $query->getParams ();
+		} else {			
+			$hasRequest=true;
 			$numberPage = $this->request->getQuery ( "page", "int" );
 		}
 		
 		$parameters = array ();
-		if ($this->persistent->SearchParams) {
-			$parameters = $this->persistent->SearchParams;
+		if ($this->persistent->searchParams && $hasRequest) {
+			$parameters = $this->persistent->searchParams;
 		}else{
 			$parameters=["j_id=100"];
 		}
 		$journals = Journals::find ( $parameters );
 		if (count ( $journals ) == 0) {
-			// $this->flash->notice("The search did not find any products");
-			echo "nothing find.";
-			//return;
+			 $this->flash->notice("The search did not find any journals");
 		}
 		
 		$paginator = new Paginator ( array (
