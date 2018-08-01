@@ -132,6 +132,18 @@ class SecurityPlugin extends Plugin {
 							'delete',
 							'recycleBin' 
 					],
+					'videoscore' => [
+							'add',
+							'update',
+							'delete',
+							'show'
+					],
+					'videoaudit'=>[
+							'add',
+							'update',
+							'delete',
+							'show'
+					],
 					'journals'=>[
 							'index',
 							'search',
