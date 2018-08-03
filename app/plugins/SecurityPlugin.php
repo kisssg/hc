@@ -147,6 +147,8 @@ class SecurityPlugin extends Plugin {
 					'journals'=>[
 							'index',
 							'search',
+							'vrdScoreAdd',
+							'vrdScores'
 					]
 			];
 			foreach ( $publicResources as $resource => $actions ) {
