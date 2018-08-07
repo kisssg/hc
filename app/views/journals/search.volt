@@ -62,7 +62,7 @@ $collector=isset($_GET['collector'])?$_GET['collector']:"";
 
     {% endif %}
 {% else %}
-    No journals are recorded
+    No record
 {% endfor %}
 
 <?php

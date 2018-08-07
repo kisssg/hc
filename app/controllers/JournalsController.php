@@ -49,7 +49,12 @@ class JournalsController extends ControllerBase {
 			$parameters = $this->persistent->searchParams;
 		} else {
 			$parameters = [ 
-					"j_id=100" 
+					"conditions"=>"1=2" 
+			];
+		}
+		if($parameters['conditions']=="1=1"){			
+			$parameters = [
+					"conditions"=>"1=2"
 			];
 		}
 		$journals = Journals::find ( $parameters );
@@ -185,13 +190,18 @@ class JournalsController extends ControllerBase {
 		if ($this->persistent->mySearchParams && $hasRequest) {
 			$parameters = $this->persistent->mySearchParams;
 		} else {
-			$parameters = [ 
-					"id=0" 
+			$parameters = [
+					"conditions"=>"1=2"
+			];
+		}
+		if($parameters['conditions']=="1=1"){
+			$parameters = [
+					"conditions"=>"1=2"
 			];
 		}
 		$journals = VideoScores::find ( $parameters );
 		if (count ( $journals ) == 0) {
-			$this->flash->notice ( "The search did not find any journals" );
+			$this->flash->notice ( "The search did not find any scores" );
 		}
 		
 		$paginator = new Paginator ( array (

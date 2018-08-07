@@ -79,7 +79,7 @@ $(document)
 
 					    // initialize the html tag for video
 					    // info adding
-					    $(".videoInfo").remove();
+					    $(".videoInfoFrame").remove();
 					    VideoScoreCard.addVideoInfo();
 					} else {
 					    alert("未完成的功能");
@@ -166,9 +166,13 @@ $(document)
 						    complaintIndicator);
 					    // initialize user input box
 					    $("#object").val(object);
-					    vInfo=VideoScore.videoInfoSplit(videoInfo);
-					    $("#remark").val(vInfo);
-					    //$("#remark").val(remark);
+					    $("#remark").val(remark);
+					    console.log(videoInfo);
+					    videoInfo=JSON.parse(videoInfo);
+					    $(".videoInfoFrame").remove();
+					    for(i=0;i<videoInfo.length;i++){
+						 VideoScoreCard.addVideoInfo(videoInfo[i].name,videoInfo[i].duration);						
+					    }
 					    $("#tips").text("");
 					    if (action == "edit") {
 						$("#object").attr("disabled",
@@ -176,6 +180,10 @@ $(document)
 						$("#complaintIndicator").attr(
 							"disabled", false);
 						$(".videoScore").attr(
+							"disabled", false);
+						$(".videoName").attr(
+							"disabled", false);
+						$(".duration").attr(
 							"disabled", false);
 						$("#remark").prop("disabled",
 							false);
@@ -190,6 +198,10 @@ $(document)
 						$("#complaintIndicator").attr(
 							"disabled", true);
 						$(".videoScore").attr(
+							"disabled", true);
+						$(".videoName").attr(
+							"disabled", true);
+						$(".duration").attr(
 							"disabled", true);
 						$("#remark").prop("disabled",
 							true);

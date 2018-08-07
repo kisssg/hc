@@ -3,10 +3,11 @@ var VideoScore = {
     add: function() {
 	eachDuration = $(".duration");
 	eachVideoName = $(".videoName");
-	videoInfo = "";
+	//videoInfo1 = "";
 	duration=0;
+	var videoInfo=[];
 	for (i = 0; i < eachDuration.length; i++) {
-	    vName = (eachVideoName[i].value).replace(/[\]\[\|]/g,"");
+	    vName = (eachVideoName[i].value).replace(/[\]\[\|\'\\\/\"]/g,"");
 	    vDuration = eachDuration[i].value;
 	    if (vName == "" || vDuration == ""
 		    || !Validator.checkTimeFormat(vDuration)) {
@@ -18,8 +19,14 @@ var VideoScore = {
 	    m=Number(ms[0]);
 	    s=Number(ms[1]);
 	    duration += m*60 +s;
-	    videoInfo += '[' + vName + '|' + vDuration + ']';
+	    //videoInfo1 += '[' + vName + '|' + vDuration + ']';
+	    var info={
+		    "name":vName,
+		    "duration":vDuration
+	    }
+	    videoInfo.push(info );
 	}
+	videoInfo=JSON.stringify(videoInfo);
 	city = $("#city").text();
 	LLI = $("#journal_creator").text();
 	contractNo = $("#contract_no").text();
@@ -28,7 +35,7 @@ var VideoScore = {
 	employeeID = $('#employee_code').text();
 	signInAddr = $('#addr_detail').text() + $("#addr_sign_in").text();
 	visitResult = $('#visit_result').text();
-	object = $('#object').val();
+	object = ($('#object').val()).replace(/[\"]/g,"''");
 	if(object==""){
 	    $("#tips").text("Object不能为空！");
 	    return;
@@ -42,7 +49,7 @@ var VideoScore = {
 	noHarassment = $('#noHarassment').val();
 	getPTP = $('#getPTP').val();
 	skipTrace = $('#skipTrace').val();
-	remark = $('#remark').val();
+	remark = ($('#remark').val()).replace(/[\"]/g,"''");
 	complaintIndicator = $('#complaintIndicator').val();
 
 	score = $('#score').text();
@@ -110,16 +117,16 @@ var VideoScore = {
     }
 }
 var VideoScoreCard = {
-    addVideoInfo : function() {
+    addVideoInfo : function(name="",duration="") {
 	rid = Math.ceil(Math.random() * 1000);
-	videoInfoHtml = '<tr class="videoInfo" id="videoInfo'
+	videoInfoHtml = '<tr class="videoInfoFrame" id="videoInfo'
 		+ rid
 		+ '"><td colspan="2">'
 		+ '<label for="videoName" class="control-label">Video Name：'
-		+ '</label><input type="text" class="form-control input-sm videoName" id="" value="">'
+		+ '</label><input type="text" class="form-control input-sm videoName" id="" value="' + name + '">'
 		+ '</td><td><div class="row"><div class="col-md-5">'
 		+ '<label for="duration" class="control-label">Duration：</label>'
-		+ '<input type="text" class="form-control input-sm duration" id="" value="" placeholder="mm:ss">'
+		+ '<input type="text" class="form-control input-sm duration" id="" value="' + duration + '" placeholder="mm:ss">'
 		+ '</div><div class="col-md-5">'
 		+ '<button onclick="return VideoScoreCard.addVideoInfo();"><span class="glyphicon glyphicon-plus"></span></button>'
 		+ '<button onclick="return VideoScoreCard.removeVideoInfo('
@@ -127,9 +134,10 @@ var VideoScoreCard = {
 		+ ');"><span class="glyphicon glyphicon-minus"></span></button>'
 		+ '</div></div></td></tr>';
 	$("#videoBottom").before(videoInfoHtml);
+	return(rid);
     },
     removeVideoInfo : function(id) {
-	if ($(".videoInfo").length == 1) {
+	if ($(".videoInfoFrame").length == 1) {
 	    return;
 	}
 	;

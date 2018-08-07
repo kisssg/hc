@@ -39,7 +39,7 @@ $collector=isset($_GET['collector'])?$_GET['collector']:"";
             <input type="hidden" class="journalID" value="{{vrdScore.journalID}}"/>
             <input type="hidden" class="object" value="{{vrdScore.object}}"/>
             <input type="hidden" class="remark" value="{{vrdScore.remark}}"/>
-            <input type="hidden" class="videoInfo" value="{{vrdScore.videoInfo}}"/>
+            <input type="hidden" class="videoInfo" value='{{vrdScore.videoInfo}}'/>
             <input type="hidden" class="integrality" value="{{vrdScore.integrality}}"/>
             <input type="hidden" class="description" value="{{vrdScore.description}}"/>
             <input type="hidden" class="announcement" value="{{vrdScore.announcement}}"/>
@@ -76,7 +76,7 @@ $collector=isset($_GET['collector'])?$_GET['collector']:"";
 
     {% endif %}
 {% else %}
-    No journals are recorded
+    No record
 {% endfor %}
 
 <?php
