@@ -3,12 +3,13 @@ use Phalcon\Mvc\Model\Criteria;
 use Phalcon\Paginator\Adapter\Model as Paginator;
 class JournalsController extends ControllerBase {
 	public function initialize() {
-		$this->tag->setTitle ( '外访日志搜索' );
+		$this->tag->setTitle ( 'VRD Scoring' );
 	}
 	public function indexAction() {
 	}
 	public function searchAction() {
-		$this->view->setTemplateBefore("vrd");
+		$this->tag->appendTitle ( '|Journals Search' );
+		$this->view->setTemplateBefore ( "vrd" );
 		$numberPage = 1;
 		if ($this->request->isPost ()) {
 			$visit_date = $this->request->getPost ( 'visit_date', 'string' );
@@ -94,7 +95,7 @@ class JournalsController extends ControllerBase {
 		$createDate = $this->request->getPost ( 'createDate' );
 		$journalID = $this->request->getPost ( 'journalID' );
 		
-		$vrdScore =new VideoScores();
+		$vrdScore = new VideoScores ();
 		$vrdScore->contractNo = $contractNo;
 		$vrdScore->visitDate = $visitDate;
 		$vrdScore->visitTime = $visitTime;
@@ -123,11 +124,30 @@ class JournalsController extends ControllerBase {
 		$vrdScore->createDate = date ( "Y-m-d" );
 		$vrdScore->journalID = $journalID;
 		
-		$vrdScore->create (); 
+		$vrdScore->create ();
 		echo "done";
 	}
-	public function vrdScoresAction(){
-		$this->view->setTemplateBefore("vrd");
+	public function vrdScoreDelAction() {
+		$this->view->disable ();
+		try {
+			$id = $this->request->getPost ( "id" );
+			
+			$score = VideoScores::find ( $id );
+			if ($score == null) {
+				throw new exception ( "数据不存在！" );
+			}
+			if ($score->delete () === true) {
+				echo '{"result":"success","msg":"' . $id . '"}';
+			} else {
+				throw new exception ( "删除失败！请重试！" );
+			}
+		} catch ( Exception $e ) {
+			echo '{"result":"failed","msg":"' . $e->getMessage () . '"}';
+		}
+	}
+	public function vrdScoresAction() {
+		$this->tag->appendTitle ( '|Scores' );
+		$this->view->setTemplateBefore ( "vrd" );
 		$numberPage = 1;
 		if ($this->request->isPost ()) {
 			$visit_date = $this->request->getPost ( 'visit_date', 'string' );
@@ -138,24 +158,24 @@ class JournalsController extends ControllerBase {
 			$query->where ( "1=1" );
 			$hasRequest = false;
 			if ($visit_date) {
-				$query->andWhere ( "visitDate=:visit_date: ", [
-						"visit_date" => "$visit_date"
+				$query->andWhere ( "visitDate=:visit_date: ", [ 
+						"visit_date" => "$visit_date" 
 				] );
 				$hasRequest = true;
 			}
 			if ($journal_creator) {
-				$query->andWhere ( "LLI like :journal_creator:", [
-						"journal_creator" => "$journal_creator%"
+				$query->andWhere ( "LLI like :journal_creator:", [ 
+						"journal_creator" => "$journal_creator%" 
 				] );
 				$hasRequest = true;
 			}
 			if ($contract_no) {
-				$query->andWhere ( "contractNo = :contract_no:", [
-						"contract_no" => "$contract_no"
+				$query->andWhere ( "contractNo = :contract_no:", [ 
+						"contract_no" => "$contract_no" 
 				] );
 				$hasRequest = true;
 			}
-			$this->persistent->mySearchParams= $query->getParams ();
+			$this->persistent->mySearchParams = $query->getParams ();
 		} else {
 			$hasRequest = true;
 			$numberPage = $this->request->getQuery ( "page", "int" );
@@ -165,8 +185,8 @@ class JournalsController extends ControllerBase {
 		if ($this->persistent->mySearchParams && $hasRequest) {
 			$parameters = $this->persistent->mySearchParams;
 		} else {
-			$parameters = [
-					"id=0"
+			$parameters = [ 
+					"id=0" 
 			];
 		}
 		$journals = VideoScores::find ( $parameters );
@@ -177,10 +197,9 @@ class JournalsController extends ControllerBase {
 		$paginator = new Paginator ( array (
 				"data" => $journals,
 				"limit" => 10,
-				"page" => $numberPage
+				"page" => $numberPage 
 		) );
 		
 		$this->view->page = $paginator->getPaginate ();
-		
 	}
 }

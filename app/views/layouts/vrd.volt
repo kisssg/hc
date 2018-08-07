@@ -62,7 +62,7 @@
 								<tr>
 									<td>合同号：<span id="contract_no"></span></td>
 									<td>外访日期：<span id="visit_date_card"></span></td>
-									<td>签到地址：<span id="addr_detail"></span><span id="addr_sign_in"></span></td>
+									<td>签到地址：<span id="signInAddr"><span id="addr_detail"></span><span id="addr_sign_in"></span></span></td>
 								</tr>
 								<tr>
 									<td>外访时间：<span id="visit_time"></span></td>
@@ -220,7 +220,7 @@
 							<div class="modal-footer">
 								<input type="hidden" id="journalID" value=""/>
 								<span id="tips"></span>
-								<button type="button" class="btn btn-primary" onclick="return VideoScore.addScore();" id="scoreSubmitBtn">提交</button>
+								<button type="button" class="btn btn-primary" onclick="return VideoScore.add();" id="scoreSubmitBtn">提交</button>
 								<button type="button" class="btn btn-default"
 									data-dismiss="modal">关闭</button>
 							</div>

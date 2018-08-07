@@ -41,7 +41,7 @@ $collector=isset($_GET['collector'])?$_GET['collector']:"";
             <input type="hidden" class="addr_sign_in" value="{{journal.addr_sign_in}}"/>
             <input type="hidden" class="journalID" value="{{journal.j_id}}"/>
             <input type="hidden" class="employee_code" value="{{journal.employee_code}}"/>
-            <td width="7%">{{ link_to("#", '评分', "class": "btn btn-default btn-xs","data-toggle":"modal","data-target":"#videoScoreBoard","data-backdrop":"static","data-id":journal.j_id) }}</td>
+            <td width="7%">{{ link_to("#", '评分', "class": "btn btn-default btn-xs","data-toggle":"modal","data-target":"#videoScoreBoard","data-backdrop":"static","data-id":journal.j_id,"data-action":"add") }}</td>
         </tr>
     {% if loop.last %}
     </tbody>

@@ -148,6 +148,7 @@ class SecurityPlugin extends Plugin {
 							'index',
 							'search',
 							'vrdScoreAdd',
+							'vrdScoreDel',
 							'vrdScores'
 					]
 			];

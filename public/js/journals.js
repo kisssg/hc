@@ -1,12 +1,12 @@
 var VideoScore = {
     name : "",
-    addScore : function() {
+    add: function() {
 	eachDuration = $(".duration");
 	eachVideoName = $(".videoName");
 	videoInfo = "";
 	duration=0;
 	for (i = 0; i < eachDuration.length; i++) {
-	    vName = eachVideoName[i].value;
+	    vName = (eachVideoName[i].value).replace(/[\]\[\|]/g,"");
 	    vDuration = eachDuration[i].value;
 	    if (vName == "" || vDuration == ""
 		    || !Validator.checkTimeFormat(vDuration)) {
@@ -85,12 +85,29 @@ var VideoScore = {
 	});
 
     },
-    deleteScore : function(id) {
-	alert(id + " deleted!");
+    delete: function(id) {
+	cf=confirm("确定要删除吗？");
+	if(cf===true){
+	arg={"id":id}
+	url="vrdScoreDel";
+	$.post(url,arg,function(data){
+	    res=JSON.parse(data);
+	    if(res.result=="success"){
+		alert("success");
+		window.location.reload();
+	    }else{
+		alert("失败！"+res.msg);
+	    }
+	});
+	}
     },
-    updateScore : function(id) {
+    update: function(id) {
 	alert(id + " updated!");
     },
+    videoInfoSplit:function(info){
+	result=info.match(/(\[[^\[\]]+)\|(\d{1,3}:\d{1,2}\])/g);
+	return result;
+    }
 }
 var VideoScoreCard = {
     addVideoInfo : function() {
@@ -102,7 +119,7 @@ var VideoScoreCard = {
 		+ '</label><input type="text" class="form-control input-sm videoName" id="" value="">'
 		+ '</td><td><div class="row"><div class="col-md-5">'
 		+ '<label for="duration" class="control-label">Duration：</label>'
-		+ '<input type="text" class="form-control input-sm duration" id="" value="">'
+		+ '<input type="text" class="form-control input-sm duration" id="" value="" placeholder="mm:ss">'
 		+ '</div><div class="col-md-5">'
 		+ '<button onclick="return VideoScoreCard.addVideoInfo();"><span class="glyphicon glyphicon-plus"></span></button>'
 		+ '<button onclick="return VideoScoreCard.removeVideoInfo('
