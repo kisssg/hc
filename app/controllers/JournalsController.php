@@ -102,7 +102,7 @@ class JournalsController extends ControllerBase {
 		$journalID = $this->request->getPost ( 'journalID' );
 		$id = $this->request->getPost ( 'id' );
 		
-		if ($id == - 1) {
+		if ($id == "") {
 			$vrdScore = new VideoScores ();
 		} else {
 			$vrdScore = VideoScores::findFirst ( $id );

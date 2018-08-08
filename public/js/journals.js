@@ -1,6 +1,6 @@
 var VideoScore = {
     name : "",
-    add: function(id=-1) {
+    add: function(id) {
 	eachDuration = $(".duration");
 	eachVideoName = $(".videoName");
 	// videoInfo1 = "";
@@ -125,8 +125,12 @@ var VideoScore = {
     }
 }
 var VideoScoreCard = {
-    addVideoInfo : function(name="",duration="") {
+    addVideoInfo : function(name,duration) {
 	rid = Math.ceil(Math.random() * 1000);
+	if(name==undefined || duration== undefined){
+	    name="";
+	    duration="";
+	}
 	videoInfoHtml = '<tr class="videoInfoFrame" id="videoInfo'
 		+ rid
 		+ '"><td colspan="2">'
@@ -142,7 +146,6 @@ var VideoScoreCard = {
 		+ ');"><span class="glyphicon glyphicon-minus"></span></button>'
 		+ '</div></div></td></tr>';
 	$("#videoBottom").before(videoInfoHtml);
-	return(rid);
     },
     removeVideoInfo : function(id) {
 	if ($(".videoInfoFrame").length == 1) {
