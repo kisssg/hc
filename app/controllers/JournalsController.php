@@ -83,7 +83,6 @@ class JournalsController extends ControllerBase {
 		$visitResult = $this->request->getPost ( 'visitResult' );
 		$duration = $this->request->getPost ( 'duration' );
 		$object = $this->request->getPost ( 'object' );
-		$videoName = $this->request->getPost ( 'videoName' );
 		$videoInfo = $this->request->getPost ( 'videoInfo' );
 		$integrality = $this->request->getPost ( 'integrality' );
 		$description = $this->request->getPost ( 'description' );
@@ -117,7 +116,6 @@ class JournalsController extends ControllerBase {
 		$vrdScore->visitResult = $visitResult;
 		$vrdScore->duration = $duration;
 		$vrdScore->object = $object;
-		$vrdScore->videoName = $videoName;
 		$vrdScore->videoInfo = $videoInfo;
 		$vrdScore->integrality = $integrality;
 		$vrdScore->description = $description;

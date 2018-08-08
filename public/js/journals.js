@@ -88,13 +88,16 @@ var VideoScore = {
 	$("#scoreSubmitBtn").attr("disabled", true);
 	$.post(url, args, function(data) {
 	    res=JSON.parse(data);
-	    if(res.result=="success" && id>0){
-		window.location.reload();
-	    }
-	    if(res.result=="failed"){
-		$("#tips").text(res.msg);
+	    if(res.result=="success"){
+		if(id>0){
+			$("#tips").text("成功保存！");
+			window.location.reload();		    
+		}else{
+			$("#tips").text("添加成功！");
+			$("#videoScoreBoard").modal("hide");		    
+		}
 	    }else{
-		$("#videoScoreBoard").modal("hide");
+		$("#tips").text(res.msg);
 	    }
 	    $("#scoreSubmitBtn").attr("disabled", false);	    
 	});
