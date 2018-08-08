@@ -1,9 +1,9 @@
 var VideoScore = {
     name : "",
-    add: function() {
+    add: function(id=-1) {
 	eachDuration = $(".duration");
 	eachVideoName = $(".videoName");
-	//videoInfo1 = "";
+	// videoInfo1 = "";
 	duration=0;
 	var videoInfo=[];
 	for (i = 0; i < eachDuration.length; i++) {
@@ -19,7 +19,7 @@ var VideoScore = {
 	    m=Number(ms[0]);
 	    s=Number(ms[1]);
 	    duration += m*60 +s;
-	    //videoInfo1 += '[' + vName + '|' + vDuration + ']';
+	    // videoInfo1 += '[' + vName + '|' + vDuration + ']';
 	    var info={
 		    "name":vName,
 		    "duration":vDuration
@@ -57,6 +57,7 @@ var VideoScore = {
 	journalID = $('#journalID').val();
 
 	args = {
+	    'id':id,
 	    'contractNo' : contractNo,
 	    'visitDate' : visitDate,
 	    'visitTime' : visitTime,
@@ -86,9 +87,16 @@ var VideoScore = {
 	$('#tips').text("提交中...");
 	$("#scoreSubmitBtn").attr("disabled", true);
 	$.post(url, args, function(data) {
-	    alert(data);
-	    $("#scoreSubmitBtn").attr("disabled", false);
-	    $("#videoScoreBoard").modal("hide");
+	    res=JSON.parse(data);
+	    if(res.result=="success" && id>0){
+		window.location.reload();
+	    }
+	    if(res.result=="failed"){
+		$("#tips").text(res.msg);
+	    }else{
+		$("#videoScoreBoard").modal("hide");
+	    }
+	    $("#scoreSubmitBtn").attr("disabled", false);	    
 	});
 
     },
@@ -109,7 +117,7 @@ var VideoScore = {
 	}
     },
     update: function(id) {
-	alert(id + " updated!");
+	this.add(id);
     },
     videoInfoSplit:function(info){
 	result=info.match(/(\[[^\[\]]+)\|(\d{1,3}:\d{1,2}\])/g);

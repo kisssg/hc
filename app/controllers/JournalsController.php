@@ -49,12 +49,12 @@ class JournalsController extends ControllerBase {
 			$parameters = $this->persistent->searchParams;
 		} else {
 			$parameters = [ 
-					"conditions"=>"1=2" 
+					"conditions" => "1=2" 
 			];
 		}
-		if($parameters['conditions']=="1=1"){			
-			$parameters = [
-					"conditions"=>"1=2"
+		if ($parameters ['conditions'] == "1=1") {
+			$parameters = [ 
+					"conditions" => "1=2" 
 			];
 		}
 		$journals = Journals::find ( $parameters );
@@ -72,6 +72,7 @@ class JournalsController extends ControllerBase {
 	}
 	public function vrdScoreAddAction() {
 		$this->view->disable ();
+		try{
 		$contractNo = $this->request->getPost ( 'contractNo' );
 		$visitDate = $this->request->getPost ( 'visitDate' );
 		$visitTime = $this->request->getPost ( 'visitTime' );
@@ -99,8 +100,13 @@ class JournalsController extends ControllerBase {
 		$createTime = $this->request->getPost ( 'createTime' );
 		$createDate = $this->request->getPost ( 'createDate' );
 		$journalID = $this->request->getPost ( 'journalID' );
+		$id = $this->request->getPost ( 'id' );
 		
-		$vrdScore = new VideoScores ();
+		if ($id == - 1) {
+			$vrdScore = new VideoScores ();
+		} else {
+			$vrdScore = VideoScores::findFirst ( $id );
+		}
 		$vrdScore->contractNo = $contractNo;
 		$vrdScore->visitDate = $visitDate;
 		$vrdScore->visitTime = $visitTime;
@@ -129,8 +135,14 @@ class JournalsController extends ControllerBase {
 		$vrdScore->createDate = date ( "Y-m-d" );
 		$vrdScore->journalID = $journalID;
 		
-		$vrdScore->create ();
-		echo "done";
+		if($vrdScore->save ()==true){
+			echo '{"result":"success","msg":"'.$vrdScore->id.'"}';
+		}else{
+			throw new exception("failed transferring data");
+		}
+		}catch(Exception $e){
+			echo '{"result":"failed","msg":"'.$e->getMessage().'"}';
+		}
 	}
 	public function vrdScoreDelAction() {
 		$this->view->disable ();
@@ -190,13 +202,13 @@ class JournalsController extends ControllerBase {
 		if ($this->persistent->mySearchParams && $hasRequest) {
 			$parameters = $this->persistent->mySearchParams;
 		} else {
-			$parameters = [
-					"conditions"=>"1=2"
+			$parameters = [ 
+					"conditions" => "1=2" 
 			];
 		}
-		if($parameters['conditions']=="1=1"){
-			$parameters = [
-					"conditions"=>"1=2"
+		if ($parameters ['conditions'] == "1=1") {
+			$parameters = [ 
+					"conditions" => "1=2" 
 			];
 		}
 		$journals = VideoScores::find ( $parameters );

@@ -82,7 +82,6 @@ $(document)
 					    $(".videoInfoFrame").remove();
 					    VideoScoreCard.addVideoInfo();
 					} else {
-					    alert("未完成的功能");
 					    // find text;
 					    visit_result = (table
 						    .find('.visitResult')
@@ -193,6 +192,7 @@ $(document)
 								+ id + ");");
 						$("#scoreSubmitBtn").text("保存");
 					    } else {
+						alert("未完成的功能");
 						$("#object").attr("disabled",
 							true);
 						$("#complaintIndicator").attr(
