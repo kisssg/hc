@@ -144,7 +144,7 @@ $(document)
 					    $("#visit_time").text(visit_time);
 					    $("#employee_code").text(
 						    employee_code);
-					    $("#signInAddr").text(signInAddr);
+					    $("#addr_detail").text(signInAddr);
 					    $("#city").text(city);
 					    $("#validity").text(validity);
 					    $("#score").text(score);
