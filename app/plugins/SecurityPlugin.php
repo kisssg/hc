@@ -63,6 +63,13 @@ class SecurityPlugin extends Plugin {
 							'markDeletion',
 							'restoreDeletion',
 							'transfer' 
+					],
+					'journals'=>[
+							'index',
+							'search',
+							'vrdScoreAdd',
+							'vrdScoreDel',
+							'vrdScores'
 					]
 			];
 			foreach ( $privateResources as $resource => $actions ) {
@@ -143,13 +150,6 @@ class SecurityPlugin extends Plugin {
 							'update',
 							'delete',
 							'show'
-					],
-					'journals'=>[
-							'index',
-							'search',
-							'vrdScoreAdd',
-							'vrdScoreDel',
-							'vrdScores'
 					]
 			];
 			foreach ( $publicResources as $resource => $actions ) {

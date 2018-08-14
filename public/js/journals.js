@@ -154,10 +154,46 @@ var VideoScoreCard = {
 	if ($(".videoInfoFrame").length == 1) {
 	    return;
 	}
-	;
 	videoInfoHtml = $("#videoInfo" + id);
 	videoInfoHtml.remove();
-    }
+    },
+    showSignIns:function(journal_creator,visit_date,contract_no){
+        /*
+         * fetch sign-in data
+         */
+        url = "/qm/vc_get_signin.php?t="
+                + Math.random()
+        args = {
+            "llc" : journal_creator,
+            "visit_date" : visit_date,
+            "contract_no" : contract_no
+        }
+        $(".signInAddrFrame").remove();
+        $("#objectTr").before("<tr class='waitingText'><td colspan='3'>等待签到数据...</td></tr>");
+        $.post(url,args,function (data) {
+                            res = JSON.parse(data);
+                            $(".waitingText").remove();
+                            for (i in res) {
+                                $("#objectTr").before("<tr class='signInAddrFrame'><td colspan='3'>"
+                                                        + (Number(i) + 1)
+                                                        + ".<span class='addrSignIn'>"
+                                                        + res[i].addr_detail
+                                                        + res[i].addr
+                                                        + "</span> <span class='signTime'>"
+                                                        + res[i].sign_in_time
+                                                        + "</span><button class='btn btn-default btn-xs' onclick='VideoScoreCard.replaceSignIn(\"" 
+                                                        + res[i].sign_in_time
+                                                        +"\",\"" + res[i].addr_detail
+                                                        + res[i].addr                                                        		
+                                                        +"\")'>匹配</button></td></tr>");
+                            }
+                        });
+        },
+        replaceSignIn:function(signTime,signAddr){
+            $("#visit_time").text(signTime).css("color","red");
+            $("#addr_detail").text(signAddr).css("color","red");
+            $("#addr_sign_in").text("");
+        }
 }
 var Validator = {
     checkTimeFormat : function(str) {

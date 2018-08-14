@@ -6,6 +6,7 @@ $collector=isset($_GET['collector'])?$_GET['collector']:"";
 <form action="" method="post">
 日期：<input type="text" class="datepicker" name="visit_date" id="visit_date" value=""/>
 催收员：<input type="text" name="journal_creator" id ="" value=""/>
+质检：<input type="text" name="QC" id ="" value=""/>
 合同号：<input type="text" name="contract_no" id ="" value=""/>
 <input type="submit" class="btn btn-default btn-xs" value="搜索"/>
 </form>
@@ -53,7 +54,7 @@ $collector=isset($_GET['collector'])?$_GET['collector']:"";
             <td>
             {{ link_to("#", '修改', "class": "btn btn-default btn-xs","data-toggle":"modal","data-target":"#videoScoreBoard","data-backdrop":"static","data-id":vrdScore.id,"data-action":"edit") }}
             {{ tagHtml("input",["type":"button","value": "删除", "class":"btn btn-default btn-xs","onclick":"return VideoScore.delete("~vrdScore.id~");"],true) }}
-            {{ link_to("#", '审核', "class": "btn btn-default btn-xs","data-toggle":"modal","data-target":"#videoScoreBoard","data-backdrop":"static","data-id":vrdScore.id,"data-action":"autit") }}
+            {{ link_to("#", '审核', "class": "btn btn-default btn-xs","data-toggle":"modal","data-target":"#videoScoreBoard","data-backdrop":"static","data-id":vrdScore.id,"data-action":"audit") }}
             </td>
         </tr>
     {% if loop.last %}

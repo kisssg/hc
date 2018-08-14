@@ -22,13 +22,7 @@ try {
     			// Create an events manager
     			$eventsManager = new EventsManager();
     			
-    			// Listen for events produced in the dispatcher using the Security plugin
-    			/* $eventsManager->attach(
-    					'dispatch:beforeExecuteRoute',
-    					new MytestPlugin()
-    					); */
-    			
-    			// Listen for events produced in the dispatcher using the Security plugin
+    			// Listen for events produced in the dispatcher using the SecurityPlugin
     			$eventsManager->attach(
     					'dispatch:beforeExecuteRoute',
     					new SecurityPlugin()

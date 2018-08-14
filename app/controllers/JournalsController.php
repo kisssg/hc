@@ -72,79 +72,86 @@ class JournalsController extends ControllerBase {
 	}
 	public function vrdScoreAddAction() {
 		$this->view->disable ();
-		try{
-		$contractNo = $this->request->getPost ( 'contractNo' );
-		$visitDate = $this->request->getPost ( 'visitDate' );
-		$visitTime = $this->request->getPost ( 'visitTime' );
-		$LLI = $this->request->getPost ( 'LLI' );
-		$employeeID = $this->request->getPost ( 'employeeID' );
-		$city = $this->request->getPost ( 'city' );
-		$signInAddr = $this->request->getPost ( 'signInAddr' );
-		$visitResult = $this->request->getPost ( 'visitResult' );
-		$duration = $this->request->getPost ( 'duration' );
-		$object = $this->request->getPost ( 'object' );
-		$videoInfo = $this->request->getPost ( 'videoInfo' );
-		$integrality = $this->request->getPost ( 'integrality' );
-		$description = $this->request->getPost ( 'description' );
-		$announcement = $this->request->getPost ( 'announcement' );
-		$location = $this->request->getPost ( 'location' );
-		$objectionHandling = $this->request->getPost ( 'objectionHandling' );
-		$noHarassment = $this->request->getPost ( 'noHarassment' );
-		$getPTP = $this->request->getPost ( 'getPTP' );
-		$skipTrace = $this->request->getPost ( 'skipTrace' );
-		$score = $this->request->getPost ( 'score' );
-		$remark = $this->request->getPost ( 'remark' );
-		$complaintIndicator = $this->request->getPost ( 'complaintIndicator' );
-		$QC = $this->request->getPost ( 'QC' );
-		$createTime = $this->request->getPost ( 'createTime' );
-		$createDate = $this->request->getPost ( 'createDate' );
-		$journalID = $this->request->getPost ( 'journalID' );
-		$id = $this->request->getPost ( 'id' );
-		
-		if ($id == "") {
-			$vrdScore = new VideoScores ();
-		} else {
-			$vrdScore = VideoScores::findFirst ( $id );
-		}
-		$vrdScore->contractNo = $contractNo;
-		$vrdScore->visitDate = $visitDate;
-		$vrdScore->visitTime = $visitTime;
-		$vrdScore->LLI = $LLI;
-		$vrdScore->employeeID = $employeeID;
-		$vrdScore->city = $city;
-		$vrdScore->signInAddr = $signInAddr;
-		$vrdScore->visitResult = $visitResult;
-		$vrdScore->duration = $duration;
-		$vrdScore->object = $object;
-		$vrdScore->videoInfo = $videoInfo;
-		$vrdScore->integrality = $integrality;
-		$vrdScore->description = $description;
-		$vrdScore->announcement = $announcement;
-		$vrdScore->location = $location;
-		$vrdScore->objectionHandling = $objectionHandling;
-		$vrdScore->noHarassment = $noHarassment;
-		$vrdScore->getPTP = $getPTP;
-		$vrdScore->skipTrace = $skipTrace;
-		$vrdScore->score = $score;
-		$vrdScore->remark = $remark;
-		$vrdScore->complaintIndicator = $complaintIndicator;
-		$vrdScore->QC = $QC;
-		$vrdScore->createTime = date ( "H:i:s" );
-		$vrdScore->createDate = date ( "Y-m-d" );
-		$vrdScore->journalID = $journalID;
-		
-		if($vrdScore->save ()==true){
-			echo '{"result":"success","msg":"'.$vrdScore->id.'"}';
-		}else{
-			throw new exception("failed transferring data");
-		}
-		}catch(Exception $e){
-			echo '{"result":"failed","msg":"'.$e->getMessage().'"}';
+		try {
+			$QC = $this->session->get ( 'auth' ) ['name'];
+			if ($QC == "") {
+				throw new exception ( "Login session expired!" );
+			}
+			$contractNo = $this->request->getPost ( 'contractNo' );
+			$visitDate = $this->request->getPost ( 'visitDate' );
+			$visitTime = $this->request->getPost ( 'visitTime' );
+			$LLI = $this->request->getPost ( 'LLI' );
+			$employeeID = $this->request->getPost ( 'employeeID' );
+			$city = $this->request->getPost ( 'city' );
+			$signInAddr = $this->request->getPost ( 'signInAddr' );
+			$visitResult = $this->request->getPost ( 'visitResult' );
+			$duration = $this->request->getPost ( 'duration' );
+			$object = $this->request->getPost ( 'object' );
+			$videoInfo = $this->request->getPost ( 'videoInfo' );
+			$integrality = $this->request->getPost ( 'integrality' );
+			$description = $this->request->getPost ( 'description' );
+			$announcement = $this->request->getPost ( 'announcement' );
+			$location = $this->request->getPost ( 'location' );
+			$objectionHandling = $this->request->getPost ( 'objectionHandling' );
+			$noHarassment = $this->request->getPost ( 'noHarassment' );
+			$getPTP = $this->request->getPost ( 'getPTP' );
+			$skipTrace = $this->request->getPost ( 'skipTrace' );
+			$score = $this->request->getPost ( 'score' );
+			$remark = $this->request->getPost ( 'remark' );
+			$complaintIndicator = $this->request->getPost ( 'complaintIndicator' );
+			$createTime = $this->request->getPost ( 'createTime' );
+			$createDate = $this->request->getPost ( 'createDate' );
+			$journalID = $this->request->getPost ( 'journalID' );
+			$id = $this->request->getPost ( 'id' );
+			
+			if ($id == "") {
+				$vrdScore = new VideoScores ();
+			} else {
+				$vrdScore = VideoScores::findFirst ( $id );
+			}
+			$vrdScore->contractNo = $contractNo;
+			$vrdScore->visitDate = $visitDate;
+			$vrdScore->visitTime = $visitTime;
+			$vrdScore->LLI = $LLI;
+			$vrdScore->employeeID = $employeeID;
+			$vrdScore->city = $city;
+			$vrdScore->signInAddr = $signInAddr;
+			$vrdScore->visitResult = $visitResult;
+			$vrdScore->duration = $duration;
+			$vrdScore->object = $object;
+			$vrdScore->videoInfo = $videoInfo;
+			$vrdScore->integrality = $integrality;
+			$vrdScore->description = $description;
+			$vrdScore->announcement = $announcement;
+			$vrdScore->location = $location;
+			$vrdScore->objectionHandling = $objectionHandling;
+			$vrdScore->noHarassment = $noHarassment;
+			$vrdScore->getPTP = $getPTP;
+			$vrdScore->skipTrace = $skipTrace;
+			$vrdScore->score = $score;
+			$vrdScore->remark = $remark;
+			$vrdScore->complaintIndicator = $complaintIndicator;
+			$vrdScore->QC = $QC;
+			$vrdScore->createTime = date ( "H:i:s" );
+			$vrdScore->createDate = date ( "Y-m-d" );
+			$vrdScore->journalID = $journalID;
+			
+			if ($vrdScore->save () == true) {
+				echo '{"result":"success","msg":"' . $vrdScore->id . '"}';
+			} else {
+				throw new exception ( "failed transferring data" );
+			}
+		} catch ( Exception $e ) {
+			echo '{"result":"failed","msg":"' . $e->getMessage () . '"}';
 		}
 	}
 	public function vrdScoreDelAction() {
 		$this->view->disable ();
 		try {
+			$QC = $this->session->get ( 'auth' ) ['name'];
+			if ($QC == "") {
+				throw new exception ( "Login session expired!" );
+			}
 			$id = $this->request->getPost ( "id" );
 			
 			$score = VideoScores::find ( $id );
@@ -168,6 +175,7 @@ class JournalsController extends ControllerBase {
 			$visit_date = $this->request->getPost ( 'visit_date', 'string' );
 			$journal_creator = $this->request->getPost ( 'journal_creator', 'string' );
 			$contract_no = $this->request->getPost ( 'contract_no', 'string' );
+			$QC = $this->request->getPost ( 'QC', 'string' );
 			$query = new Criteria ();
 			$query->setModelName ( "VideoScores" );
 			$query->where ( "1=1" );
@@ -183,6 +191,18 @@ class JournalsController extends ControllerBase {
 						"journal_creator" => "$journal_creator%" 
 				] );
 				$hasRequest = true;
+			}
+			if($this->session->get ( 'auth' ) ['level']>9){
+				if ($QC) {
+					$query->andWhere ( "QC like :QC:", [
+							"QC" => "$QC%"
+					] );
+					$hasRequest = true;
+				}				
+			}else{
+				$query->andWhere ( "QC = :QC:", [
+						"QC" => $this->session->get ( 'auth' ) ['name']
+				] );
 			}
 			if ($contract_no) {
 				$query->andWhere ( "contractNo = :contract_no:", [ 
@@ -213,10 +233,9 @@ class JournalsController extends ControllerBase {
 		if (count ( $journals ) == 0) {
 			$this->flash->notice ( "The search did not find any scores" );
 		}
-		
 		$paginator = new Paginator ( array (
 				"data" => $journals,
-				"limit" => 10,
+				"limit" => 20,
 				"page" => $numberPage 
 		) );
 		

@@ -69,7 +69,7 @@
 									<td>外访结果：<span id="visit_result"></span></td>
 									<td>质检结果：<span id="validity"></span></td>
 								</tr>									
-									<tr>
+									<tr id="objectTr">
 										<td colspan="3">
 											<div class="form-group">
 												<label for="object" class="col-sm-4 control-label">Object：</label>
@@ -205,7 +205,7 @@
 											</div>
 										</td>
 									</tr>	
-									<tr>
+									<tr id="tableBottom">
 										<td colspan="3">
 											<div class="form-group">
 												<label for="remark" class="col-sm-2 control-label">备注：</label>
