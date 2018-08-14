@@ -108,6 +108,9 @@ class JournalsController extends ControllerBase {
 				$vrdScore = new VideoScores ();
 			} else {
 				$vrdScore = VideoScores::findFirst ( $id );
+				if($QC != $vrdScore->QC){
+					throw new Exception("你只能修改自己的数据。");
+				}
 			}
 			$vrdScore->contractNo = $contractNo;
 			$vrdScore->visitDate = $visitDate;
