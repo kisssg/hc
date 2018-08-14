@@ -1,5 +1,4 @@
 var VideoScore = {
-    name : "",
     add: function(id) {
 	eachDuration = $(".duration");
 	eachVideoName = $(".videoName");
@@ -158,11 +157,7 @@ var VideoScoreCard = {
 	videoInfoHtml.remove();
     },
     showSignIns:function(journal_creator,visit_date,contract_no){
-        /*
-         * fetch sign-in data
-         */
-        url = "/qm/vc_get_signin.php?t="
-                + Math.random()
+        url = "/qm/vc_get_signin.php?t=" + Math.random()
         args = {
             "llc" : journal_creator,
             "visit_date" : visit_date,
@@ -181,18 +176,28 @@ var VideoScoreCard = {
                                                         + res[i].addr
                                                         + "</span> <span class='signTime'>"
                                                         + res[i].sign_in_time
-                                                        + "</span><button class='btn btn-default btn-xs' onclick='VideoScoreCard.replaceSignIn(\"" 
+                                                        + "</span><button class='btn btn-primary btn-xs' onclick='VideoScoreCard.replaceSignIn(\"" 
                                                         + res[i].sign_in_time
                                                         +"\",\"" + res[i].addr_detail
                                                         + res[i].addr                                                        		
-                                                        +"\")'>匹配</button></td></tr>");
+                                                        +"\")'>匹配签到</button></td></tr>");
                             }
                         });
         },
-        replaceSignIn:function(signTime,signAddr){
+    replaceSignIn:function(signTime,signAddr){
             $("#visit_time").text(signTime).css("color","red");
             $("#addr_detail").text(signAddr).css("color","red");
             $("#addr_sign_in").text("");
+        },
+    showAuditHtml:function(){
+            var auditHtml = '<tr class="auditFrame"><td colspan="3"><div class="row"><div class="col-md-7">Audit Result:</div><div class="col-xs-2">'
+                    + '<select class="form-control input-sm" id="auditResult"><option>N</option><option>Y</option></select></div></div></td></tr>'
+                    + '<tr class="auditFrame"><td colspan="3"><div class="form-group"><label for="auditRemark" class="col-sm-2 control-label">Audit Remark：</label>'
+                    + '<div class="col-sm-10">'
+                    + '<textarea class="form-control" id="auditRemark" rows="5" onkeyup="" maxlength="500" placeholder="auditRemark"></textarea>'
+                    + '</div></div></td></tr>';
+            $(".auditFrame").remove();
+            $("#tableBottom").after(auditHtml);
         }
 }
 var Validator = {
