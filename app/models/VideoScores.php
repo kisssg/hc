@@ -28,5 +28,9 @@ class VideoScores extends Model{
 	public $QC;
 	public $createTime;
 	public $createDate;
+	public $editTime;
+	public $editDate;
+	public $auditResult;
+	
 	public $journalID;	
 }

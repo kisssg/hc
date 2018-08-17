@@ -1,12 +1,8 @@
-<?php
-$visit_date=isset($_GET['visit_date'])?($_GET['visit_date']):"";
-$collector=isset($_GET['collector'])?$_GET['collector']:"";
-?>
 {{ content()}}
 <form action="" method="post">
-日期：<input type="text" class="datepicker" name="visit_date" id="visit_date" value=""/>
-催收员：<input type="text" name="journal_creator" id ="" value=""/>
-合同号：<input type="text" name="contract_no" id ="" value=""/>
+日期：<input type="text" class="datepicker" name="visit_date" id="visit_date" value="{{request.getQuery("visitDate")}}"/>
+催收员：<input type="text" name="journal_creator" id ="" value="{{request.getQuery("collector")}}"/>
+合同号：<input type="text" name="contract_no" id ="" value="{{request.getQuery("srvID")}}"/>
 <input type="submit" class="btn btn-default btn-xs" value="搜索"/>
 </form>
 {% for journal in page.items %}
@@ -65,6 +61,4 @@ $collector=isset($_GET['collector'])?$_GET['collector']:"";
     No record
 {% endfor %}
 
-<?php
-echo $this->tag->javascriptInclude ( 'js/journals.js?t=0525' );
 

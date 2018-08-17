@@ -113,17 +113,13 @@ var VideoScore = {
 		alert("success");
 		window.location.reload();
 	    }else{
-		alert("失败！"+res.msg);
+		alert("删除失败！"+res.msg);
 	    }
 	});
 	}
     },
     update: function(id) {
 	this.add(id);
-    },
-    videoInfoSplit:function(info){
-	result=info.match(/(\[[^\[\]]+)\|(\d{1,3}:\d{1,2}\])/g);
-	return result;
     }
 }
 var VideoScoreCard = {
@@ -198,8 +194,78 @@ var VideoScoreCard = {
                     + '</div></div></td></tr>';
             $(".auditFrame").remove();
             $("#tableBottom").after(auditHtml);
+            $("#auditResult").val("");
+        },
+        showAuditDelBtn:function(vsID){
+            auditDelBtn='<button class="btn auditDelBtn" onclick="return VideoAudits.delete('+vsID+')">删除内审</button>';
+            $("#scoreSubmitBtn").before(auditDelBtn);
         }
 }
+var VideoAudits={
+        Add:function(vsID){
+            contractNo = $("#contract_no").text();
+            visitDate = $('#visit_date_card').text();
+            visitTime = $('#visit_time').text();
+            result = $("#auditResult").val();
+            remark = $("#auditRemark").val();
+            url="../videoaudit/add";
+            args={
+                    "contractNo":contractNo,
+                    "visitDate":visitDate,
+                    "visitTime":visitTime,
+                    "result":result,
+                    "remark":remark,
+                    "vsID":vsID
+            }
+            $.post(url,args,function(data){
+                re=JSON.parse(data);
+                if(re.result=="success"){
+                    $("#tips").text("添加成功！");
+                    $("#videoScoreBoard").modal("hide");
+                    $("[data-id='"+vsID+"'][data-action='audit']").removeClass("btn-default")
+                    .addClass("btn-primary").text("审核"+result);                    
+                }else{
+                    $("#tips").text("提交失败！"+re.msg);
+                }
+            })
+        },
+        fillData:function(vsID){
+            ra=Math.ceil(Math.random() * 100);
+            url="../videoaudit/get?"+ra;
+            args={
+                    "vsID":vsID
+            }
+            $.post(url,args,function(data){
+                re=JSON.parse(data);
+                $("#auditResult").val(re.result);
+                $("#auditRemark").val(re.remark);
+                
+            });
+        },
+        delete:function(vsID){
+            cf=confirm("确定清除内审数据吗？");
+            if(cf){
+                ra=Math.ceil(Math.random() * 100);
+                url="../videoaudit/delete?"+ra;
+                args={
+                        "vsID":vsID
+                }                
+                $.post(url,args,function(data){
+                    re=JSON.parse(data);
+                    if(re.result=="success"){
+                        $("#auditResult").val("");
+                        $("#auditRemark").val("");
+                        $(".auditDelBtn").remove();
+                        $("[data-id='"+vsID+"'][data-action='audit']").removeClass("btn-primary")
+                        .addClass("btn-default").text("审核");                           
+                    }else{
+                        alert(re.msg);
+                    }
+                });
+            }
+        }
+}
+
 var Validator = {
     checkTimeFormat : function(str) {
 	var result = str.match(/^(\d{1,3})(:)(\d{1,2})$/);

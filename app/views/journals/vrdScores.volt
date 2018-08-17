@@ -1,13 +1,10 @@
-<?php
-$visit_date=isset($_GET['visit_date'])?($_GET['visit_date']):"";
-$collector=isset($_GET['collector'])?$_GET['collector']:"";
-?>
 {{ content()}}
 <form action="" method="post">
-日期：<input type="text" class="datepicker" name="visit_date" id="visit_date" value=""/>
+日期：<input type="text" class="datepicker" name="visit_date" id="visit_date" value="{{request.getQuery("visitDate")}}"/>
 催收员：<input type="text" name="journal_creator" id ="" value=""/>
 质检：<input type="text" name="QC" id ="" value=""/>
-合同号：<input type="text" name="contract_no" id ="" value=""/>
+内审结果：<input type="text" name="auditResult" id ="" value=""/>
+合同号：<input type="text" name="contract_no" id ="" value="{{request.getQuery("srvID")}}"/>
 <input type="submit" class="btn btn-default btn-xs" value="搜索"/>
 </form>
 {% for vrdScore in page.items %}
@@ -50,11 +47,16 @@ $collector=isset($_GET['collector'])?$_GET['collector']:"";
             <input type="hidden" class="getPTP" value="{{vrdScore.getPTP}}"/>
             <input type="hidden" class="skipTrace" value="{{vrdScore.skipTrace}}"/>
             <input type="hidden" class="complaintIndicator" value="{{vrdScore.complaintIndicator}}"/>
+            <input type="hidden" class="auditResult" value="{{vrdScore.auditResult}}"/>
             <input type="hidden" class="journalID" value="{{vrdScore.journalID}}"/>
             <td>
             {{ link_to("#", '修改', "class": "btn btn-default btn-xs","data-toggle":"modal","data-target":"#videoScoreBoard","data-backdrop":"static","data-id":vrdScore.id,"data-action":"edit") }}
             {{ tagHtml("input",["type":"button","value": "删除", "class":"btn btn-default btn-xs","onclick":"return VideoScore.delete("~vrdScore.id~");"],true) }}
+            {% if vrdScore.auditResult=="blank" %}
             {{ link_to("#", '审核', "class": "btn btn-default btn-xs","data-toggle":"modal","data-target":"#videoScoreBoard","data-backdrop":"static","data-id":vrdScore.id,"data-action":"audit") }}
+            {% else %}
+            {{ link_to("#", '审核'~vrdScore.auditResult, "class": "btn btn-primary btn-xs","data-toggle":"modal","data-target":"#videoScoreBoard","data-backdrop":"static","data-id":vrdScore.id,"data-action":"audit") }}
+            {% endif %}
             </td>
         </tr>
     {% if loop.last %}
@@ -80,6 +82,4 @@ $collector=isset($_GET['collector'])?$_GET['collector']:"";
     No record
 {% endfor %}
 
-<?php
-echo $this->tag->javascriptInclude ( 'js/journals.js?t=0525' );
 

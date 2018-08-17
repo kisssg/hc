@@ -83,6 +83,7 @@ $(document).ready(function () {
             object = table.find(".object").val();
             remark = table.find(".remark").val();
             videoInfo = table.find(".videoInfo").val();
+            auditResult = table.find(".auditResult").val();
 
             // get scores
             integrality = table.find('.integrality').val();
@@ -143,22 +144,26 @@ $(document).ready(function () {
                 $(".auditFrame").remove();
             } else {
                 VideoScoreCard.showAuditHtml();
+                $(".auditDelBtn").remove();
+                if (auditResult != "blank") {
+                    // if the score has audited,show the audit result.                    
+                    VideoAudits.fillData(id);
+                    VideoScoreCard.showAuditDelBtn(id);
+                }
                 $("#object").attr("disabled", true);
                 $("#complaintIndicator").attr("disabled", true);
                 $(".videoScore").attr("disabled", true);
                 $(".videoName").attr("disabled", true);
                 $(".duration").attr("disabled", true);
                 $("#remark").prop("disabled", true);
-                $("#scoreSubmitBtn").attr("onclick", "");
-                $("#scoreSubmitBtn").text("balabala");
+                $("#scoreSubmitBtn").attr("onclick", "return VideoAudits.Add("+id+");");
+                $("#scoreSubmitBtn").text("提交");
             }
         }
     });
 
     $(".videoScore").change(function () {
-
         // update total score when item score change
-
         scoreArr = $(".videoScore")
         var totalScore = 0;
         for (i = 0; i < scoreArr.length; i++) {

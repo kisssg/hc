@@ -70,6 +70,13 @@ class SecurityPlugin extends Plugin {
 							'vrdScoreAdd',
 							'vrdScoreDel',
 							'vrdScores'
+					],
+					'videoaudit'=>[
+							'get',
+							'add',
+							'update',
+							'delete',
+							'show'
 					]
 			];
 			foreach ( $privateResources as $resource => $actions ) {
@@ -140,12 +147,7 @@ class SecurityPlugin extends Plugin {
 							'recycleBin' 
 					],
 					'videoscore' => [
-							'add',
-							'update',
-							'delete',
-							'show'
-					],
-					'videoaudit'=>[
+							'get',
 							'add',
 							'update',
 							'delete',

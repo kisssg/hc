@@ -229,5 +229,5 @@
 				</div>
 <!-- end of modal -->
 <?php
-echo $this->tag->javascriptInclude ( 'js/journals.js?t=0525' );
+echo $this->tag->javascriptInclude ( 'js/vrd.js?t=0525' );
 

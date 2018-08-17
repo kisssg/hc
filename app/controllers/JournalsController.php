@@ -105,7 +105,11 @@ class JournalsController extends ControllerBase {
 			$id = $this->request->getPost ( 'id' );
 			
 			if ($id == "") {
-				$vrdScore = new VideoScores ();
+				$vrdScore = new VideoScores ();				
+				$vrdScore->createTime = date ( "H:i:s" );
+				$vrdScore->createDate = date ( "Y-m-d" );
+				$vrdScore->QC = $QC;
+				$vrdScore->journalID = $journalID;
 			} else {
 				$vrdScore = VideoScores::findFirst ( $id );
 				if ($vrdScore == null) {
@@ -113,7 +117,9 @@ class JournalsController extends ControllerBase {
 				}
 				if($QC != $vrdScore->QC){
 					throw new Exception("你只能修改自己的数据。");
-				}
+				}				
+				$vrdScore->editTime = date ( "H:i:s" );
+				$vrdScore->editDate = date ( "Y-m-d" );
 			}
 			$vrdScore->contractNo = $contractNo;
 			$vrdScore->visitDate = $visitDate;
@@ -137,10 +143,6 @@ class JournalsController extends ControllerBase {
 			$vrdScore->score = $score;
 			$vrdScore->remark = $remark;
 			$vrdScore->complaintIndicator = $complaintIndicator;
-			$vrdScore->QC = $QC;
-			$vrdScore->createTime = date ( "H:i:s" );
-			$vrdScore->createDate = date ( "Y-m-d" );
-			$vrdScore->journalID = $journalID;
 			
 			if ($vrdScore->save () == true) {
 				echo '{"result":"success","msg":"' . $vrdScore->id . '"}';
@@ -186,13 +188,20 @@ class JournalsController extends ControllerBase {
 			$journal_creator = $this->request->getPost ( 'journal_creator', 'string' );
 			$contract_no = $this->request->getPost ( 'contract_no', 'string' );
 			$QC = $this->request->getPost ( 'QC', 'string' );
+			$auditResult=$this->request->getPost('auditResult','string');
 			$query = new Criteria ();
 			$query->setModelName ( "VideoScores" );
 			$query->where ( "1=1" );
 			$hasRequest = false;
 			if ($visit_date) {
-				$query->andWhere ( "visitDate=:visit_date: ", [ 
-						"visit_date" => "$visit_date" 
+				$query->andWhere ( "visitDate=:visit_date: ", [
+						"visit_date" => "$visit_date"
+				] );
+				$hasRequest = true;
+			}
+			if ($auditResult) {
+				$query->andWhere ( "auditResult=:auditResult: ", [
+						"auditResult" => "$auditResult"
 				] );
 				$hasRequest = true;
 			}
