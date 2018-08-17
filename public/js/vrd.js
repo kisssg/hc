@@ -223,7 +223,8 @@ var VideoAudits={
                     $("#tips").text("添加成功！");
                     $("#videoScoreBoard").modal("hide");
                     $("[data-id='"+vsID+"'][data-action='audit']").removeClass("btn-default")
-                    .addClass("btn-primary").text("审核"+result);                    
+                    .addClass("btn-primary").text("审核"+result);
+                    $("#"+vsID).find(".auditResult").val(result);
                 }else{
                     $("#tips").text("提交失败！"+re.msg);
                 }
@@ -238,8 +239,7 @@ var VideoAudits={
             $.post(url,args,function(data){
                 re=JSON.parse(data);
                 $("#auditResult").val(re.result);
-                $("#auditRemark").val(re.remark);
-                
+                $("#auditRemark").val(re.remark);                
             });
         },
         delete:function(vsID){
@@ -257,7 +257,8 @@ var VideoAudits={
                         $("#auditRemark").val("");
                         $(".auditDelBtn").remove();
                         $("[data-id='"+vsID+"'][data-action='audit']").removeClass("btn-primary")
-                        .addClass("btn-default").text("审核");                           
+                        .addClass("btn-default").text("审核");
+                        $("#"+vsID).find(".auditResult").val("blank");                           
                     }else{
                         alert(re.msg);
                     }
