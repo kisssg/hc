@@ -6,6 +6,8 @@ class JournalsController extends ControllerBase {
 		$this->tag->setTitle ( 'VRD Scoring' );
 	}
 	public function indexAction() {
+		$this->response->redirect('journals/search');
+		$this->view->disable();
 	}
 	public function searchAction() {
 		$this->tag->appendTitle ( '|Journals Search' );
@@ -105,7 +107,7 @@ class JournalsController extends ControllerBase {
 			$id = $this->request->getPost ( 'id' );
 			
 			if ($id == "") {
-				$vrdScore = new VideoScores ();				
+				$vrdScore = new VideoScores ();
 				$vrdScore->createTime = date ( "H:i:s" );
 				$vrdScore->createDate = date ( "Y-m-d" );
 				$vrdScore->QC = $QC;
@@ -115,9 +117,9 @@ class JournalsController extends ControllerBase {
 				if ($vrdScore == null) {
 					throw new exception ( "数据不存在！" );
 				}
-				if($QC != $vrdScore->QC){
-					throw new Exception("你只能修改自己的数据。");
-				}				
+				if ($QC != $vrdScore->QC) {
+					throw new Exception ( "你只能修改自己的数据。" );
+				}
 				$vrdScore->editTime = date ( "H:i:s" );
 				$vrdScore->editDate = date ( "Y-m-d" );
 			}
@@ -167,8 +169,8 @@ class JournalsController extends ControllerBase {
 			if ($score == null) {
 				throw new exception ( "数据不存在！" );
 			}
-			if($QC != $score->QC){
-				throw new Exception("你只能修改自己的数据。");
+			if ($QC != $score->QC) {
+				throw new Exception ( "你只能修改自己的数据。" );
 			}
 			if ($score->delete () === true) {
 				echo '{"result":"success","msg":"' . $id . '"}';
@@ -188,20 +190,20 @@ class JournalsController extends ControllerBase {
 			$journal_creator = $this->request->getPost ( 'journal_creator', 'string' );
 			$contract_no = $this->request->getPost ( 'contract_no', 'string' );
 			$QC = $this->request->getPost ( 'QC', 'string' );
-			$auditResult=$this->request->getPost('auditResult','string');
+			$auditResult = $this->request->getPost ( 'auditResult', 'string' );
 			$query = new Criteria ();
 			$query->setModelName ( "VideoScores" );
 			$query->where ( "1=1" );
 			$hasRequest = false;
 			if ($visit_date) {
-				$query->andWhere ( "visitDate=:visit_date: ", [
-						"visit_date" => "$visit_date"
+				$query->andWhere ( "visitDate=:visit_date: ", [ 
+						"visit_date" => "$visit_date" 
 				] );
 				$hasRequest = true;
 			}
 			if ($auditResult) {
-				$query->andWhere ( "auditResult=:auditResult: ", [
-						"auditResult" => "$auditResult"
+				$query->andWhere ( "auditResult=:auditResult: ", [ 
+						"auditResult" => "$auditResult" 
 				] );
 				$hasRequest = true;
 			}
@@ -211,16 +213,16 @@ class JournalsController extends ControllerBase {
 				] );
 				$hasRequest = true;
 			}
-			if($this->session->get ( 'auth' ) ['level']>9){
+			if ($this->session->get ( 'auth' ) ['level'] > 9) {
 				if ($QC) {
-					$query->andWhere ( "QC like :QC:", [
-							"QC" => "$QC%"
+					$query->andWhere ( "QC like :QC:", [ 
+							"QC" => "$QC%" 
 					] );
 					$hasRequest = true;
-				}				
-			}else{
-				$query->andWhere ( "QC = :QC:", [
-						"QC" => $this->session->get ( 'auth' ) ['name']
+				}
+			} else {
+				$query->andWhere ( "QC = :QC:", [ 
+						"QC" => $this->session->get ( 'auth' ) ['name'] 
 				] );
 			}
 			if ($contract_no) {
