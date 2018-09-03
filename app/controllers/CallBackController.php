@@ -213,7 +213,7 @@ class CallBackController extends ControllerBase {
 					] 
 			] );
 			// @FIXME it can transfer only one record while there actually are multiple;
-			$action_id = date ( "YmdHis" );
+			$action_id = date ( "YmdHis" ).random_int(1,999);
 			$count = 0;
 			foreach ( $items as $item ) {
 				$item->post_qc = $item->qc_name;
