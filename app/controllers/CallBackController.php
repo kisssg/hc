@@ -206,7 +206,7 @@ class CallBackController extends ControllerBase {
 			$receiver = str_replace ( ".", " ", $receiver );//data owner in the call back table username separate with blank character
 			
 			$items = Callback::find ( [ 
-					"conditions" => "id in ({ids:array})  and is_connected='' and action_id is null",
+					"conditions" => "id in ({ids:array})  and action_id is null",
 					"bind" => [ 
 							"ids" => $ids 
 					] 
