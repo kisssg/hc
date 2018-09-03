@@ -171,7 +171,8 @@ class CallBackController extends ControllerBase {
 							"value" => "$value" 
 					] 
 			] );
-			$action_id = date ( "YmdHis" );
+			
+			$action_id = date ( "YmdHis" ).random_int();
 			$count = 0;
 			foreach ( $items as $item ) {
 				$item->post_qc = $item->qc_name;
