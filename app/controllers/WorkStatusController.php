@@ -310,8 +310,11 @@ class WorkStatusController extends ControllerBase {
 		 * $qc="sucre.xu";
 		 */
 		$this->view->disable ();
-		echo 'permit';
-		return;
+		
+		/*
+		 *  //always permit 
+		 *  echo 'permit';
+		 *	return; */
 		
 		if ($qc == null || $batch == null) {
 			echo "reject:arguments not enough";
