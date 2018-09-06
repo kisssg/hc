@@ -11,7 +11,7 @@ class CollectorsController extends ControllerBase {
 			$keyword = $this->request->getPost ( 'search' );
 			// $keyword="kai";
 			$suggestion = Collectors::find ( [ 
-					"columns" => "id,Name_EN as value",
+					"columns" => "id,Name_EN as value,City as city,Area as region",
 					"conditions" => "Name_EN like :keyword: ",
 					"bind" => [ 
 							"keyword" => "$keyword%" 
