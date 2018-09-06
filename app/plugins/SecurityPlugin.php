@@ -152,6 +152,9 @@ class SecurityPlugin extends Plugin {
 							'update',
 							'delete',
 							'show'
+					],
+					'collectors'=>[
+							'search'
 					]
 			];
 			foreach ( $publicResources as $resource => $actions ) {
