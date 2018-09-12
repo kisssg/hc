@@ -213,7 +213,7 @@ class CallBackController extends ControllerBase {
 					] 
 			] );
 			// @FIXME it can transfer only one record while there actually are multiple;
-			$action_id = date ( "YmdHis" ).random_int(1,999);
+			$action_id = date ( "YmdHis" ).rand(1,999);
 			$count = 0;
 			foreach ( $items as $item ) {
 				$item->post_qc = $item->qc_name;
@@ -236,7 +236,7 @@ class CallBackController extends ControllerBase {
 			if ($level < 10) {
 				throw new exception ( "Not authorized" );
 			}
-			$action_id = $this->request->getPost ( 'action_id' );
+			$action_id = $this->request->getPost ( 'action_id','string');
 			if ($action_id == "") {
 				throw new exception ( "Action ID not valid" );
 			}
@@ -296,7 +296,7 @@ class CallBackController extends ControllerBase {
         <td>" . $item->operator . "</td>
         <td>" . $item->currentQC . "</td>
 		<td>" . $item->count . "</td>
-		<td><button class='btn btn-default btn-xs' onclick='return Callback.restore(" . $item->action_id . ")'>restore</button></td>
+		<td><button class='btn btn-default btn-xs' onclick='return Callback.restore(\"" . $item->action_id . "\")'>restore</button></td>
     	</tr>";
 			}
 			echo "</table>";
