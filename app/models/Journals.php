@@ -60,4 +60,11 @@ class Journals extends Model {
 	public $device_check_time;
 	public $checking_time;
 	public $index_llc_date;
+	public $lon;
+	public $lat;
+	public $lon_from;
+	public $lat_from;
+	public $distance;
+	public $time_from;
+	public $duration;
 }

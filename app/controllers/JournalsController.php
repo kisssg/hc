@@ -6,8 +6,8 @@ class JournalsController extends ControllerBase {
 		$this->tag->setTitle ( 'VRD Scoring' );
 	}
 	public function indexAction() {
-		$this->response->redirect('journals/search');
-		$this->view->disable();
+		$this->response->redirect ( 'journals/search' );
+		$this->view->disable ();
 	}
 	public function searchAction() {
 		$this->tag->appendTitle ( '|Journals Search' );
@@ -261,5 +261,127 @@ class JournalsController extends ControllerBase {
 		) );
 		
 		$this->view->page = $paginator->getPaginate ();
+	}
+	public function fetchStartPointsAction($visitDate) {
+		ini_set ( "max_execution_time", 600 );
+		$this->view->disable ();
+		try {
+			// $visitDate = '2018-09-19';
+			if ($visitDate == "") {
+				throw new exception ( 'visitDate not available' );
+			}
+			$llis = Journals::find ( [ 
+					"columns" => "distinct journal_creator",
+					"conditions" => "visit_date = :visitDate: and lon_from is null and lon is not null and visit_time != ''",
+					"order" => "journal_creator",
+					"limit" => "100",
+					"bind" => [ 
+							"visitDate" => "$visitDate" 
+					] 
+			] );
+			$lliArray = Array ();
+			$lliCount = $llis->count ();
+			if ($lliCount == 0) {
+				throw new exception ( 'allDone' );
+			}
+			for($k = 0; $k < $lliCount; $k ++) {
+				$lliArray [$k] = $llis [$k]->journal_creator;
+			}
+			$journals = Journals::find ( [ 
+					"conditions" => "visit_date = :visitDate: and lon_from is null and lon is not null and visit_time != '' and journal_creator in ({llis:array}) ",
+					"order" => "journal_creator,visit_time",
+					"bind" => [ 
+							"visitDate" => "$visitDate",
+							"llis" => $lliArray 
+					] 
+			] );
+			$count = $journals->count ();
+			if ($count < 1) {
+				throw new exception ( 'allDone' );
+			}
+			
+			$journals [0]->lon_from = $journals [0]->lon;
+			$journals [0]->lat_from = $journals [0]->lat;
+			$journals [0]->time_from = $journals [0]->visit_time;
+			
+			$journals [0]->update ();
+			for($i = 0; $i < $count - 1; $i ++) {
+				$j = $i + 1;
+				$lonf = $journals [$i]->lon;
+				$latf = $journals [$i]->lat;
+				$timeFrom = $journals [$i]->visit_time;
+				$creator = $journals [$i]->journal_creator;
+				if ($lonf != null && $journals [$j]->journal_creator == $creator) {
+					$journals [$j]->lon_from = $lonf;
+					$journals [$j]->lat_from = $latf;
+					$journals [$j]->time_from = $timeFrom;
+					$journals [$j]->update ();
+				} else {
+					$journals [$j]->lon_from = $journals [$j]->lon;
+					$journals [$j]->lat_from = $journals [$j]->lat;
+					$journals [$j]->time_from = $journals [$j]->visit_time;
+					$journals [$j]->update ();
+				}
+			}
+			echo '{"result":"unDone","visitDate":"' . $visitDate . '"}';
+		} catch ( Exception $e ) {
+			echo '{"result":"' . $e->getMessage () . '","visitDate":"' . $visitDate . '"}';
+		}
+	}
+	public function clearStartPointsAction($visitDate) {
+		// $visitDate = '2018-09-19';
+		$this->view->disable ();
+		try {
+			if ($visitDate == "") {
+				throw new exception ( 'visitDate not available' );
+			}
+			$query = $this->modelsManager->createQuery ( 'update Journals set lon_from=null, lat_from=null,time_from=null WHERE visit_date = :visitDate:' );
+			$query->execute ( [ 
+					'visitDate' => "$visitDate" 
+			] );
+			echo '{"result":"success","visitDate":"' . $visitDate . '"}';
+		} catch ( exception $e ) {
+			echo '{"result":"' . $e->getMessage () . '","visitDate":"' . $visitDate . '"}';
+		}
+	}
+	public function distanceAction() {
+		$this->tag->setTitle ( 'Mileage' );
+	}
+	public function fetchLocationsAction($visitDate) {
+		$this->view->disable ();
+		//$visitDate = '2018-09-22';
+		$journals = Journals::find ( [ 
+				"columns" => "j_id,lon,lat,lon_from,lat_from",
+				"conditions" => "visit_date = :visitDate: and lon is not null and lon_from is not null and distance is null",
+				"limit" => "100",
+				"bind" => [ 
+						"visitDate" => "$visitDate" 
+				] 
+		] );
+		echo json_encode ( $journals );
+	}
+	public function uploadDistanceAction() {
+		$this->view->disable ();
+		$j_id = $this->request->getPost ( 'j_id' );
+		$distance = $this->request->getPost ( 'distance' );
+		$duration = $this->request->getPost ( 'duration' );
+		
+		/*  $j_id = '95230';
+		$distance='15645';
+		$duration='158';  */
+		try {
+			if($j_id==''){
+				throw new exception('j_id not exist');				
+			}
+			$journal = Journals::findFirstByJId ( $j_id );
+			$journal->distance = $distance;
+			$journal->duration = $duration;
+			if ($journal->update () === false) {
+				throw new exception ( 'Failed updating' );
+			}
+			echo '{"result":"success","id":"' . $j_id . '"}';
+		} catch ( Exception $e ) {
+			echo '{"result":"failed","errMsg":"'.$e->getMessage ().'","id":"' . $j_id . '"}';
+		}
 	}
 }

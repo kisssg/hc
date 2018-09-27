@@ -69,7 +69,12 @@ class SecurityPlugin extends Plugin {
 							'search',
 							'vrdScoreAdd',
 							'vrdScoreDel',
-							'vrdScores'
+							'vrdScores',
+							'fetchStartPoints',
+							'calcDistance',
+							'clearStartPoints',
+							'uploadDistance',
+							'fetchLocations'
 					],
 					'videoaudit'=>[
 							'get',
@@ -155,6 +160,9 @@ class SecurityPlugin extends Plugin {
 					],
 					'collectors'=>[
 							'search'
+					],
+					'journals'=>[
+							'distance'
 					]
 			];
 			foreach ( $publicResources as $resource => $actions ) {
