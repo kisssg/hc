@@ -12,7 +12,7 @@ var Distance = {
         }
 
         if($("#startPointCount").text()==''){
-            $("#info").prepend('Sections completed:<span id="startPointCount">0</span> <br/>');
+            $("#info").prepend('Sections of start points fetching completed:<span id="startPointCount">0</span> <br/>');
             $('#info').append('Start fetching start points for <strong>' + visitDate + '</strong> -' + d.toLocaleString() + ' <br/>');
         }
         var url = 'fetchStartPoints/' + visitDate + '?t=' + Math.random();
@@ -56,7 +56,7 @@ var Distance = {
             return;
         }
         if($("#calculated").text()==''){
-            $("#info").prepend('calculated:<span id="calculated">0</span> <br/>');
+            $("#info").prepend('Distance calculated:<span id="calculated">0</span> <br/>');
         }
         locations = this.fetchLocations(visitDate);
         if(locations=='noResponse'){
