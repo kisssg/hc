@@ -274,7 +274,7 @@ class JournalsController extends ControllerBase {
 					"columns" => "distinct journal_creator",
 					"conditions" => "visit_date = :visitDate: and lon_from is null and lon is not null and visit_time != ''",
 					"order" => "journal_creator",
-					"limit" => "20",
+					"limit" => "10",
 					"bind" => [ 
 							"visitDate" => "$visitDate" 
 					] 

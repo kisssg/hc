@@ -6,43 +6,47 @@ var Distance = {
         visitDate = $("#visitDate").val();
         var d = new Date();
         if (visitDate == '') {
-            $('#info').append('Visit Date can\'t be blank<br/>');
+            $('#info').prepend('Visit Date can\'t be blank<br/>');
             $('#visitDate').focus();
             return;
         }
 
-        if($("#startPointCount").text()==''){
+        if ($("#startPointCount").text() == '') {
             $("#info").prepend('Sections of start points fetching completed:<span id="startPointCount">0</span> <br/>');
-            $('#info').append('Start fetching start points for <strong>' + visitDate + '</strong> -' + d.toLocaleString() + ' <br/>');
+            $('#info').prepend('Start fetching start points for <strong>' + visitDate + '</strong> -' + d.toLocaleString() + ' <br/>');
         }
         var url = 'fetchStartPoints/' + visitDate + '?t=' + Math.random();
-        
-        $.post(url, '', function (data) {
-            result = JSON.parse(data);
-            if (result.result == 'unDone') {
-                $("#startPointCount").text(Number($("#startPointCount").text())++);
-                return Distance.fetchStartPoints();
-            } else if (result.result == 'allDone') {
-                $('#info').append(visitDate + ' all done!<br/>');
-            }
+        $.ajax({
+            'url':url,
+            'success':function(data){
+                noResponse=false;
+                if (data.result == 'unDone') {
+                    $("#startPointCount").text(Number($("#startPointCount").text()) + 1);
+                    return Distance.fetchStartPoints();
+                } else if (data.result == 'allDone') {
+                    $('#info').prepend('Start points of ' + visitDate + ' all done!<br/>');
+                }                
+            },
+            'type':'POST',
+            'dataType':'json'
         });
     },
     clearStartPoints : function () {
         visitDate = $("#visitDate").val();
         var d = new Date();
         if (visitDate == '') {
-            $('#info').append('Visit Date can\'t be blank<br/>');
+            $('#info').prepend('Visit Date can\'t be blank<br/>');
             $('#visitDate').focus();
             return;
         }
         var url = 'clearStartPoints/' + visitDate + '?t=' + Math.random();
-        $("#info").append('Start clearing...-' + d.toLocaleString() + '<br/>');
+        $("#info").prepend('Start clearing...-' + d.toLocaleString() + '<br/>');
         $.post(url, '', function (data) {
             result = JSON.parse(data);
             if (result.result == 'success') {
-                $("#info").append('Start points of <strong>' + visitDate + '</strong> cleared. -' + d.toLocaleString() + '<br/>');
+                $("#info").prepend('Start points of <strong>' + visitDate + '</strong> cleared. -' + d.toLocaleString() + '<br/>');
             } else {
-                $("#info").append('Error');
+                $("#info").prepend('Error');
             }
         })
 
@@ -51,19 +55,19 @@ var Distance = {
         visitDate = $("#visitDate").val();
         var d = new Date();
         if (visitDate == '') {
-            $('#info').append('Visit Date can\'t be blank<br/>');
+            $('#info').prepend('Visit Date can\'t be blank<br/>');
             $('#visitDate').focus();
             return;
         }
-        if($("#calculated").text()==''){
+        if ($("#calculated").text() == '') {
             $("#info").prepend('Distance calculated:<span id="calculated">0</span> <br/>');
         }
         locations = this.fetchLocations(visitDate);
-        if(locations=='noResponse'){
+        if (locations == 'noResponse') {
             this.calc();
         }
         count = locations.length;
-        for (i = 0; i < count; i++) {      
+        for (i = 0; i < count; i++) {
             var origins = locations[i].lon_from + ',' + locations[i].lat_from;
             var destination = locations[i].lon + ',' + locations[i].lat;
             args = {
@@ -72,45 +76,45 @@ var Distance = {
                 "origins" : origins,
                 "destination" : destination
             }
-            var distance,duration;
+            var distance, duration;
             $.ajax({
                 url : this.url,
                 async : false,
                 type : 'POST',
                 data : args,
                 success : function (data) {
-                    distance=data.results[0].distance;
-                    duration=data.results[0].duration;
+                    distance = data.results[0].distance;
+                    duration = data.results[0].duration;
                 },
                 dataType : 'json'
             })
-            this.upload(locations[i].j_id,distance,duration);
-            $("#calculated").text(Number($("#calculated").text())+1);
+            this.upload(locations[i].j_id, distance, duration);
+            $("#calculated").text(Number($("#calculated").text()) + 1);
         }
-        //if there are still journals there, do another round of calculation
-        if(count==100){
+        // if there are still journals there, do another round of calculation
+        if (count == 100) {
             this.calc();
             return;
         }
-        $("#info").append("Mileage calculation done for " + visitDate + "  -" +d.toLocaleString() + "<br/>")
+        $("#info").prepend("Mileage calculation done for " + visitDate + "  -" + d.toLocaleString() + "<br/>")
     },
     clearCalc : function () {
         visitDate = $("#visitDate").val();
         var d = new Date();
         if (visitDate == '') {
-            $('#info').append('Visit Date can\'t be blank<br/>');
+            $('#info').prepend('Visit Date can\'t be blank<br/>');
             $('#visitDate').focus();
             return;
         }
-        cf=confirm('Are you sure to clear all distances of '+ visitDate +'?');
-        if(cf){
-            url='clearDistance?t='+ Math.random();
-            args={
-                    "visitDate":visitDate
+        cf = confirm('Are you sure to clear all distances of ' + visitDate + '?');
+        if (cf) {
+            url = 'clearDistance?t=' + Math.random();
+            args = {
+                "visitDate" : visitDate
             }
-            $.post(url,args,function(data){
-                $('#info').append(data.result);
-            },'json')
+            $.post(url, args, function (data) {
+                $('#info').prepend(data.result);
+            }, 'json')
         }
     },
     fetchLocations : function (visitDate) {
