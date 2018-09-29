@@ -274,7 +274,7 @@ class JournalsController extends ControllerBase {
 					"columns" => "distinct journal_creator",
 					"conditions" => "visit_date = :visitDate: and lon_from is null and lon is not null and visit_time != ''",
 					"order" => "journal_creator",
-					"limit" => "100",
+					"limit" => "20",
 					"bind" => [ 
 							"visitDate" => "$visitDate" 
 					] 
@@ -349,10 +349,10 @@ class JournalsController extends ControllerBase {
 	}
 	public function fetchLocationsAction($visitDate) {
 		$this->view->disable ();
-		//$visitDate = '2018-09-22';
+		// $visitDate = '2018-09-22';
 		$journals = Journals::find ( [ 
 				"columns" => "j_id,lon,lat,lon_from,lat_from",
-				"conditions" => "visit_date = :visitDate: and lon is not null and lon_from is not null and distance is null",
+				"conditions" => "visit_date = :visitDate: and lat is not null and lat_from is not null and distance is null",
 				"limit" => "100",
 				"bind" => [ 
 						"visitDate" => "$visitDate" 
@@ -366,12 +366,14 @@ class JournalsController extends ControllerBase {
 		$distance = $this->request->getPost ( 'distance' );
 		$duration = $this->request->getPost ( 'duration' );
 		
-		/*  $j_id = '95230';
-		$distance='15645';
-		$duration='158';  */
+		/*
+		 * $j_id = '95230';
+		 * $distance='15645';
+		 * $duration='158';
+		 */
 		try {
-			if($j_id==''){
-				throw new exception('j_id not exist');				
+			if ($j_id == '') {
+				throw new exception ( 'j_id not exist' );
 			}
 			$journal = Journals::findFirstByJId ( $j_id );
 			$journal->distance = $distance;
@@ -381,7 +383,28 @@ class JournalsController extends ControllerBase {
 			}
 			echo '{"result":"success","id":"' . $j_id . '"}';
 		} catch ( Exception $e ) {
-			echo '{"result":"failed","errMsg":"'.$e->getMessage ().'","id":"' . $j_id . '"}';
+			echo '{"result":"failed","errMsg":"' . $e->getMessage () . '","id":"' . $j_id . '"}';
 		}
+	}
+	public function clearDistanceAction() {
+		$visitDate = $this->request->getPost ( 'visitDate' );
+		// $visitDate = '2018-09-19';
+		$this->view->disable ();
+		try {
+			if ($visitDate == "") {
+				throw new exception ( 'visitDate not available' );
+			}
+			$query = $this->modelsManager->createQuery ( 'update Journals set distance=null, duration=null WHERE visit_date = :visitDate:' );
+			$query->execute ( [ 
+					'visitDate' => "$visitDate" 
+			] );
+			echo '{"result":"success","visitDate":"' . $visitDate . '"}';
+		} catch ( exception $e ) {
+			echo '{"result":"' . $e->getMessage () . '","visitDate":"' . $visitDate . '"}';
+		}
+	}
+	public function mileageRemain() {
+		$this->view->disable ();
+		$visitDate = $this->request->getPost ( 'visitDate' );
 	}
 }

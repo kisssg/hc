@@ -74,7 +74,9 @@ class SecurityPlugin extends Plugin {
 							'calcDistance',
 							'clearStartPoints',
 							'uploadDistance',
-							'fetchLocations'
+							'fetchLocations',
+							'clearDistance',
+							'distance'
 					],
 					'videoaudit'=>[
 							'get',
@@ -160,9 +162,6 @@ class SecurityPlugin extends Plugin {
 					],
 					'collectors'=>[
 							'search'
-					],
-					'journals'=>[
-							'distance'
 					]
 			];
 			foreach ( $publicResources as $resource => $actions ) {

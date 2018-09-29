@@ -10,12 +10,17 @@ var Distance = {
             $('#visitDate').focus();
             return;
         }
+
+        if($("#startPointCount").text()==''){
+            $("#info").prepend('Sections completed:<span id="startPointCount">0</span> <br/>');
+            $('#info').append('Start fetching start points for <strong>' + visitDate + '</strong> -' + d.toLocaleString() + ' <br/>');
+        }
         var url = 'fetchStartPoints/' + visitDate + '?t=' + Math.random();
-        $('#info').append('Start fetching start points for <strong>' + visitDate + '</strong> -' + d.toLocaleString() + ' <br/>');
+        
         $.post(url, '', function (data) {
             result = JSON.parse(data);
             if (result.result == 'unDone') {
-                $('#info').append('Section done...doing another section...pls wait until all done! -' + d.toLocaleString() + '<br/>');
+                $("#startPointCount").text(Number($("#startPointCount").text())++);
                 return Distance.fetchStartPoints();
             } else if (result.result == 'allDone') {
                 $('#info').append('All done!<br/>');
@@ -31,7 +36,7 @@ var Distance = {
             return;
         }
         var url = 'clearStartPoints/' + visitDate + '?t=' + Math.random();
-        $("#info").append('Start clearing...<br/>');
+        $("#info").append('Start clearing...-' + d.toLocaleString() + '<br/>');
         $.post(url, '', function (data) {
             result = JSON.parse(data);
             if (result.result == 'success') {
@@ -50,7 +55,13 @@ var Distance = {
             $('#visitDate').focus();
             return;
         }
+        if($("#calculated").text()==''){
+            $("#info").prepend('calculated:<span id="calculated">0</span> <br/>');
+        }
         locations = this.fetchLocations(visitDate);
+        if(locations=='noResponse'){
+            this.calc();
+        }
         count = locations.length;
         if(count==0){
             $("#info").append("Mileage calculation done for " + visitDate + "  -" +d.toLocaleString() + "<br/>")
@@ -77,21 +88,38 @@ var Distance = {
                 dataType : 'json'
             })
             this.upload(locations[i].j_id,distance,duration);
+            $("#calculated").text(Number($("#calculated").text())+1);
         }
-        //if there are still journals there, do another calculation round
+        //if there are still journals there, do another round of calculation
         if(count==100){
             this.calc();
         }
     },
     clearCalc : function () {
-        alert(this.upload(95230,1,2));
+        visitDate = $("#visitDate").val();
+        var d = new Date();
+        if (visitDate == '') {
+            $('#info').append('Visit Date can\'t be blank<br/>');
+            $('#visitDate').focus();
+            return;
+        }
+        cf=confirm('Are you sure to clear all distances of '+ visitDate +'?');
+        if(cf){
+            url='clearDistance?t='+ Math.random();
+            args={
+                    "visitDate":visitDate
+            }
+            $.post(url,args,function(data){
+                $('#info').append(data.result);
+            },'json')
+        }
     },
     fetchLocations : function (visitDate) {
         if (visitDate == undefined) {
             return false;
         }
         url = 'fetchLocations/' + visitDate + '?t=' + Math.random();
-        var resultSets = false;
+        var resultSets = 'noResponse';
         $.ajax({
             url : url,
             type : 'POST',
