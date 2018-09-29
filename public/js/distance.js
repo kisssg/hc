@@ -23,7 +23,7 @@ var Distance = {
                 $("#startPointCount").text(Number($("#startPointCount").text())++);
                 return Distance.fetchStartPoints();
             } else if (result.result == 'allDone') {
-                $('#info').append('All done!<br/>');
+                $('#info').append(visitDate + ' all done!<br/>');
             }
         });
     },
@@ -63,9 +63,6 @@ var Distance = {
             this.calc();
         }
         count = locations.length;
-        if(count==0){
-            $("#info").append("Mileage calculation done for " + visitDate + "  -" +d.toLocaleString() + "<br/>")
-        }
         for (i = 0; i < count; i++) {      
             var origins = locations[i].lon_from + ',' + locations[i].lat_from;
             var destination = locations[i].lon + ',' + locations[i].lat;
@@ -93,7 +90,9 @@ var Distance = {
         //if there are still journals there, do another round of calculation
         if(count==100){
             this.calc();
+            return;
         }
+        $("#info").append("Mileage calculation done for " + visitDate + "  -" +d.toLocaleString() + "<br/>")
     },
     clearCalc : function () {
         visitDate = $("#visitDate").val();
