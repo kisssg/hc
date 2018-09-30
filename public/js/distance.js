@@ -24,16 +24,17 @@ var Distance = {
                 noResponse = "hasResponse";
                 if (data.result == 'unDone') {
                     $("#startPointCount").text(Number($("#startPointCount").text()) + 1);
-                    return Distance.fetchStartPoints();
+                    return Distance.fetchStartPoints();//when start points not all done, re-fetch.
                 } else if (data.result == 'allDone') {
                     $('#info').prepend('Start points of ' + visitDate + ' all done! -' + d.toLocaleString() + '<br/>');
-                    return Distance.calc();
+                    return Distance.calc();//when start points all fetched, start distance calculation
                 }
             },
             'type' : 'POST',
             'dataType' : 'json'
         });
         console.log(noResponse);
+        //only if ajax not success, noResponse will remain 'noResponse'.
         if (noResponse == "noResponse") {
             return Distance.fetchStartPoints();
         }
