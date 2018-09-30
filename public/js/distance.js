@@ -16,20 +16,26 @@ var Distance = {
             $("#info").prepend('Sections of start points fetching completed:<span id="startPointCount">0</span> <br/>');
         }
         var url = 'fetchStartPoints/' + visitDate + '?t=' + Math.random();
+        var noResponse = "noResponse";
         $.ajax({
-            'url':url,
-            'success':function(data){
-                noResponse=false;
+            async : false,
+            'url' : url,
+            'success' : function (data) {
+                noResponse = "hasResponse";
                 if (data.result == 'unDone') {
                     $("#startPointCount").text(Number($("#startPointCount").text()) + 1);
                     return Distance.fetchStartPoints();
                 } else if (data.result == 'allDone') {
                     $('#info').prepend('Start points of ' + visitDate + ' all done!<br/>');
-                }                
+                }
             },
-            'type':'POST',
-            'dataType':'json'
+            'type' : 'POST',
+            'dataType' : 'json'
         });
+        console.log(noResponse);
+        if (noResponse == "noResponse") {
+            return Distance.fetchStartPoints();
+        }
     },
     clearStartPoints : function () {
         visitDate = $("#visitDate").val();
@@ -60,7 +66,7 @@ var Distance = {
             return;
         }
         if ($("#calculated").text() == '') {
-            $("#info").prepend('Distance calculation started.  -' + d.toLocaleString()  + '<br/>');
+            $("#info").prepend('Distance calculation started.  -' + d.toLocaleString() + '<br/>');
             $("#info").prepend('Distance calculated:<span id="calculated">0</span> <br/>');
         }
         locations = this.fetchLocations(visitDate);
