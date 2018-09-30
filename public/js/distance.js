@@ -26,7 +26,8 @@ var Distance = {
                     $("#startPointCount").text(Number($("#startPointCount").text()) + 1);
                     return Distance.fetchStartPoints();
                 } else if (data.result == 'allDone') {
-                    $('#info').prepend('Start points of ' + visitDate + ' all done!<br/>');
+                    $('#info').prepend('Start points of ' + visitDate + ' all done! -' + d.toLocaleString() + '<br/>');
+                    return Distance.calc();
                 }
             },
             'type' : 'POST',
