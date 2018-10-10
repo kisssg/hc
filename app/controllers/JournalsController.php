@@ -293,7 +293,7 @@ class JournalsController extends ControllerBase {
 					"bind" => [ 
 							"visitDate" => "$visitDate",
 							"llis" => $lliArray 
-					] 
+					]
 			] );
 			$count = $journals->count ();
 			if ($count < 1) {
@@ -311,7 +311,7 @@ class JournalsController extends ControllerBase {
 				$latf = $journals [$i]->lat;
 				$timeFrom = $journals [$i]->visit_time;
 				$creator = $journals [$i]->journal_creator;
-				if ($lonf != null && $journals [$j]->journal_creator == $creator) {
+				if ($journals [$j]->journal_creator == $creator) {
 					$journals [$j]->lon_from = $lonf;
 					$journals [$j]->lat_from = $latf;
 					$journals [$j]->time_from = $timeFrom;
@@ -326,6 +326,16 @@ class JournalsController extends ControllerBase {
 			echo '{"result":"unDone","visitDate":"' . $visitDate . '"}';
 		} catch ( Exception $e ) {
 			echo '{"result":"' . $e->getMessage () . '","visitDate":"' . $visitDate . '"}';
+		}
+	}
+	public function testAction(){
+		$journal=Journals::findFirst(4559082);
+		$journal->lon_from= $journal->lon;
+		$journal->lat_from= $journal->lat;
+		if($journal->update()===false){
+			foreach ($journal->getMessages() as $msg){
+				echo $msg;
+			}
 		}
 	}
 	public function clearStartPointsAction($visitDate) {

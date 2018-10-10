@@ -76,7 +76,8 @@ class SecurityPlugin extends Plugin {
 							'uploadDistance',
 							'fetchLocations',
 							'clearDistance',
-							'distance'
+							'distance',
+							'test'
 					],
 					'videoaudit'=>[
 							'get',
