@@ -77,7 +77,8 @@ class SecurityPlugin extends Plugin {
 							'fetchLocations',
 							'clearDistance',
 							'distance',
-							'test'
+							'createHomeLog',
+							'delHomeLog'
 					],
 					'videoaudit'=>[
 							'get',

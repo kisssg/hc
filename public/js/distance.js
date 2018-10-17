@@ -24,17 +24,17 @@ var Distance = {
                 noResponse = "hasResponse";
                 if (data.result == 'unDone') {
                     $("#startPointCount").text(Number($("#startPointCount").text()) + 1);
-                    return Distance.fetchStartPoints();//when start points not all done, re-fetch.
+                    return Distance.fetchStartPoints();// when start points not all done, re-fetch.
                 } else if (data.result == 'allDone') {
                     $('#info').prepend('Start points of ' + visitDate + ' all done! -' + d.toLocaleString() + '<br/>');
-                    return Distance.calc();//when start points all fetched, start distance calculation
+                    return Distance.calc();// when start points all fetched, start distance calculation
                 }
             },
             'type' : 'POST',
             'dataType' : 'json'
         });
         console.log(noResponse);
-        //only if ajax not success, noResponse will remain 'noResponse'.
+        // only if ajax not success, noResponse will remain 'noResponse'.
         if (noResponse == "noResponse") {
             return Distance.fetchStartPoints();
         }
@@ -168,6 +168,60 @@ var Distance = {
             dataType : 'json'
         });
         return result;
+    },
+    createHomeLog : function () {
+        visitDate = $("#visitDate").val();
+        var d = new Date();
+        if (visitDate == '') {
+            $('#info').prepend('Visit Date can\'t be blank<br/>');
+            $('#visitDate').focus();
+            return;
+        }
+        if ($("#homeLogCount").text() == '') {
+            $('#info').prepend('Start creating homeLogs for <strong>' + visitDate + '</strong> -' + d.toLocaleString() + ' <br/>');
+            $("#info").prepend('Sections of homeLog created:<span id="homeLogCount">0</span> <br/>');
+        }
+        url = 'createHomeLog/' + visitDate + '?t=' + Math.random();
+        //console.log(url);
+        var noResponse = "noResponse";
+        $.ajax({
+            async : false,
+            'url' : url,
+            'success' : function (data) {
+                noResponse = "hasResponse";
+                if (data.result == 'unDone') {
+                    $("#homeLogCount").text(Number($("#homeLogCount").text()) + 1);
+                    return Distance.createHomeLog();// when homeLogs not all created, re-do.
+                } else if (data.result == 'allDone') {
+                    $('#info').prepend('HomeLogs of ' + visitDate + ' all created! -' + d.toLocaleString() + '<br/>');
+                    return Distance.fetchStartPoints();// when homeLogs all created, start fetching start points.
+                } else {
+                    $('#info').prepend("Error occured,re-try:" + data.msg + ' -' + d.toLocaleString() + '<br/>');
+                    return Distance.createHomeLog();
+                }
+            },
+            'type' : 'POST',
+            'dataType' : 'json'
+        });
+        console.log(noResponse);
+        // only if ajax not success, noResponse will remain 'noResponse'.     
+        if (noResponse == "noResponse") {
+            return Distance.createHomeLog();
+        }
+    },
+    delHomeLog : function () {
+        visitDate = $("#visitDate").val();
+        var d = new Date();
+        if (visitDate == '') {
+            $('#info').prepend('Visit Date can\'t be blank<br/>');
+            $('#visitDate').focus();
+            return;
+        }
+        url='delHomeLog/'+visitDate+'?t='+ Math.random();
+        
+        $.post(url,'',function(data){
+            alert(data.result);
+        },'json')
     },
     clearInfo : function () {
         $("#info").text('');

@@ -293,7 +293,7 @@ class JournalsController extends ControllerBase {
 					"bind" => [ 
 							"visitDate" => "$visitDate",
 							"llis" => $lliArray 
-					]
+					] 
 			] );
 			$count = $journals->count ();
 			if ($count < 1) {
@@ -328,12 +328,12 @@ class JournalsController extends ControllerBase {
 			echo '{"result":"' . $e->getMessage () . '","visitDate":"' . $visitDate . '"}';
 		}
 	}
-	public function testAction(){
-		$journal=Journals::findFirst(4559082);
-		$journal->lon_from= $journal->lon;
-		$journal->lat_from= $journal->lat;
-		if($journal->update()===false){
-			foreach ($journal->getMessages() as $msg){
+	public function testAction() {
+		$journal = Journals::findFirst ( 4559082 );
+		$journal->lon_from = $journal->lon;
+		$journal->lat_from = $journal->lat;
+		if ($journal->update () === false) {
+			foreach ( $journal->getMessages () as $msg ) {
 				echo $msg;
 			}
 		}
@@ -413,8 +413,110 @@ class JournalsController extends ControllerBase {
 			echo '{"result":"' . $e->getMessage () . '","visitDate":"' . $visitDate . '"}';
 		}
 	}
-	public function mileageRemain() {
+	public function createHomeLogAction($visitDate) {
+		ini_set ( "max_execution_time", 600 );
 		$this->view->disable ();
-		$visitDate = $this->request->getPost ( 'visitDate' );
+		//$visitDate = '2018-10-01';
+		try {
+			if ($visitDate == "") {
+				throw new exception ( 'visitDate not available' );
+			}
+			$collectorsHasHomeLog = Journals::find ( [ 
+					"columns" => "distinct journal_creator",
+					"conditions" => "visit_date=:visitDate: and detail='通勤专用日志'",
+					"bind" => [ 
+							"visitDate" => "$visitDate" 
+					] 
+			] );
+			$lliCount = $collectorsHasHomeLog->count ();
+			$llis=Array();
+			if($lliCount!=0){
+				for($i = 0; $i < $lliCount; $i ++) {
+					$llis [$i] = $collectorsHasHomeLog [$i]->journal_creator;
+				}				
+			}else{
+				$llis=['978'];				
+			}
+			$collectors = Journals::find ( [ 
+					"columns" => "distinct journal_creator",
+					"conditions" => "visit_date=:visitDate: and visit_time !='' and journal_creator not in ({llis:array})",
+					"limit" => "100",
+					"bind" => [ 
+							"visitDate" => "$visitDate",
+							"llis" => $llis 
+					] 
+			] );
+			if($collectors->count()=="0"){
+				echo '{"result":"allDone","msg":"ok","visitDate":"' . $visitDate . '"}';
+				return;
+			}
+			foreach ( $collectors as $collector ) {
+				$checkIn = CheckIns::find ( [ 
+						"columns" => "sign_in_time,lon,lat",
+						"conditions" => "sign_in_date=:visitDate: and llc = :llc:",
+						"order" => "llc,sign_in_time",
+						"bind" => [ 
+								"visitDate" => "$visitDate",
+								"llc" => "$collector->journal_creator" 
+						] 
+				] );
+				
+				if ($checkIn->count () > 0) {
+					/*
+					 * home -> first visit
+					 */
+					$log = new Journals ();
+					$log->visit_date = $visitDate;
+					$log->journal_creator = $collector->journal_creator;
+					$log->visit_time = $checkIn [0]->sign_in_time;
+					$log->lon = $checkIn [0]->lon;
+					$log->lat = $checkIn [0]->lat;
+					$log->detail = '通勤专用日志';
+					$log->remark = '从家出发';
+					if ($log->save () === false) {
+						foreach ( $log->getMessages () as $msg ) {
+							throw new Exception ( $msg->getMessage () );
+						}
+					}
+					
+					/*
+					 * last visit->home log
+					 */
+					$cnt = $checkIn->count () - 1;
+					$logEnd = new Journals ();
+					$logEnd->visit_date = $visitDate;
+					$logEnd->journal_creator = $collector->journal_creator;
+					$logEnd->visit_time = $checkIn [$cnt]->sign_in_time;
+					$logEnd->lon = $checkIn [$cnt]->lon;
+					$logEnd->lat = $checkIn [$cnt]->lat;
+					$logEnd->detail = '通勤专用日志';
+					$logEnd->remark = '下班回家';
+					if ($logEnd->save () === false) {
+						foreach ( $logEnd->getMessages () as $msg ) {
+							throw new Exception ( $msg->getMessage () );
+						}
+					}
+				}
+			}
+			echo '{"result":"unDone","msg":"ok","visitDate":"' . $visitDate . '"}';
+		} catch ( Exception $e ) {
+			echo '{"result":"failed","msg":"' . $e->getMessage () . '","visitDate":"' . $visitDate . '"}';
+		}
+	}
+	public function delHomeLogAction($visitDate){
+		$this->view->disable();
+		//$visitDate='2018-10-01';
+		try {
+			if ($visitDate == "") {
+				throw new exception ( 'visitDate not available' );
+			}
+			$query = $this->modelsManager->createQuery ( 'delete from Journals WHERE visit_date = :visitDate: and detail="通勤专用日志"' );
+			$query->execute ( [
+					'visitDate' => "$visitDate"
+			] );
+			echo '{"result":"success","visitDate":"' . $visitDate . '"}';
+		} catch ( exception $e ) {
+			echo '{"result":"' . $e->getMessage () . '","visitDate":"' . $visitDate . '"}';
+		}
 	}
 }
