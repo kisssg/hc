@@ -122,7 +122,7 @@ var Distance = {
                 "visitDate" : visitDate
             }
             $.post(url, args, function (data) {
-                $('#info').prepend(data.result);
+                $('#info').prepend('Distance deleting '+data.result + ".  -" + d.toLocaleString() + "<br/>");
             }, 'json')
         }
     },
@@ -220,7 +220,7 @@ var Distance = {
         url='delHomeLog/'+visitDate+'?t='+ Math.random();
         
         $.post(url,'',function(data){
-            alert(data.result);
+            $('#info').prepend('Home logs deleting '+data.result + ".  -" + d.toLocaleString() + "<br/>");
         },'json')
     },
     clearInfo : function () {
