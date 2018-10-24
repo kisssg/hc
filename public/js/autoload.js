@@ -17,6 +17,7 @@ $(document).ready(function () {
         var id = button.data("id");
         var action = button.data("action");
         var table = $("#" + id);
+        VideoScoreCard.onObjectChange('hideAllNoShow');
         if (action == "add") {
             // find text;
             visit_result = (table.find('.visit_result_cn').text());
@@ -26,6 +27,7 @@ $(document).ready(function () {
             visit_time = table.find(".visit_time").text();
             validity = table.find(".validity").text();
             // find hidden values;
+            negotiator_cn = table.find(".negotiator_cn").val();
             employee_code = table.find(".employee_code").val();
             city = table.find(".city").val();
             addr_sign_in = table.find(".addr_sign_in").val();
@@ -34,7 +36,7 @@ $(document).ready(function () {
 
             // fetch sign-in data
 
-            VideoScoreCard.showSignIns(journal_creator, visit_date, contract_no);
+            //VideoScoreCard.showSignIns(journal_creator, visit_date, contract_no);
 
             // initialize values on the score board.
 
@@ -49,12 +51,11 @@ $(document).ready(function () {
             $("#addr_detail").text(addr_detail).css("color", "black");
             $("#city").text(city);
             $("#validity").text(validity);
+            $("#negotiator_cn").text(negotiator_cn);
 
             // initialize score
-            $(".fif-value").val(15);
-            $(".five-value").val(5);
             $("#score").text(100);
-            $("#complaintIndicator").val("N");
+            $(".judgeResults").text("");
             // initialize user input box
             $("#duration").val("");
             $("#object").val("");
@@ -76,6 +77,7 @@ $(document).ready(function () {
             validity = "无";
             score = table.find(".score").text();
             // find hidden values;
+            negotiator_cn = table.find(".negotiator_cn").val();
             employee_code = table.find(".employeeID").val();
             city = table.find(".city").val();
             signInAddr = table.find(".signInAddr").val();
@@ -84,23 +86,39 @@ $(document).ready(function () {
             remark = table.find(".remark").val();
             videoInfo = table.find(".videoInfo").val();
             auditResult = table.find(".auditResult").val();
+            
+            //call onObjectChange();
+            VideoScoreCard.onObjectChange(object);
 
             // get scores
-            integrality = table.find('.integrality').val();
-            description = table.find('.description').val();
-            announcement = table.find('.announcement').val();
-            scoreLocation = table.find('.location').val();
-            objectionHandling = table.find('.objectionHandling').val();
-            noHarassment = table.find('.noHarassment').val();
-            getPTP = table.find('.getPTP').val();
-            skipTrace = table.find('.skipTrace').val();
-            complaintIndicator = table.find(".complaintIndicator").val();
+            announceRec=table.find('.announceRec').val();
+            visitLocation=table.find('.visitLocation').val();
+            objectionHandling=table.find('.objectionHandling').val();
+            InfoInvestigation=table.find('.InfoInvestigation').val();
+            matchedVisitResult=table.find('.matchedVisitResult').val();
+            uploadOntime=table.find('.uploadOntime').val();
+            IDVerification=table.find('.IDVerification').val();
+            selfIntroduction=table.find('.selfIntroduction').val();
+            infoProviding=table.find('.infoProviding').val();
+            paymentChannel=table.find('.paymentChannel').val();
+            approvedCashCollect=table.find('.approvedCashCollect').val();
+            dataIntegrality=table.find('.dataIntegrality').val();
+            wrongInfo=table.find('.wrongInfo').val();
+            attitude=table.find('.attitude').val();
+            cheating=table.find('.cheating').val();
+            informationLeakage=table.find('.informationLeakage').val();
+            urgentNoReport=table.find('.urgentNoReport').val();
+            acceptWaiving=table.find('.acceptWaiving').val();
+            sensitiveWording=table.find('.sensitiveWording').val();
+            description=table.find('.description').val();
+
 
             // show the signIns
 
-            VideoScoreCard.showSignIns(journal_creator, visit_date, contract_no);
+            //VideoScoreCard.showSignIns(journal_creator, visit_date, contract_no);
 
             // initialize values on the score board
+            $("#negotiator_cn").text(negotiator_cn);
             $("#journalID").val(journalID);
             $("#visit_result").text(visit_result);
             $("#journal_creator").text(journal_creator);
@@ -114,31 +132,38 @@ $(document).ready(function () {
             $("#score").text(score);
 
             // set score
-            $('#integrality').val(integrality);
-            $('#description').val(description);
-            $('#announcement').val(announcement);
-            $('#location').val(scoreLocation);
-            $('#objectionHandling').val(objectionHandling);
-            $('#noHarassment').val(noHarassment);
-            $('#getPTP').val(getPTP);
-            $('#skipTrace').val(skipTrace);
-            $('#complaintIndicator').val(complaintIndicator);
+            $('#announceRec').text(announceRec);
+            $('#visitLocation').text(visitLocation);
+            $('#objectionHandling').text(objectionHandling);
+            $('#InfoInvestigation').text(InfoInvestigation);
+            $('#matchedVisitResult').text(matchedVisitResult);
+            $('#uploadOntime').text(uploadOntime);
+            $('#IDVerification').text(IDVerification);
+            $('#selfIntroduction').text(selfIntroduction);
+            $('#infoProviding').text(infoProviding);
+            $('#paymentChannel').text(paymentChannel);
+            $('#approvedCashCollect').text(approvedCashCollect);
+            $('#dataIntegrality').text(dataIntegrality);
+            $('#wrongInfo').text(wrongInfo);
+            $('#attitude').text(attitude);
+            $('#cheating').text(cheating);
+            $('#informationLeakage').text(informationLeakage);
+            $('#urgentNoReport').text(urgentNoReport);
+            $('#acceptWaiving').text(acceptWaiving);
+            $('#sensitiveWording').text(sensitiveWording);
+            $('#description').text(description);
+            
+            
             // initialize user input box
             $("#object").val(object);
             $("#remark").val(remark);
             videoInfo = JSON.parse(videoInfo);
             $(".videoInfoFrame").remove();
             for (i = 0; i < videoInfo.length; i++) {
-                VideoScoreCard.addVideoInfo(videoInfo[i].name, videoInfo[i].duration);
+                VideoScoreCard.addVideoInfo(videoInfo[i].name, videoInfo[i].duration,videoInfo[i].createDate,videoInfo[i].createTime,videoInfo[i].uploadDate,videoInfo[i].uploadTime);
             }
             $("#tips").text("");
             if (action == "edit") {
-                $("#object").attr("disabled", false);
-                $("#complaintIndicator").attr("disabled", false);
-                $(".videoScore").attr("disabled", false);
-                $(".videoName").attr("disabled", false);
-                $(".duration").attr("disabled", false);
-                $("#remark").prop("disabled", false);
                 $("#scoreSubmitBtn").attr("onclick", "return VideoScore.update(" + id + ");");
                 $("#scoreSubmitBtn").text("保存");
                 $(".auditFrame").remove();
@@ -150,14 +175,9 @@ $(document).ready(function () {
                     VideoAudits.fillData(id);
                     VideoScoreCard.showAuditDelBtn(id);
                 }
-                $("#object").attr("disabled", true);
-                $("#complaintIndicator").attr("disabled", true);
-                $(".videoScore").attr("disabled", true);
-                $(".videoName").attr("disabled", true);
-                $(".duration").attr("disabled", true);
                 $("#remark").prop("disabled", true);
                 $("#scoreSubmitBtn").attr("onclick", "return VideoAudits.Add("+id+");");
-                $("#scoreSubmitBtn").text("提交");
+                $("#scoreSubmitBtn").text("提交内审结果");
             }
         }
     });

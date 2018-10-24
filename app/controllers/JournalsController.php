@@ -79,32 +79,47 @@ class JournalsController extends ControllerBase {
 			if ($QC == "") {
 				throw new exception ( "Login session expired!" );
 			}
+			$id = $this->request->getPost ( 'id' );
+			$videoInfo = $this->request->getPost ( 'videoInfo' );
+			$city = $this->request->getPost ( 'city' );
+			$LLI = $this->request->getPost ( 'LLI' );
 			$contractNo = $this->request->getPost ( 'contractNo' );
 			$visitDate = $this->request->getPost ( 'visitDate' );
 			$visitTime = $this->request->getPost ( 'visitTime' );
-			$LLI = $this->request->getPost ( 'LLI' );
 			$employeeID = $this->request->getPost ( 'employeeID' );
-			$city = $this->request->getPost ( 'city' );
 			$signInAddr = $this->request->getPost ( 'signInAddr' );
 			$visitResult = $this->request->getPost ( 'visitResult' );
-			$duration = $this->request->getPost ( 'duration' );
+			$negotiator = $this->request->getPost ( 'negotiator' );
 			$object = $this->request->getPost ( 'object' );
-			$videoInfo = $this->request->getPost ( 'videoInfo' );
-			$integrality = $this->request->getPost ( 'integrality' );
-			$description = $this->request->getPost ( 'description' );
-			$announcement = $this->request->getPost ( 'announcement' );
-			$location = $this->request->getPost ( 'location' );
+			$announceRec = $this->request->getPost ( 'announceRec' );
+			$visitLocation = $this->request->getPost ( 'visitLocation' );
 			$objectionHandling = $this->request->getPost ( 'objectionHandling' );
-			$noHarassment = $this->request->getPost ( 'noHarassment' );
-			$getPTP = $this->request->getPost ( 'getPTP' );
-			$skipTrace = $this->request->getPost ( 'skipTrace' );
+			$InfoInvestigation = $this->request->getPost ( 'InfoInvestigation' );
 			$score = $this->request->getPost ( 'score' );
+			$matchedVisitResult = $this->request->getPost ( 'matchedVisitResult' );
+			$uploadOntime = $this->request->getPost ( 'uploadOntime' );
+			$IDVerification = $this->request->getPost ( 'IDVerification' );
+			$selfIntroduction = $this->request->getPost ( 'selfIntroduction' );
+			$infoProviding = $this->request->getPost ( 'infoProviding' );
+			$paymentChannel = $this->request->getPost ( 'paymentChannel' );
+			$approvedCashCollect = $this->request->getPost ( 'approvedCashCollect' );
+			$dataIntegrality = $this->request->getPost ( 'dataIntegrality' );
+			$wrongInfo = $this->request->getPost ( 'wrongInfo' );
+			$attitude = $this->request->getPost ( 'attitude' );
+			$cheating = $this->request->getPost ( 'cheating' );
+			$informationLeakage = $this->request->getPost ( 'informationLeakage' );
+			$urgentNoReport = $this->request->getPost ( 'urgentNoReport' );
+			$acceptWaiving = $this->request->getPost ( 'acceptWaiving' );
+			$sensitiveWording = $this->request->getPost ( 'sensitiveWording' );
+			$duration = $this->request->getPost ( 'duration' );
+			$description = $this->request->getPost ( 'description' );
 			$remark = $this->request->getPost ( 'remark' );
-			$complaintIndicator = $this->request->getPost ( 'complaintIndicator' );
-			$createTime = $this->request->getPost ( 'createTime' );
-			$createDate = $this->request->getPost ( 'createDate' );
+			$score = $this->request->getPost ( 'score' );
 			$journalID = $this->request->getPost ( 'journalID' );
-			$id = $this->request->getPost ( 'id' );
+			$videoCreateDate = $this->request->getPost ( 'videoCreateDate' );
+			$videoCreateTime = $this->request->getPost ( 'videoCreateTime' );
+			$videoUploadDate = $this->request->getPost ( 'videoUploadDate' );
+			$videoUploadTime = $this->request->getPost ( 'videoUploadTime' );
 			
 			if ($id == "") {
 				$vrdScore = new VideoScores ();
@@ -123,28 +138,48 @@ class JournalsController extends ControllerBase {
 				$vrdScore->editTime = date ( "H:i:s" );
 				$vrdScore->editDate = date ( "Y-m-d" );
 			}
+			
+			$vrdScore->videoInfo = $videoInfo;
+			$vrdScore->city = $city;
+			$vrdScore->LLI = $LLI;
 			$vrdScore->contractNo = $contractNo;
 			$vrdScore->visitDate = $visitDate;
 			$vrdScore->visitTime = $visitTime;
-			$vrdScore->LLI = $LLI;
 			$vrdScore->employeeID = $employeeID;
-			$vrdScore->city = $city;
 			$vrdScore->signInAddr = $signInAddr;
 			$vrdScore->visitResult = $visitResult;
-			$vrdScore->duration = $duration;
+			$vrdScore->negotiator = $negotiator;
 			$vrdScore->object = $object;
-			$vrdScore->videoInfo = $videoInfo;
-			$vrdScore->integrality = $integrality;
-			$vrdScore->description = $description;
-			$vrdScore->announcement = $announcement;
-			$vrdScore->location = $location;
+			$vrdScore->announceRec = $announceRec;
+			$vrdScore->visitLocation = $visitLocation;
 			$vrdScore->objectionHandling = $objectionHandling;
-			$vrdScore->noHarassment = $noHarassment;
-			$vrdScore->getPTP = $getPTP;
-			$vrdScore->skipTrace = $skipTrace;
+			$vrdScore->InfoInvestigation = $InfoInvestigation;
 			$vrdScore->score = $score;
+			$vrdScore->matchedVisitResult = $matchedVisitResult;
+			$vrdScore->uploadOntime = $uploadOntime;
+			$vrdScore->IDVerification = $IDVerification;
+			$vrdScore->selfIntroduction = $selfIntroduction;
+			$vrdScore->infoProviding = $infoProviding;
+			$vrdScore->paymentChannel = $paymentChannel;
+			$vrdScore->approvedCashCollect = $approvedCashCollect;
+			$vrdScore->dataIntegrality = $dataIntegrality;
+			$vrdScore->wrongInfo = $wrongInfo;
+			$vrdScore->attitude = $attitude;
+			$vrdScore->cheating = $cheating;
+			$vrdScore->informationLeakage = $informationLeakage;
+			$vrdScore->urgentNoReport = $urgentNoReport;
+			$vrdScore->acceptWaiving = $acceptWaiving;
+			$vrdScore->sensitiveWording = $sensitiveWording;
+			$vrdScore->duration = $duration;
+			$vrdScore->description = $description;
 			$vrdScore->remark = $remark;
-			$vrdScore->complaintIndicator = $complaintIndicator;
+			$vrdScore->score = $score;
+			
+			$vrdScore->videoCreateDate=$videoCreateDate;
+			$vrdScore->videoCreateTime=$videoCreateTime;
+			$vrdScore->videoUploadDate=$videoUploadDate;
+			$vrdScore->videoUploadTime=$videoUploadTime;
+			
 			
 			if ($vrdScore->save () == true) {
 				echo '{"result":"success","msg":"' . $vrdScore->id . '"}';
@@ -416,7 +451,7 @@ class JournalsController extends ControllerBase {
 	public function createHomeLogAction($visitDate) {
 		ini_set ( "max_execution_time", 600 );
 		$this->view->disable ();
-		//$visitDate = '2018-10-01';
+		// $visitDate = '2018-10-01';
 		try {
 			if ($visitDate == "") {
 				throw new exception ( 'visitDate not available' );
@@ -429,13 +464,15 @@ class JournalsController extends ControllerBase {
 					] 
 			] );
 			$lliCount = $collectorsHasHomeLog->count ();
-			$llis=Array();
-			if($lliCount!=0){
+			$llis = Array ();
+			if ($lliCount != 0) {
 				for($i = 0; $i < $lliCount; $i ++) {
 					$llis [$i] = $collectorsHasHomeLog [$i]->journal_creator;
-				}				
-			}else{
-				$llis=['978'];				
+				}
+			} else {
+				$llis = [ 
+						'978' 
+				];
 			}
 			$collectors = Journals::find ( [ 
 					"columns" => "distinct journal_creator",
@@ -446,7 +483,7 @@ class JournalsController extends ControllerBase {
 							"llis" => $llis 
 					] 
 			] );
-			if($collectors->count()=="0"){
+			if ($collectors->count () == "0") {
 				echo '{"result":"allDone","msg":"ok","visitDate":"' . $visitDate . '"}';
 				return;
 			}
@@ -503,16 +540,16 @@ class JournalsController extends ControllerBase {
 			echo '{"result":"failed","msg":"' . $e->getMessage () . '","visitDate":"' . $visitDate . '"}';
 		}
 	}
-	public function delHomeLogAction($visitDate){
-		$this->view->disable();
-		//$visitDate='2018-10-01';
+	public function delHomeLogAction($visitDate) {
+		$this->view->disable ();
+		// $visitDate='2018-10-01';
 		try {
 			if ($visitDate == "") {
 				throw new exception ( 'visitDate not available' );
 			}
 			$query = $this->modelsManager->createQuery ( 'delete from Journals WHERE visit_date = :visitDate: and detail="通勤专用日志"' );
-			$query->execute ( [
-					'visitDate' => "$visitDate"
+			$query->execute ( [ 
+					'visitDate' => "$visitDate" 
 			] );
 			echo '{"result":"success","visitDate":"' . $visitDate . '"}';
 		} catch ( exception $e ) {

@@ -44,7 +44,7 @@
 {{content()}}
 <!-- Modal 评分卡-->
 				<div class="modal fade" id="videoScoreBoard" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-					<div class="modal-dialog " role="document">
+					<div class="modal-dialog  modal-lg" role="document">
 						<div class="modal-content">
 							<div class="modal-header">
 								<button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -62,147 +62,241 @@
 								<tr>
 									<td>合同号：<span id="contract_no"></span></td>
 									<td>外访日期：<span id="visit_date_card"></span></td>
-									<td>签到地址：<span id="signInAddr"><span id="addr_detail"></span><span id="addr_sign_in"></span></span></td>
+									<td>质检结果：<span id="validity"></span></td>
 								</tr>
 								<tr>
+									<td colspan="2">外访结果：<span id="visit_result"></span></td>
+									<td>交涉对象：<span id="negotiator_cn"></span></td>
+								</tr>								
+								<tr>
+									<td colspan="2">签到地址：<span id="signInAddr"><span id="addr_detail"></span><span id="addr_sign_in"></span></span></td>
 									<td>外访时间：<span id="visit_time"></span></td>
-									<td>外访结果：<span id="visit_result"></span></td>
-									<td>质检结果：<span id="validity"></span></td>
 								</tr>									
 									<tr id="objectTr">
 										<td colspan="3">
 											<div class="form-group">
 												<label for="object" class="col-sm-4 control-label">Object：</label>
 												<div class="col-sm-5">
-													<input type="text" class="form-control input-sm" id="object" value="">
+													<select class="form-control input-sm" id="object" onchange="return VideoScoreCard.onObjectChange(this.value);">
+													<option>RPC</option>
+													<option>TPC</option>
+													<option>WPC</option>
+													<option>NPC</option>
+													</select>
 												</div>
 											</div>
 										</td>
 									</tr>
 									<tr id="videoBottom">
-										<td colspan="3">
-											<div class="row">
-												<div class="col-md-7">1. Data integrality</div>
-												<div class="col-xs-2">
-													<select class="form-control input-sm fif-value videoScore" id="integrality">
-														<option>15</option>
-														<option>0</option>
-													</select>
-												</div>
-											</div>
+										<td colspan="1">Critical:Data integrality 数据完整性:</td><td>
+										<span class="judgeResults" id="dataIntegrality" style="color:red;"></span></td>
+										<td colspan="1">
+										<button onclick="return VideoScoreCard.judge('dataIntegrality',this.innerHTML);">0</button>
+										<button onclick="return VideoScoreCard.judge('dataIntegrality',this.innerHTML);">10101无录音或录像</button>
+										<button onclick="return VideoScoreCard.judge('dataIntegrality',this.innerHTML);">10102未拍摄拜访对象</button>
+										<button onclick="return VideoScoreCard.judge('dataIntegrality',this.innerHTML);">清除</button>
 										</td>
 									</tr>
 									<tr>
-										<td colspan="3">
-											<div class="row">
-												<div class="col-md-7">2. Description of the visit</div>
-												<div class="col-xs-2">
-													<select class="form-control input-sm fif-value videoScore" id="description">
-														<option>15</option>
-														<option>0</option>
-													</select>
-												</div>
-											</div>
+										<td colspan="1">Critical:Wrong info 不实信息:</td><td>
+										<span class="judgeResults" id="wrongInfo" style="color:red;"></span></td>
+										<td colspan="1">
+										<button onclick="return VideoScoreCard.judge('wrongInfo',this.innerHTML);">0</button>
+										<button onclick="return VideoScoreCard.judge('wrongInfo',this.innerHTML);">10201不实承诺</button>
+										<button onclick="return VideoScoreCard.judge('wrongInfo',this.innerHTML);">10202诱导下P</button>
+										<button onclick="return VideoScoreCard.judge('wrongInfo',this.innerHTML);">清除</button>
 										</td>
 									</tr>
 									<tr>
-										<td colspan="3">
-											<div class="row">
-												<div class="col-md-7">3. Announcing of the recording</div>
-												<div class="col-xs-2">
-													<select class="form-control input-sm fif-value videoScore" id="announcement">
-														<option>15</option>
-														<option>0</option>
-													</select>
-												</div>
-											</div>
+										<td colspan="1">Critical:Attitude 态度问题:</td><td>
+										<span class="judgeResults" id="attitude" style="color:red;"></span></td>
+										<td colspan="1">
+										<button onclick="return VideoScoreCard.judge('attitude',this.innerHTML);">0</button>
+										<button onclick="return VideoScoreCard.judge('attitude',this.innerHTML);">10301态度恶劣</button>
+										<button onclick="return VideoScoreCard.judge('attitude',this.innerHTML);">10302威胁恐吓</button>
+										<button onclick="return VideoScoreCard.judge('attitude',this.innerHTML);">清除</button>
 										</td>
 									</tr>
 									<tr>
-										<td colspan="3">
-											<div class="row">
-												<div class="col-md-7">4. Start location/end location</div>
-												<div class="col-xs-2">
-													<select class="form-control input-sm fif-value videoScore" id="location">
-														<option>15</option>
-														<option>0</option>
-													</select>
-												</div>
-											</div>
+										<td colspan="1">Critical:Cheating 虚假行为:</td><td>
+										<span class="judgeResults" id="cheating" style="color:red;"></span></td>
+										<td colspan="1">
+										<button onclick="return VideoScoreCard.judge('cheating',this.innerHTML);">0</button>
+										<button onclick="return VideoScoreCard.judge('cheating',this.innerHTML);">10401虚假外访（有人扮演RPC）</button>
+										<button onclick="return VideoScoreCard.judge('cheating',this.innerHTML);">10402外访时间与录像时间差别较大</button>
+										<button onclick="return VideoScoreCard.judge('cheating',this.innerHTML);">清除</button>
 										</td>
 									</tr>
 									<tr>
-										<td colspan="3">
-											<div class="row">
-												<div class="col-md-7">5. Objection handling</div>
-												<div class="col-xs-2">
-													<select class="form-control input-sm fif-value videoScore" id="objectionHandling">
-														<option>15</option>
-														<option>0</option>
-													</select>
-												</div>
-											</div>
+										<td>Critical:Information leakage 信息泄露:</td><td>
+										<span class="judgeResults" id="informationLeakage" style="color:red;"></span></td>
+										<td>
+										<button onclick="return VideoScoreCard.judge('informationLeakage',this.innerHTML);">0</button>
+										<button onclick="return VideoScoreCard.judge('informationLeakage',this.innerHTML);">10501未核实身份但透露贷款信息</button>
+										<button onclick="return VideoScoreCard.judge('informationLeakage',this.innerHTML);">清除</button>
 										</td>
 									</tr>
 									<tr>
-										<td colspan="3">
-											<div class="row">
-												<div class="col-md-7">6. no harassment visit</div>
-												<div class="col-xs-2">
-													<select class="form-control input-sm fif-value videoScore" id="noHarassment">
-														<option>15</option>
-														<option>0</option>
-													</select>
-												</div>
-											</div>
+										<td>Critical:Failing to report urgent complaints/other fraud 未上报紧急投诉/其他欺诈:</td><td>
+										<span class="judgeResults" id="urgentNoReport" style="color:red;"></span></td>
+										<td>
+										<button onclick="return VideoScoreCard.judge('urgentNoReport',this.innerHTML);">0</button>
+										<button onclick="return VideoScoreCard.judge('urgentNoReport',this.innerHTML);">10601未上报紧急投诉</button>
+										<button onclick="return VideoScoreCard.judge('urgentNoReport',this.innerHTML);">清除</button>
 										</td>
 									</tr>
 									<tr>
-										<td colspan="3">
-											<div class="row">
-												<div class="col-md-7">7. Compliant PTP</div>
-												<div class="col-xs-2">
-													<select class="form-control input-sm five-value videoScore" id="getPTP">
-														<option>5</option>
-														<option>0</option>
-													</select>
-												</div>
-											</div>
+										<td>Contract description 合同要素描述:</td><td>
+										<span class="judgeResults" id="description" style="color:red;"></span></td>
+										<td>
+										<button onclick="return VideoScoreCard.judge('description',this.innerHTML);">0</button>
+										<button onclick="return VideoScoreCard.judge('description',this.innerHTML);">20101日期和时间</button>
+										<button onclick="return VideoScoreCard.judge('description',this.innerHTML);">20102客户姓名</button>
+										<button onclick="return VideoScoreCard.judge('description',this.innerHTML);">20103合同号码</button>
+										<button onclick="return VideoScoreCard.judge('description',this.innerHTML);">清除</button>
 										</td>
 									</tr>
 									<tr>
-										<td colspan="3">
-											<div class="row">
-												<div class="col-md-7">8. skip trace</div>
-												<div class="col-xs-2">
-													<select class="form-control input-sm five-value videoScore" id="skipTrace">
-														<option>5</option>
-														<option>0</option>
-													</select>
-												</div>
-											</div>
+										<td>Visit location 外访地址:</td><td>
+										<span class="judgeResults" id="visitLocation" style="color:red;"></span></td>
+										<td>
+										<button onclick="return VideoScoreCard.judge('visitLocation',this.innerHTML);">0</button>
+										<button onclick="return VideoScoreCard.judge('visitLocation',this.innerHTML);">20201未拍摄实际外访地址</button>
+										<button onclick="return VideoScoreCard.judge('visitLocation',this.innerHTML);">20202外访地址错误</button>
+										<button onclick="return VideoScoreCard.judge('visitLocation',this.innerHTML);">清除</button>
 										</td>
-									</tr>								
+									</tr>
 									<tr>
-										<td colspan="3"><div class="row">
+										<td>Visit result 拜访结果:</td><td>
+										<span class="judgeResults" id="matchedVisitResult" style="color:red;"></span></td>
+										<td>
+										<button onclick="return VideoScoreCard.judge('matchedVisitResult',this.innerHTML);">0</button>
+										<button onclick="return VideoScoreCard.judge('matchedVisitResult',this.innerHTML);">20301外访结果填写错误</button>
+										<button onclick="return VideoScoreCard.judge('matchedVisitResult',this.innerHTML);">清除</button>
+										</td>
+									</tr>
+									<tr>
+										<td>On time uploading 是否准时上传:</td><td>
+										<span class="judgeResults" id="uploadOntime" style="color:red;"></span></td>
+										<td>
+										<button onclick="return VideoScoreCard.judge('uploadOntime',this.innerHTML);">0</button>
+										<button onclick="return VideoScoreCard.judge('uploadOntime',this.innerHTML);">20401未准时上传</button>
+										<button onclick="return VideoScoreCard.judge('uploadOntime',this.innerHTML);">清除</button>
+										</td>
+									</tr>
+									<tr class="NONPC">
+										<td>ID verification 身份核实:</td><td>
+										<span class="judgeResults" id="IDVerification" style="color:red;"></span></td>
+										<td>
+										<button onclick="return VideoScoreCard.judge('IDVerification',this.innerHTML);">0</button>
+										<button onclick="return VideoScoreCard.judge('IDVerification',this.innerHTML);">30101未核实身份</button>
+										<button onclick="return VideoScoreCard.judge('IDVerification',this.innerHTML);">清除</button>
+										</td>
+									</tr>
+									<tr class="NOWPC NONPC">
+										<td>Self introduction 自我介绍:</td><td>
+										<span class="judgeResults" id="selfIntroduction" style="color:red;"></span></td>
+										<td>
+										<button onclick="return VideoScoreCard.judge('selfIntroduction',this.innerHTML);">0</button>
+										<button onclick="return VideoScoreCard.judge('selfIntroduction',this.innerHTML);">30201未自我介绍</button>
+										<button onclick="return VideoScoreCard.judge('selfIntroduction',this.innerHTML);">清除</button>
+										</td>
+									</tr>
+									<tr class="NOWPC NONPC">
+										<td>Objection Handling 争议处理:</td><td>
+										<span class="judgeResults" id="objectionHandling" style="color:red;"></span></td>
+										<td>
+										<button onclick="return VideoScoreCard.judge('objectionHandling',this.innerHTML);">0</button>
+										<button onclick="return VideoScoreCard.judge('objectionHandling',this.innerHTML);">30301忽视不及时还款争议</button>
+										<button onclick="return VideoScoreCard.judge('objectionHandling',this.innerHTML);">30302使用规定外的方案</button>
+										<button onclick="return VideoScoreCard.judge('objectionHandling',this.innerHTML);">清除</button>
+										</td>
+									</tr>
+									<tr class="NOWPC NONPC">
+										<td>Providing info 提供信息:</td><td>
+										<span class="judgeResults" id="infoProviding" style="color:red;"></span></td>
+										<td>
+										<button onclick="return VideoScoreCard.judge('infoProviding',this.innerHTML);">0</button>
+										<button onclick="return VideoScoreCard.judge('infoProviding',this.innerHTML);">30401提供其他错误信息(RPC/TPC)</button>
+										<button onclick="return VideoScoreCard.judge('infoProviding',this.innerHTML);">30402忽视问题(RPC/TPC)</button>
+										<button onclick="return VideoScoreCard.judge('infoProviding',this.innerHTML);">30403未留言(TPC)</button>
+										<button onclick="return VideoScoreCard.judge('infoProviding',this.innerHTML);">30404未告知减免方案内容(Waving)</button>
+										<button onclick="return VideoScoreCard.judge('infoProviding',this.innerHTML);">30405未告知减免方案失效政策(Waving)</button>
+										<button onclick="return VideoScoreCard.judge('infoProviding',this.innerHTML);">清除</button>
+										</td>
+									</tr>
+									<tr class="NOWPC NONPC">
+										<td>Information Investigation 信息调查:</td><td>
+										<span class="judgeResults" id="InfoInvestigation" style="color:red;"></span></td>
+										<td>
+										<button onclick="return VideoScoreCard.judge('InfoInvestigation',this.innerHTML);">0</button>
+										<button onclick="return VideoScoreCard.judge('InfoInvestigation',this.innerHTML);">30501未询问住址(RPC)</button>
+										<button onclick="return VideoScoreCard.judge('InfoInvestigation',this.innerHTML);">30502未询问联系方式(RPC)</button>
+										<button onclick="return VideoScoreCard.judge('InfoInvestigation',this.innerHTML);">30503未询问工作(RPC)</button>
+										<button onclick="return VideoScoreCard.judge('InfoInvestigation',this.innerHTML);">30504未询问违约原因(RPC)</button>
+										<button onclick="return VideoScoreCard.judge('InfoInvestigation',this.innerHTML);">30505未寻求RPC的联系信息(TPC)</button>
+										<button onclick="return VideoScoreCard.judge('InfoInvestigation',this.innerHTML);">清除</button>
+										</td>
+									</tr>	
+									<tr class="NOTPC NOWPC NONPC">
+										<td>Announcing of the recording 提示录音录像:</td><td>
+										<span class="judgeResults" id="announceRec" style="color:red;"></span></td>
+										<td>
+										<button onclick="return VideoScoreCard.judge('announceRec',this.innerHTML);">0</button>
+										<button onclick="return VideoScoreCard.judge('announceRec',this.innerHTML);">30601未提示录像</button>
+										<button onclick="return VideoScoreCard.judge('announceRec',this.innerHTML);">30602未二次提示录像</button>
+										<button onclick="return VideoScoreCard.judge('announceRec',this.innerHTML);">30603未提示录音</button>
+										<button onclick="return VideoScoreCard.judge('announceRec',this.innerHTML);">清除</button>
+										</td>
+									</tr>	
+									<tr class="NOTPC NOWPC NONPC">
+										<td>Payment channel 还款渠道:</td><td>
+										<span class="judgeResults" id="paymentChannel" style="color:red;"></span></td>
+										<td>
+										<button onclick="return VideoScoreCard.judge('paymentChannel',this.innerHTML);">0</button>
+										<button onclick="return VideoScoreCard.judge('paymentChannel',this.innerHTML);">30701未推荐线上还款渠道</button>
+										<button onclick="return VideoScoreCard.judge('paymentChannel',this.innerHTML);">清除</button>
+										</td>
+									</tr>	
+									<tr class="NOTPC NOWPC NONPC">
+										<td>Cash payment with approval 现金代收审批:</td><td>
+										<span class="judgeResults" id="approvedCashCollect" style="color:red;"></span></td>
+										<td>
+										<button onclick="return VideoScoreCard.judge('approvedCashCollect',this.innerHTML);">0</button>
+										<button onclick="return VideoScoreCard.judge('approvedCashCollect',this.innerHTML);">30801未有现金代收审批</button>
+										<button onclick="return VideoScoreCard.judge('approvedCashCollect',this.innerHTML);">30802现金代收金额与审批金额不一致</button>
+										<button onclick="return VideoScoreCard.judge('approvedCashCollect',this.innerHTML);">清除</button>
+										</td>
+									</tr>							
+									<tr>
+										<td colspan="3">
+										<div class="row">
 												<div class="col-md-7">Total score 总分：</div>
 												<div class="col-xs-2">
 													<div id="score">100</div>
 												</div>
-											</div></td>
-									</tr>
-									
+										</div>
+										</td>
+									</tr>	
 									<tr>
-										<td colspan="3">
-											<div class="row">
-												<div class="col-md-7">Complaint Indicator:</div>
-												<div class="col-xs-2">
-													<select class="form-control input-sm" id="complaintIndicator">
-														<option>N</option>
-														<option>Y</option>
-													</select>
-												</div>
-											</div>
+										<td>Client accept waving 客户接受减免:</td><td>
+										<span class="judgeResults" id="acceptWaiving" style="color:red;"></span></td>
+										<td>
+										<button onclick="return VideoScoreCard.judge('acceptWaiving',this.innerHTML);">0</button>
+										<button onclick="return VideoScoreCard.judge('acceptWaiving',this.innerHTML);">40101接受</button>
+										<button onclick="return VideoScoreCard.judge('acceptWaiving',this.innerHTML);">40102未接受</button>
+										<button onclick="return VideoScoreCard.judge('acceptWaiving',this.innerHTML);">清除</button>
+										</td>
+									</tr>	
+									<tr>
+										<td>Sensitive wording 敏感字眼:</td><td>
+										<span class="judgeResults" id="sensitiveWording" style="color:red;"></span></td>
+										<td>
+										<button onclick="return VideoScoreCard.judge('sensitiveWording',this.innerHTML);">0</button>
+										<button onclick="return VideoScoreCard.judge('sensitiveWording',this.innerHTML);">40201敏感字眼</button>
+										<button onclick="return VideoScoreCard.judge('sensitiveWording',this.innerHTML);">40202身份欺诈</button>
+										<button onclick="return VideoScoreCard.judge('sensitiveWording',this.innerHTML);">40203其他欺诈</button>
+										<button onclick="return VideoScoreCard.judge('sensitiveWording',this.innerHTML);">清除</button>
 										</td>
 									</tr>	
 									<tr id="tableBottom">

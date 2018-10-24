@@ -31,24 +31,37 @@
             <td class="visitTime">{{ vrdScore.visitTime }}</td>
             <td class="score">{{ vrdScore.score }}</td>
             <td class="QC">{{ vrdScore.QC }}</td>
-            <input type="hidden" class="employeeID" value="{{vrdScore.employeeID}}"/>
-            <input type="hidden" class="city" value="{{vrdScore.city}}"/>
-            <input type="hidden" class="signInAddr" value="{{vrdScore.signInAddr}}"/>
-            <input type="hidden" class="journalID" value="{{vrdScore.journalID}}"/>
-            <input type="hidden" class="object" value="{{vrdScore.object}}"/>
-            <input type="hidden" class="remark" value="{{vrdScore.remark}}"/>
-            <input type="hidden" class="videoInfo" value='{{vrdScore.videoInfo}}'/>
-            <input type="hidden" class="integrality" value="{{vrdScore.integrality}}"/>
-            <input type="hidden" class="description" value="{{vrdScore.description}}"/>
-            <input type="hidden" class="announcement" value="{{vrdScore.announcement}}"/>
-            <input type="hidden" class="location" value="{{vrdScore.location}}"/>
-            <input type="hidden" class="objectionHandling" value="{{vrdScore.objectionHandling}}"/>
-            <input type="hidden" class="noHarassment" value="{{vrdScore.noHarassment}}"/>
-            <input type="hidden" class="getPTP" value="{{vrdScore.getPTP}}"/>
-            <input type="hidden" class="skipTrace" value="{{vrdScore.skipTrace}}"/>
-            <input type="hidden" class="complaintIndicator" value="{{vrdScore.complaintIndicator}}"/>
-            <input type="hidden" class="auditResult" value="{{vrdScore.auditResult}}"/>
-            <input type="hidden" class="journalID" value="{{vrdScore.journalID}}"/>
+			<input type='hidden' class='videoInfo' value='{{vrdScore.videoInfo}}'/>
+			<input type='hidden' class='city' value='{{vrdScore.city}}'/>
+			<input type='hidden' class='employeeID' value='{{vrdScore.employeeID}}'/>
+			<input type='hidden' class='signInAddr' value='{{vrdScore.signInAddr}}'/>
+			<input type='hidden' class='negotiator_cn' value='{{vrdScore.negotiator}}'/>
+			<input type='hidden' class='object' value='{{vrdScore.object}}'/>
+			<input type='hidden' class='announceRec' value='{{vrdScore.announceRec}}'/>
+			<input type='hidden' class='visitLocation' value='{{vrdScore.visitLocation}}'/>
+			<input type='hidden' class='objectionHandling' value='{{vrdScore.objectionHandling}}'/>
+			<input type='hidden' class='InfoInvestigation' value='{{vrdScore.InfoInvestigation}}'/>
+			<input type='hidden' class='matchedVisitResult' value='{{vrdScore.matchedVisitResult}}'/>
+			<input type='hidden' class='uploadOntime' value='{{vrdScore.uploadOntime}}'/>
+			<input type='hidden' class='IDVerification' value='{{vrdScore.IDVerification}}'/>
+			<input type='hidden' class='selfIntroduction' value='{{vrdScore.selfIntroduction}}'/>
+			<input type='hidden' class='infoProviding' value='{{vrdScore.infoProviding}}'/>
+			<input type='hidden' class='paymentChannel' value='{{vrdScore.paymentChannel}}'/>
+			<input type='hidden' class='approvedCashCollect' value='{{vrdScore.approvedCashCollect}}'/>
+			<input type='hidden' class='dataIntegrality' value='{{vrdScore.dataIntegrality}}'/>
+			<input type='hidden' class='wrongInfo' value='{{vrdScore.wrongInfo}}'/>
+			<input type='hidden' class='attitude' value='{{vrdScore.attitude}}'/>
+			<input type='hidden' class='cheating' value='{{vrdScore.cheating}}'/>
+			<input type='hidden' class='informationLeakage' value='{{vrdScore.informationLeakage}}'/>
+			<input type='hidden' class='urgentNoReport' value='{{vrdScore.urgentNoReport}}'/>
+			<input type='hidden' class='acceptWaiving' value='{{vrdScore.acceptWaiving}}'/>
+			<input type='hidden' class='sensitiveWording' value='{{vrdScore.sensitiveWording}}'/>
+			<input type='hidden' class='description' value='{{vrdScore.description}}'/>
+			<input type='hidden' class='remark' value='{{vrdScore.remark}}'/>
+			<input type='hidden' class='score' value='{{vrdScore.score}}'/>
+			<input type='hidden' class='journalID' value='{{vrdScore.journalID}}'/>
+			
+			<input type='hidden' class='auditResult' value='{{vrdScore.auditResult}}'/>
             <td>
             {{ link_to("#", '修改', "class": "btn btn-default btn-xs","data-toggle":"modal","data-target":"#videoScoreBoard","data-backdrop":"static","data-id":vrdScore.id,"data-action":"edit") }}
             {{ tagHtml("input",["type":"button","value": "删除", "class":"btn btn-default btn-xs","onclick":"return VideoScore.delete("~vrdScore.id~");"],true) }}

@@ -1,6 +1,6 @@
 <?php
 use Phalcon\Mvc\Model;
-class VideoScores extends Model{
+class VideoScores extends Model {
 	public $id;
 	public $contractNo;
 	public $visitDate;
@@ -12,25 +12,39 @@ class VideoScores extends Model{
 	public $visitResult;
 	public $duration;
 	public $object;
-	public $videoName;
 	public $videoInfo;
-	public $integrality;
 	public $description;
-	public $announcement;
-	public $location;
+	public $announceRec;
+	public $visitLocation;
 	public $objectionHandling;
-	public $noHarassment;
-	public $getPTP;
-	public $skipTrace;
+	public $InfoInvestigation;
 	public $score;
 	public $remark;
-	public $complaintIndicator;
 	public $QC;
 	public $createTime;
 	public $createDate;
-	public $editTime;
 	public $editDate;
+	public $editTime;
+	public $journalID;
 	public $auditResult;
-	
-	public $journalID;	
+	public $matchedVisitResult;
+	public $uploadOntime;
+	public $IDVerification;
+	public $selfIntroduction;
+	public $infoProviding;
+	public $paymentChannel;
+	public $approvedCashCollect;
+	public $dataIntegrality;
+	public $wrongInfo;
+	public $attitude;
+	public $cheating;
+	public $informationLeakage;
+	public $urgentNoReport;
+	public $negotiator;
+	public $videoCreateDate;
+	public $videoCreateTime;
+	public $videoUploadDate;
+	public $videoUploadTime;
+	public $acceptWaiving;
+	public $sensitiveWording;
 }
