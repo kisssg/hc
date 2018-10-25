@@ -305,18 +305,142 @@ var VideoScoreCard = {
             }else{
                 $("#"+id).append(',',result);
             }
+            VideoScoreCard.calcScore();
         },
         onObjectChange:function(obj){
             $(".NOTPC").show();
             $(".NONPC").show();
             $(".NOWPC").show();
             
-            if(obj=="TPC")
+            if(obj=="TPC"){
                 $(".NOTPC").hide();
-            if(obj=="NPC")
+                $(".NOTPC").find(".judgeResults").text('');
+            }
+            if(obj=="NPC"){
                 $(".NONPC").hide();
-            if(obj=="WPC")
+                $(".NONPC").find(".judgeResults").text('');
+            }
+            if(obj=="WPC"){
                 $(".NOWPC").hide();
+                $(".NOWPC").find(".judgeResults").text('');
+            }
+            VideoScoreCard.calcScore();
+        },
+        calcScore:function(){
+            obj = $("#object").val();
+            scoreArr = $(".judgeResults")
+            scoreRef = {
+                "RPC" : {
+                    'description' : 10,
+                    'visitLocation' : 5,
+                    'matchedVisitResult' : 10,
+                    'uploadOntime' : 10,
+                    'IDVerification' : 10,
+                    'selfIntroduction' : 5,
+                    'objectionHandling' : 10,
+                    'infoProviding' : 10,
+                    'InfoInvestigation' : 5,
+                    'announceRec' : 10,
+                    'paymentChannel' : 5,
+                    'approvedCashCollect' : 10
+                },
+                "TPC" : {
+                    'description' : 15,
+                    'visitLocation' : 10,
+                    'matchedVisitResult' : 10,
+                    'uploadOntime' : 10,
+                    'IDVerification' : 10,
+                    'selfIntroduction' : 10,
+                    'objectionHandling' : 10,
+                    'infoProviding' : 15,
+                    'InfoInvestigation' : 10,
+                    'announceRec' : 0,
+                    'paymentChannel' : 0,
+                    'approvedCashCollect' : 0,
+                },
+                "WPC" : {
+                    'description' : 20,
+                    'visitLocation' : 20,
+                    'matchedVisitResult' : 20,
+                    'uploadOntime' : 20,
+                    'IDVerification' : 20,
+                    'selfIntroduction' : 0,
+                    'objectionHandling' : 0,
+                    'infoProviding' : 0,
+                    'InfoInvestigation' : 0,
+                    'announceRec' : 0,
+                    'paymentChannel' : 0,
+                    'approvedCashCollect' : 0,
+                },
+                "NPC" : {
+                    'description' : 25,
+                    'visitLocation' : 25,
+                    'matchedVisitResult' : 25,
+                    'uploadOntime' : 25,
+                    'IDVerification' : 0,
+                    'selfIntroduction' : 0,
+                    'objectionHandling' : 0,
+                    'infoProviding' : 0,
+                    'InfoInvestigation' : 0,
+                    'announceRec' : 0,
+                    'paymentChannel' : 0,
+                    'approvedCashCollect' : 0
+                }
+            }
+            if (obj == 'RPC') {
+                scf = scoreRef.RPC
+            } else if (obj == 'TPC') {
+                scf = scoreRef.TPC
+            } else if (obj == 'WPC') {
+                scf = scoreRef.WPC
+            } else if (obj == 'NPC') {
+                scf = scoreRef.NPC
+            }
+            deductScore = 0;
+            for (i = 0; i < scoreArr.length; i++) {
+                if (Number(scoreArr[i].textContent) != 0) {
+                    switch (scoreArr[i].id) {
+                    case 'description':
+                        deductScore += scf.description;
+                        break;
+                    case 'visitLocation':
+                        deductScore += scf.visitLocation;
+                        break;
+                    case 'matchedVisitResult':
+                        deductScore += scf.matchedVisitResult;
+                        break;
+                    case 'uploadOntime':
+                        deductScore += scf.uploadOntime;
+                        break;
+                    case 'IDVerification':
+                        deductScore += scf.IDVerification;
+                        break;
+                    case 'selfIntroduction':
+                        deductScore += scf.selfIntroduction;
+                        break;
+                    case 'objectionHandling':
+                        deductScore += scf.objectionHandling;
+                        break;
+                    case 'infoProviding':
+                        deductScore += scf.infoProviding;
+                        break;
+                    case 'InfoInvestigation':
+                        deductScore += scf.InfoInvestigation;
+                        break;
+                    case 'announceRec':
+                        deductScore += scf.announceRec;
+                        break;
+                    case 'paymentChannel':
+                        deductScore += scf.paymentChannel;
+                        break;
+                    case 'approvedCashCollect':
+                        deductScore += scf.approvedCashCollect;
+                        break;
+                    }
+                }
+            }
+            var totalScore = 100 - deductScore;
+            $("#score").text(totalScore);
         }
 }
 var VideoAudits={
