@@ -146,6 +146,9 @@
 										</td>
 									</tr>
 									<tr>
+									<td colspan="3"></td>
+									</tr>
+									<tr>
 										<td>Contract description 合同要素描述:</td><td>
 										<span class="judgeResults" id="description" style="color:red;"></span></td>
 										<td>
@@ -323,5 +326,5 @@
 				</div>
 <!-- end of modal -->
 <?php
-echo $this->tag->javascriptInclude ( 'js/vrd.js?t=1025' );
+echo $this->tag->javascriptInclude ( 'js/vrd.js?t=102501' );
 

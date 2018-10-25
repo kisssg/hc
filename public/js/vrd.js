@@ -19,15 +19,16 @@ var VideoScore = {
 	for (i = 0; i < eachDuration.length; i++) {
 	    vName = (eachVideoName[i].value).replace(/[\]\[\|\'\\\/\"]/g,"");
 	    vDuration = eachDuration[i].value;
-	    if (vName == "" || !Validator.checkTimeFormat(vDuration)) {
+	    if (vName == "" || !Validator.checkLongTimeFormat(vDuration)) {
 		$("#tips").text(
-			"videoName和duration不能为空,duration格式为mm:ss,如05:26！" + vName + vDuration);
+			"videoName和duration不能为空,duration格式为hh:mm:ss,如01:05:26！");
 		return;
 	    }
 	    ms = vDuration.split(":");
-	    m=Number(ms[0]);
-	    s=Number(ms[1]);
-	    duration += m*60 +s;
+	    h=Number(ms[0]);
+        m=Number(ms[1]);
+        s=Number(ms[2]);
+	    duration += h*3600 + m*60 +s;
 	    
 	    vCreateDate=(eachCreateDate[i].value);
 	    vUploadDate=(eachUploadDate[i].value);
@@ -199,7 +200,7 @@ var VideoScoreCard = {
 		+ '<label for="videoName" class="control-label">Video Name：'
 		+ '</label><input type="text" class="form-control input-sm videoName" id="" value="' + name + '">'
         + '<label for="duration" class="control-label">Duration：</label>'
-        + '<input type="text" class="form-control input-sm duration" id="" value="' + duration + '" placeholder="mm:ss">'
+        + '<input type="text" class="form-control input-sm duration" id="" value="' + duration + '" placeholder="hh:mm:ss">'
 		+ '</td><td>'
         + '<label for="videoCreateDate" class="control-label">CreateDate：</label>'
         + '<input type="text" class="form-control input-sm videoCreateDate" id="" value="' + createDate + '" placeholder="yyyy/mm/dd">'
