@@ -82,6 +82,7 @@
 													<option>TPC</option>
 													<option>WPC</option>
 													<option>NPC</option>
+													<option>-</option>
 													</select>
 												</div>
 											</div>
@@ -326,5 +327,5 @@
 				</div>
 <!-- end of modal -->
 <?php
-echo $this->tag->javascriptInclude ( 'js/vrd.js?t=102501' );
+echo $this->tag->javascriptInclude ( 'js/vrd.js?t=1026' );
 

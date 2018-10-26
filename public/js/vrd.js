@@ -64,8 +64,8 @@ var VideoScore = {
 	signInAddr = $('#addr_detail').text() + $("#addr_sign_in").text();
 	visitResult = $('#visit_result').text();
 	negotiator=$('#negotiator_cn').text();
-	object = ($('#object').val()).replace(/[\"]/g,"''");
-	if(object==""){
+	obj = $('#object').val();
+	if(obj=="" || obj==null){
 	    $("#tips").text("Object不能为空！");
 	    return;
 	}
@@ -110,7 +110,7 @@ var VideoScore = {
 	        'signInAddr':signInAddr,
 	        'visitResult':visitResult,
 	        'negotiator':negotiator,
-	        'object':object,
+	        'object':obj,
 	        'announceRec':announceRec,
 	        'visitLocation':visitLocation,
 	        'objectionHandling':objectionHandling,
@@ -522,7 +522,7 @@ var Validator = {
     checkDateFormat: function(str){
         if(str=='null')
             return true;
-        var result= str.match(/^(\d{4})(\/)(\d{1,2})(\/)(\d{1,2})$/);
+        var result= str.match(/^(\d{4})(-)(\d{1,2})(-)(\d{1,2})$/);
         if(result==null)
             return false;
         return (result[3]<13 && result[5] < 32);
