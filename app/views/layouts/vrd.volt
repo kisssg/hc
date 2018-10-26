@@ -327,5 +327,5 @@
 				</div>
 <!-- end of modal -->
 <?php
-echo $this->tag->javascriptInclude ( 'js/vrd.js?t=1026' );
+echo $this->tag->javascriptInclude ( 'js/vrd.js?t=102601' );
 

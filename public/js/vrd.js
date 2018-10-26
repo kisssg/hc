@@ -7,18 +7,18 @@ var VideoScore = {
 	eachCreateTime=$('.videoCreateTime');
 	eachUploadTime=$('.videoUploadTime');
 	
-	videoCreateDate=eachCreateDate[0].value;
-	videoCreateTime=eachCreateTime[0].value;
-	videoUploadDate=eachUploadDate[0].value;
-	videoUploadTime=eachUploadTime[0].value;
+	videoCreateDate=eachCreateDate[0].value.trim();
+	videoCreateTime=eachCreateTime[0].value.trim();
+	videoUploadDate=eachUploadDate[0].value.trim();
+	videoUploadTime=eachUploadTime[0].value.trim();
 
 
 	// videoInfo1 = "";
 	duration=0;
 	var videoInfo=[];
 	for (i = 0; i < eachDuration.length; i++) {
-	    vName = (eachVideoName[i].value).replace(/[\]\[\|\'\\\/\"]/g,"");
-	    vDuration = eachDuration[i].value;
+	    vName = (eachVideoName[i].value).replace(/[\]\[\|\'\\\/\"]/g,"").trim();
+	    vDuration = eachDuration[i].value.trim();
 	    if (vName == "" || !Validator.checkLongTimeFormat(vDuration)) {
 		$("#tips").text(
 			"videoName和duration不能为空,duration格式为hh:mm:ss,如01:05:26！");
@@ -30,10 +30,10 @@ var VideoScore = {
         s=Number(ms[2]);
 	    duration += h*3600 + m*60 +s;
 	    
-	    vCreateDate=(eachCreateDate[i].value);
-	    vUploadDate=(eachUploadDate[i].value);
-	    vCreateTime=(eachCreateTime[i].value);
-	    vUploadTime=(eachUploadTime[i].value);
+	    vCreateDate=(eachCreateDate[i].value).trim();
+	    vUploadDate=(eachUploadDate[i].value).trim();
+	    vCreateTime=(eachCreateTime[i].value).trim();
+	    vUploadTime=(eachUploadTime[i].value).trim();
 	    
 	    if(!Validator.checkDateFormat(vCreateDate)||
 	            !Validator.checkLongTimeFormat(vCreateTime)||
