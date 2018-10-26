@@ -166,6 +166,8 @@ $(document).ready(
                             }
                             $("#tips").text("");
                             if (action == "edit") {
+                                $("#object").prop("disabled", false);
+                                $("#remark").prop("disabled", false);
                                 $("#scoreSubmitBtn").attr("onclick", "return VideoScore.update(" + id + ");");
                                 $("#scoreSubmitBtn").text("保存");
                                 $(".auditFrame").remove();
@@ -177,6 +179,7 @@ $(document).ready(
                                     VideoAudits.fillData(id);
                                     VideoScoreCard.showAuditDelBtn(id);
                                 }
+                                $("#object").prop("disabled", true);
                                 $("#remark").prop("disabled", true);
                                 $("#scoreSubmitBtn").attr("onclick", "return VideoAudits.Add(" + id + ");");
                                 $("#scoreSubmitBtn").text("提交内审结果");
