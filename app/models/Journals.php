@@ -67,4 +67,5 @@ class Journals extends Model {
 	public $distance;
 	public $time_from;
 	public $duration;
+	public $vrdChecked;
 }

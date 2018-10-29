@@ -183,6 +183,13 @@ class JournalsController extends ControllerBase {
 			
 			if ($vrdScore->save () == true) {
 				echo '{"result":"success","msg":"' . $vrdScore->id . '"}';
+				/*
+				 * update count of vrdChecked in journals
+				 */
+				$scores=VideoScores::findByJournalID($journalID);
+				$journal=Journals::findFirst($journalID);
+				$journal->vrdChecked=$scores->count();
+				$journal->save();
 			} else {
 				throw new exception ( "failed transferring data" );
 			}
@@ -201,6 +208,7 @@ class JournalsController extends ControllerBase {
 			}
 			
 			$score = VideoScores::findFirst ( $id );
+			$journalID=$score->journalID;
 			if ($score == null) {
 				throw new exception ( "数据不存在！" );
 			}
@@ -209,6 +217,13 @@ class JournalsController extends ControllerBase {
 			}
 			if ($score->delete () === true) {
 				echo '{"result":"success","msg":"' . $id . '"}';
+				/*
+				 * update count of vrdChecked in journals
+				 */
+				$scores=VideoScores::findByJournalID($journalID);
+				$journal=Journals::findFirst($journalID);
+				$journal->vrdChecked=$scores->count();
+				$journal->save();
 			} else {
 				throw new exception ( "删除失败！请重试！" );
 			}

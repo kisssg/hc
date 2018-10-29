@@ -154,7 +154,9 @@ var VideoScore = {
 			window.location.reload();		    
 		}else{
 			$("#tips").text("添加成功！");
-			$("#videoScoreBoard").modal("hide");		    
+			$("#videoScoreBoard").modal("hide");
+            $("[data-id='"+journalID+"'][data-action='add']").removeClass("btn-default")
+            .addClass("btn-primary").text("评分+1");		    
 		}
 	    }else{
 		$("#tips").text(res.msg);

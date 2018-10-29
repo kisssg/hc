@@ -38,7 +38,8 @@
             <input type="hidden" class="journalID" value="{{journal.j_id}}"/>
             <input type="hidden" class="employee_code" value="{{journal.employee_code}}"/>
             <input type="hidden" class="negotiator_cn" value="{{journal.negotiator_cn}}"/>
-            <td width="7%">{{ link_to("#", '评分', "class": "btn btn-default btn-xs","data-toggle":"modal","data-target":"#videoScoreBoard","data-backdrop":"static","data-id":journal.j_id,"data-action":"add") }}</td>
+            <input type="hidden" class="vrdChecked" value="{{journal.vrdChecked}}"/>
+            <td width="7%">{{ link_to("#", '评分'~journal.vrdChecked, "class": "btn btn-default btn-xs","data-toggle":"modal","data-target":"#videoScoreBoard","data-backdrop":"static","data-id":journal.j_id,"data-action":"add") }}</td>
         </tr>
     {% if loop.last %}
     </tbody>
