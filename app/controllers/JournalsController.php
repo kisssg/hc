@@ -28,8 +28,8 @@ class JournalsController extends ControllerBase {
 				$hasRequest = true;
 			}
 			if ($journal_creator) {
-				$query->andWhere ( "journal_creator like :journal_creator: or name_cn like :journal_creator:", [ 
-						"journal_creator" => "$journal_creator%" 
+				$query->andWhere ( "journal_creator = :journal_creator: or name_cn = :journal_creator:", [ 
+						"journal_creator" => "$journal_creator" 
 				] );
 				$hasRequest = true;
 			}
