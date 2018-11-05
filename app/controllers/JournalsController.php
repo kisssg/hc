@@ -20,6 +20,7 @@ class JournalsController extends ControllerBase {
 			$query = new Criteria ();
 			$query->setModelName ( "Journals" );
 			$query->where ( "1=1" );
+			$query->orderBy("journal_creator,contract_no");
 			$hasRequest = false;
 			if ($visit_date) {
 				$query->andWhere ( "visit_date=:visit_date: ", [ 
@@ -66,7 +67,7 @@ class JournalsController extends ControllerBase {
 		
 		$paginator = new Paginator ( array (
 				"data" => $journals,
-				"limit" => 10,
+				"limit" => 50,
 				"page" => $numberPage 
 		) );
 		

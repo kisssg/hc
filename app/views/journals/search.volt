@@ -12,12 +12,12 @@
         <tr>
             <th>合同号</th>
             <th>外催员</th>
+            <th>地址类型</th>
             <th>外访结果</th>
             <th>外访日期</th>
             <th>外访时间</th>
             <th>地址判定</th>
-            <th>设备判定</th>
-            <th colspan="2">质检</th>            
+            <th colspan="2">操作</th>            
         </tr>
     </thead>
     <tbody>
@@ -25,12 +25,11 @@
         <tr id="{{journal.j_id}}">
             <td class="contract_no">{{ journal.contract_no }}</td>
             <td class="journal_creator">{{ journal.journal_creator }}</td>
+            <td class="addr_type_cn">{{ journal.addr_type_cn }}</td>
             <td class="visit_result_cn">{{ journal.visit_result_cn }}</td>
             <td class="visit_date">{{ journal.visit_date }}</td>
             <td class="visit_time">{{ journal.visit_time }}</td>
             <td class="validity">{{ journal.validity }}</td>
-            <td class="equipment_id">{{ journal.equipment_id }}</td>
-            <td class="qc_name">{{ journal.qc_name }}</td>
             <input type="hidden" class="employee_code" value="{{journal.employee_code}}"/>
             <input type="hidden" class="city" value="{{journal.city}}"/>
             <input type="hidden" class="addr_detail" value="{{journal.addr_detail}}"/>
