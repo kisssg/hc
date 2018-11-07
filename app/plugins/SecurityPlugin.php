@@ -62,7 +62,9 @@ class SecurityPlugin extends Plugin {
 							'update',
 							'markDeletion',
 							'restoreDeletion',
-							'transfer' 
+							'transfer',
+							'saveRecAudit',
+							'getRecAudit'
 					],
 					'journals'=>[
 							'index',

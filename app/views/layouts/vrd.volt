@@ -95,6 +95,7 @@
 										<button onclick="return VideoScoreCard.judge('dataIntegrality',this.innerHTML);">0</button>
 										<button onclick="return VideoScoreCard.judge('dataIntegrality',this.innerHTML);">10101无录音或录像</button>
 										<button onclick="return VideoScoreCard.judge('dataIntegrality',this.innerHTML);">10102未拍摄拜访对象</button>
+										<button onclick="return VideoScoreCard.judge('dataIntegrality',this.innerHTML);">10103无录像但提供录音</button>
 										<button onclick="return VideoScoreCard.judge('dataIntegrality',this.innerHTML);">清除</button>
 										</td>
 									</tr>

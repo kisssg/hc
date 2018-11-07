@@ -172,7 +172,7 @@ class CallBackController extends ControllerBase {
 					] 
 			] );
 			
-			$action_id = date ( "YmdHis" ).random_int();
+			$action_id = date ( "YmdHis" ) . random_int ();
 			$count = 0;
 			foreach ( $items as $item ) {
 				$item->post_qc = $item->qc_name;
@@ -192,8 +192,8 @@ class CallBackController extends ControllerBase {
 		try {
 			$ids = $this->request->getPost ( 'ids' );
 			$receiver = $this->request->getPost ( 'to' );
-			$receiver = str_replace ( " ", ".", $receiver ); //need to check if object user exists, so replace those input username separated by space with dot. 
-			if ($receiver !== "已删除") {//if need to delete data, transfer to '已删除'
+			$receiver = str_replace ( " ", ".", $receiver ); // need to check if object user exists, so replace those input username separated by space with dot.
+			if ($receiver !== "已删除") { // if need to delete data, transfer to '已删除'
 				$exist_user = Users::count ( [ 
 						"username = :username:",
 						"bind" => [ 
@@ -204,7 +204,7 @@ class CallBackController extends ControllerBase {
 					throw new exception ( "User not exist" );
 				}
 			}
-			$receiver = str_replace ( ".", " ", $receiver );//data owner in the call back table username separate with blank character
+			$receiver = str_replace ( ".", " ", $receiver ); // data owner in the call back table username separate with blank character
 			
 			$items = Callback::find ( [ 
 					"conditions" => "id in ({ids:array})  and action_id is null",
@@ -213,7 +213,7 @@ class CallBackController extends ControllerBase {
 					] 
 			] );
 			// @FIXME it can transfer only one record while there actually are multiple;
-			$action_id = date ( "YmdHis" ).rand(1,999);
+			$action_id = date ( "YmdHis" ) . rand ( 1, 999 );
 			$count = 0;
 			foreach ( $items as $item ) {
 				$item->post_qc = $item->qc_name;
@@ -236,7 +236,7 @@ class CallBackController extends ControllerBase {
 			if ($level < 10) {
 				throw new exception ( "Not authorized" );
 			}
-			$action_id = $this->request->getPost ( 'action_id','string');
+			$action_id = $this->request->getPost ( 'action_id', 'string' );
 			if ($action_id == "") {
 				throw new exception ( "Action ID not valid" );
 			}
@@ -264,7 +264,7 @@ class CallBackController extends ControllerBase {
 			$list = Callback::find ( [ 
 					"columns" => "distinct(action_id) as action_id,count(action_id) as count,delete_user as operator,qc_name as currentQC",
 					"conditions" => "action_id is not null",
-					"order"=>"action_id desc",
+					"order" => "action_id desc",
 					"group" => "action_id" 
 			] );
 			// Create a Model paginator, show 10 rows by page starting from $currentPage
@@ -310,6 +310,67 @@ class CallBackController extends ControllerBase {
 			echo $this->tag->javascriptInclude ( 'js/callback.js' );
 		} catch ( Exception $e ) {
 			echo $e->getMessage ();
+		}
+	}
+	public function getRecAuditAction(){
+		$this->view->disable();
+		try{
+			$logUser = $this->session->get ( 'auth' ) ['name'];			
+			$cbId = $this->request->getPost('id');
+			$result=CallRecAudits::findFirstByCbId($cbId);
+			echo json_encode($result);			
+		}catch(Exception $e){
+			
+		}
+	}
+	public function saveRecAuditAction() {
+		$this->view->disable();
+		try {
+			$logUser = $this->session->get ( 'auth' ) ['name'];			
+			$auditor = $logUser;
+			$id = $this->request->getPost('id');
+			$cbId = $this->request->getPost ( 'cbId' );
+			$pattern_completed = $this->request->getPost ( 'pattern_completed' );
+			$filling_right = $this->request->getPost ( 'filling_right' );
+			$communication = $this->request->getPost ( 'communication' );
+			$improve_tips = $this->request->getPost ( 'improve_tips' );
+			$remark = $this->request->getPost ( 'remark' );
+			
+			$currentDate = date ( "Y-m-d" );
+			$currentTime = date ( "H:i:s" );
+			if ($id == "") {
+				$recAudit = new CallRecAudits ();				
+				$recAudit->addDate = $currentDate;
+				$recAudit->addTime = $currentTime;
+				$type='add';				
+				$recAudit->auditor = $auditor;
+				$cb=Callback::findFirst($cbId);
+				$cb->recAuditor2=$auditor;
+				if($cb->save()===FALSE){
+					throw new exception("Failed setting recAuditor2");
+				}
+			} else {
+				$recAudit=CallRecAudits::findFirst($id);
+				$recAudit->editDate = $currentDate;
+				$recAudit->editTime = $currentTime;
+				$type='update';
+				if($logUser!=$recAudit->auditor){
+					throw  new exception("不能修改别人的记录，添加人：".$recAudit->auditor);
+				}
+			}
+				$recAudit->cbId = $cbId;
+				$recAudit->pattern_completed = $pattern_completed;
+				$recAudit->filling_right = $filling_right;
+				$recAudit->communication = $communication;
+				$recAudit->improve_tips = $improve_tips;
+				$recAudit->remark = $remark;
+				if ($recAudit->save () === FALSE) {
+					throw new exception ( "Failed adding record" );
+				} else {
+					echo '{"result":"success","id":"' . $recAudit->id . '","type":"'.$type.'","msg":""}';
+				}
+		} catch ( Exception $e ) {
+			echo '{"result":"failed","id":"' . $recAudit->id . '","type":"'.$type.'","msg":"'.$e->getMessage().'"}';
 		}
 	}
 }

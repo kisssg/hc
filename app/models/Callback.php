@@ -48,4 +48,7 @@ class Callback extends Model {
 	public $create_type;
 	public $post_qc;
 	public $action_id;
+	public $secondCaller;
+	public $recAuditor;
+	public $recAuditor2;
 }
