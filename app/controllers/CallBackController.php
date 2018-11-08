@@ -338,7 +338,10 @@ class CallBackController extends ControllerBase {
 			
 			$currentDate = date ( "Y-m-d" );
 			$currentTime = date ( "H:i:s" );
-			if ($id == "") {
+			
+			
+			$recAudit=CallRecAudits::findFirstBycbId($cbId);
+			if ($recAudit ===FALSE) {
 				$recAudit = new CallRecAudits ();				
 				$recAudit->addDate = $currentDate;
 				$recAudit->addTime = $currentTime;
@@ -350,7 +353,6 @@ class CallBackController extends ControllerBase {
 					throw new exception("Failed setting recAuditor2");
 				}
 			} else {
-				$recAudit=CallRecAudits::findFirst($id);
 				$recAudit->editDate = $currentDate;
 				$recAudit->editTime = $currentTime;
 				$type='update';
