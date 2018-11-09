@@ -108,6 +108,7 @@ class CallBackController extends ControllerBase {
 			$cb->data_uploader = $qc_name;
 			$cb->upload_batch = $upload_batch;
 			$cb->create_type = $create_type;
+			$cb->edit_log=$is_connected." ".$qc_name." ".date("ymd H:i:s");
 			
 			if ($cb->create () === false) {
 				throw new exception ( "something wrong" );

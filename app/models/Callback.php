@@ -51,4 +51,5 @@ class Callback extends Model {
 	public $secondCaller;
 	public $recAuditor;
 	public $recAuditor2;
+	public $edit_log;
 }
