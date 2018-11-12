@@ -9,7 +9,7 @@ class CollectorsController extends ControllerBase {
 		$this->view->disable ();
 		if ($this->request->isPost ()) {
 			$keyword = $this->request->getPost ( 'search' );
-			$keyword="da";
+			//$keyword="da";
 			$suggestion = Collectors::find ( [ 
 					"columns" => "id,Name_EN as value,City as city,Area as region, EmployeeID as employeeID",
 					"conditions" => "Name_EN like :keyword: ",
