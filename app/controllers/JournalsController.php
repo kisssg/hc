@@ -133,8 +133,8 @@ class JournalsController extends ControllerBase {
 				if ($vrdScore == null) {
 					throw new exception ( "数据不存在！" );
 				}
-				if ($QC != $vrdScore->QC) {
-					throw new Exception ( "你只能修改自己的数据。" );
+				if (strtolower($QC) != strtolower($vrdScore->QC)) {
+					throw new Exception ( "你只能修改自己的数据。".$vrdScore->QC);
 				}
 				$vrdScore->editTime = date ( "H:i:s" );
 				$vrdScore->editDate = date ( "Y-m-d" );
