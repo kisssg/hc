@@ -315,6 +315,10 @@ var VideoScoreCard = {
             $("#scoreSubmitBtn").before(auditDelBtn);
         },
         judge:function(id,result){
+            str=$("#"+id).text().replace(/[\(\)\/]+/g,'');
+            if(str.match(result.replace(/[\(\)\/]+/g,'')) !=null){
+                return;
+            }
             if(result=='清除'){
                 $("#"+id).text('');                
             }else if(Number($("#"+id).text())==0 || result==0){
