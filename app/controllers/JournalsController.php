@@ -213,7 +213,7 @@ class JournalsController extends ControllerBase {
 			if ($score == null) {
 				throw new exception ( "数据不存在！" );
 			}
-			if ($QC != $score->QC) {
+			if (strtolower($QC) != strtolower($score->QC)) {
 				throw new Exception ( "你只能修改自己的数据。" );
 			}
 			if ($score->delete () === true) {
