@@ -76,7 +76,7 @@ class JournalsController extends ControllerBase {
 	public function vrdScoreAddAction() {
 		$this->view->disable ();
 		try {
-			$QC = $this->session->get ( 'auth' ) ['name'];
+			$QC = trim($this->session->get ( 'auth' ) ['name']);
 			if ($QC == "") {
 				throw new exception ( "Login session expired!" );
 			}
