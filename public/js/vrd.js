@@ -35,6 +35,15 @@ var VideoScore = {
 	    vCreateTime=(eachCreateTime[i].value).trim();
 	    vUploadTime=(eachUploadTime[i].value).trim();
 	    
+	    if(vCreateDate==''){
+	        vCreateDate='null';}
+	    if(vCreateTime==''){
+	        vCreateTime='null';}
+	    if(vUploadTime==''){
+	        vUploadTime='null';}
+	    if(vUploadDate==''){
+	        vUploadDate='null';}
+	    
 	    if(!Validator.checkDateFormat(vCreateDate)||
 	            !Validator.checkLongTimeFormat(vCreateTime)||
 	            !Validator.checkDateFormat(vUploadDate)||
@@ -97,6 +106,11 @@ var VideoScore = {
 	score = $('#score').text();
 	QC = $('#qc').text();
 	journalID = $('#journalID').val();
+	
+	if(dataIntegrality==''){
+	    $("#tips").text("Data Integrality必填！").css("color","red");
+	    return;
+	}
 
 	args = {
 	        'id':id,
