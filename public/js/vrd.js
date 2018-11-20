@@ -345,6 +345,14 @@ var VideoScoreCard = {
                 $(".NOWPC").hide();
                 $(".NOWPC").find(".judgeResults").text('');
             }
+            if(obj=="-"){
+                $(".NOTPC").hide();
+                $(".NOTPC").find(".judgeResults").text('');
+                $(".NONPC").hide();
+                $(".NONPC").find(".judgeResults").text('');
+                $(".NOWPC").hide();
+                $(".NOWPC").find(".judgeResults").text('');                
+            }
             VideoScoreCard.calcScore();
         },
         calcScore:function(){
@@ -381,11 +389,11 @@ var VideoScoreCard = {
                 },
                 "WPC" : {
                     'description' : 20,
-                    'visitLocation' : 20,
+                    'visitLocation' : 10,
                     'matchedVisitResult' : 20,
                     'uploadOntime' : 20,
                     'IDVerification' : 20,
-                    'selfIntroduction' : 0,
+                    'selfIntroduction' : 10,
                     'objectionHandling' : 0,
                     'infoProviding' : 0,
                     'InfoInvestigation' : 0,
@@ -406,6 +414,20 @@ var VideoScoreCard = {
                     'announceRec' : 0,
                     'paymentChannel' : 0,
                     'approvedCashCollect' : 0
+                },
+                "Nothing" : {
+                    'description' : 0,
+                    'visitLocation' : 0,
+                    'matchedVisitResult' : 0,
+                    'uploadOntime' : 0,
+                    'IDVerification' : 0,
+                    'selfIntroduction' : 0,
+                    'objectionHandling' : 0,
+                    'infoProviding' : 0,
+                    'InfoInvestigation' : 0,
+                    'announceRec' : 0,
+                    'paymentChannel' : 0,
+                    'approvedCashCollect' : 0
                 }
             }
             if (obj == 'RPC') {
@@ -416,6 +438,8 @@ var VideoScoreCard = {
                 scf = scoreRef.WPC
             } else if (obj == 'NPC') {
                 scf = scoreRef.NPC
+            }else{
+                scf=scoreRef.Nothing
             }
             deductScore = 0;
             for (i = 0; i < scoreArr.length; i++) {
