@@ -88,6 +88,21 @@ class SecurityPlugin extends Plugin {
 							'update',
 							'delete',
 							'show'
+					],
+					'issues'=>[
+							'addViolation',
+							'delViolation',
+							'getViolation',
+							'getViolations',
+							'getPunishment',
+							'getPunishments',
+							'addPunishment',
+							'delPunishment',
+							'add',
+							'del',
+							'update',
+							'get',
+							'getList',							
 					]
 			];
 			foreach ( $privateResources as $resource => $actions ) {
@@ -166,6 +181,9 @@ class SecurityPlugin extends Plugin {
 					],
 					'collectors'=>[
 							'search'
+					],
+					'issues'=>[
+							'index',
 					]
 			];
 			foreach ( $publicResources as $resource => $actions ) {

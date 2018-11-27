@@ -10,6 +10,7 @@ class Issues extends Model {
 	public $city;
 	public $region;
 	public $collector;
+	public $employeeID;
 	public $issue_type;
 	public $issue;
 	public $remark;
