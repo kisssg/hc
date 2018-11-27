@@ -57,13 +57,14 @@ try {
 	/**
 	 * Handle the request
 	 */
+	$_SERVER['PATH_INFO']=str_replace("/hc","",$_GET['_url']);
 	$application = new \Phalcon\Mvc\Application ( $di );
-	
+	//echo $_GET['_url'];
 	echo str_replace ( [ 
 			"\n",
 			"\r",
 			"\t" 
-	], '', $application->handle ()->getContent () );
+	], '', $application->handle (!empty($_SERVER['PATH_INFO']) ? $_SERVER['PATH_INFO'] : null)->getContent () );
 } catch ( \Exception $e ) {
 	echo $e->getMessage () . '<br>';
 	echo '<pre>' . $e->getTraceAsString () . '</pre>';
