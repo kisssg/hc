@@ -59,7 +59,7 @@ try {
 	 */
 	$_SERVER['PATH_INFO']=str_replace("/hc","",$_GET['_url']);
 	$application = new \Phalcon\Mvc\Application ( $di );
-	//echo $_GET['_url'];
+	//echo realpath(dirname(__FILE__) . '/../..');
 	echo str_replace ( [ 
 			"\n",
 			"\r",
