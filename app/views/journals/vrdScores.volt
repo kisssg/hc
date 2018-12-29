@@ -37,26 +37,23 @@
 			<input type='hidden' class='signInAddr' value='{{vrdScore.signInAddr}}'/>
 			<input type='hidden' class='negotiator_cn' value='{{vrdScore.negotiator}}'/>
 			<input type='hidden' class='object' value='{{vrdScore.object}}'/>
-			<input type="hidden" class="announceRec" value="{{vrdScore.announceRec}}"/>
-			<input type="hidden" class="visitLocation" value="{{vrdScore.visitLocation}}"/>
-			<input type="hidden" class="objectionHandling" value="{{vrdScore.objectionHandling}}"/>
-			<input type="hidden" class="InfoInvestigation" value="{{vrdScore.InfoInvestigation}}"/>
-			<input type="hidden" class="matchedVisitResult" value="{{vrdScore.matchedVisitResult}}"/>
-			<input type="hidden" class="uploadOntime" value="{{vrdScore.uploadOntime}}"/>
-			<input type="hidden" class="IDVerification" value="{{vrdScore.IDVerification}}"/>
-			<input type="hidden" class="selfIntroduction" value="{{vrdScore.selfIntroduction}}"/>
-			<input type="hidden" class="infoProviding" value="{{vrdScore.infoProviding}}"/>
-			<input type="hidden" class="paymentChannel" value="{{vrdScore.paymentChannel}}"/>
-			<input type="hidden" class="approvedCashCollect" value="{{vrdScore.approvedCashCollect}}"/>
-			<input type="hidden" class="dataIntegrality" value="{{vrdScore.dataIntegrality}}"/>
-			<input type="hidden" class="wrongInfo" value="{{vrdScore.wrongInfo}}"/>
-			<input type="hidden" class="attitude" value="{{vrdScore.attitude}}"/>
-			<input type="hidden" class="cheating" value="{{vrdScore.cheating}}"/>
-			<input type="hidden" class="informationLeakage" value="{{vrdScore.informationLeakage}}"/>
-			<input type="hidden" class="urgentNoReport" value="{{vrdScore.urgentNoReport}}"/>
-			<input type="hidden" class="acceptWaiving" value="{{vrdScore.acceptWaiving}}"/>
-			<input type="hidden" class="sensitiveWording" value="{{vrdScore.sensitiveWording}}"/>
-			<input type="hidden" class="description" value="{{vrdScore.description}}"/>
+			
+			<input type='hidden' class='cheating' value='{{vrdScore.cheating}}'/>
+			<input type='hidden' class='recSurrounding' value='{{vrdScore.recSurrounding}}'/>
+			<input type='hidden' class='announceContract' value='{{vrdScore.announceContract}}'/>
+			<input type='hidden' class='selfIntro' value='{{vrdScore.selfIntro}}'/>
+			<input type='hidden' class='RPCEndRec' value='{{vrdScore.RPCEndRec}}'/>
+			<input type='hidden' class='askOthers' value='{{vrdScore.askOthers}}'/>
+			<input type='hidden' class='leaveMsg' value='{{vrdScore.leaveMsg}}'/>
+			<input type='hidden' class='askForDebt' value='{{vrdScore.askForDebt}}'/>
+			<input type='hidden' class='tellConsequence' value='{{vrdScore.tellConsequence}}'/>
+			<input type='hidden' class='negotiatePay' value='{{vrdScore.negotiatePay}}'/>
+			<input type='hidden' class='provideSolution' value='{{vrdScore.provideSolution}}'/>
+			<input type='hidden' class='specificCollect' value='{{vrdScore.specificCollect}}'/>
+			<input type='hidden' class='payHierarchy' value='{{vrdScore.payHierarchy}}'/>
+			<input type='hidden' class='updateDT' value='{{vrdScore.updateDT}}'/>
+			<input type='hidden' class='cashCollect' value='{{vrdScore.cashCollect}}'/>						
+			
 			<input type='hidden' class='remark' value='{{vrdScore.remark}}'/>
 			<input type='hidden' class='score' value='{{vrdScore.score}}'/>
 			<input type='hidden' class='journalID' value='{{vrdScore.journalID}}'/>

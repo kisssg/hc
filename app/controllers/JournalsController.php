@@ -73,7 +73,7 @@ class JournalsController extends ControllerBase {
 		
 		$this->view->page = $paginator->getPaginate ();
 	}
-	public function vrdScoreAddAction() {
+	public function vrdScoreAddOldAction() {
 		$this->view->disable ();
 		try {
 			$QC = trim($this->session->get ( 'auth' ) ['name']);
@@ -198,7 +198,126 @@ class JournalsController extends ControllerBase {
 			echo '{"result":"failed","msg":"' . $e->getMessage () . '"}';
 		}
 	}
-	public function vrdScoreDelAction() {
+	public function vrdScoreAddAction(){
+		$this->view->disable ();
+		try {
+			$QC = trim($this->session->get ( 'auth' ) ['name']);
+			if ($QC == "") {
+				throw new exception ( "Login session expired!" );
+			}
+			$id = $this->request->getPost ( 'id' );
+			$videoInfo = $this->request->getPost ( 'videoInfo' );
+			$city = $this->request->getPost ( 'city' );
+			$LLI = $this->request->getPost ( 'LLI' );
+			$contractNo = $this->request->getPost ( 'contractNo' );
+			$visitDate = $this->request->getPost ( 'visitDate' );
+			$visitTime = $this->request->getPost ( 'visitTime' );
+			$employeeID = $this->request->getPost ( 'employeeID' );
+			$signInAddr = $this->request->getPost ( 'signInAddr' );
+			$visitResult = $this->request->getPost ( 'visitResult' );
+			$negotiator = $this->request->getPost ( 'negotiator' );
+			$object = $this->request->getPost ( 'object' );
+			$duration = $this->request->getPost ( 'duration' );
+			
+			//score items * 15
+			$cheating = $this->request->getPost ( 'cheating' );
+			$recSurrounding = $this->request->getPost ( 'recSurrounding' );
+			$announceContract = $this->request->getPost ( 'announceContract' );
+			$selfIntro = $this->request->getPost ( 'selfIntro' );
+			$RPCEndRec = $this->request->getPost ( 'RPCEndRec' );
+			$askOthers = $this->request->getPost ( 'askOthers' );
+			$leaveMsg = $this->request->getPost ( 'leaveMsg' );
+			$askForDebt = $this->request->getPost ( 'askForDebt' );
+			$tellConsequence = $this->request->getPost ( 'tellConsequence' );
+			$negotiatePay = $this->request->getPost ( 'negotiatePay' );
+			$provideSolution = $this->request->getPost ( 'provideSolution' );
+			$specificCollect = $this->request->getPost ( 'specificCollect' );
+			$payHierarchy = $this->request->getPost ( 'payHierarchy' );
+			$updateDT = $this->request->getPost ( 'updateDT' );
+			$cashCollect = $this->request->getPost ( 'cashCollect' );			
+			
+			$remark = $this->request->getPost ( 'remark' );
+			$score = $this->request->getPost ( 'score' );
+			$journalID = $this->request->getPost ( 'journalID' );
+			$videoCreateDate = $this->request->getPost ( 'videoCreateDate' );
+			$videoCreateTime = $this->request->getPost ( 'videoCreateTime' );
+			$videoUploadDate = $this->request->getPost ( 'videoUploadDate' );
+			$videoUploadTime = $this->request->getPost ( 'videoUploadTime' );
+			
+			if ($id == "") {
+				$vrdScore = new NewVideoScores ();
+				$vrdScore->createTime = date ( "H:i:s" );
+				$vrdScore->createDate = date ( "Y-m-d" );
+				$vrdScore->QC = $QC;
+				$vrdScore->journalID = $journalID;
+			} else {
+				$vrdScore = NewVideoScores::findFirst ( $id );
+				if ($vrdScore == null) {
+					throw new exception ( "数据不存在！" );
+				}
+				if (strtolower($QC) != strtolower($vrdScore->QC)) {
+					throw new Exception ( "你只能修改自己的数据。".$vrdScore->QC);
+				}
+				$vrdScore->editTime = date ( "H:i:s" );
+				$vrdScore->editDate = date ( "Y-m-d" );
+			}
+			
+			$vrdScore->videoInfo = $videoInfo;
+			$vrdScore->city = $city;
+			$vrdScore->LLI = $LLI;
+			$vrdScore->contractNo = $contractNo;
+			$vrdScore->visitDate = $visitDate;
+			$vrdScore->visitTime = $visitTime;
+			$vrdScore->employeeID = $employeeID;
+			$vrdScore->signInAddr = $signInAddr;
+			$vrdScore->visitResult = $visitResult;
+			$vrdScore->negotiator = $negotiator;
+			$vrdScore->object = $object;
+			
+			//score items * 15
+			$vrdScore->cheating = $cheating;
+			$vrdScore->recSurrounding = $recSurrounding;
+			$vrdScore->announceContract = $announceContract;
+			$vrdScore->selfIntro = $selfIntro;
+			$vrdScore->RPCEndRec = $RPCEndRec;
+			$vrdScore->askOthers = $askOthers;
+			$vrdScore->leaveMsg = $leaveMsg;
+			$vrdScore->askForDebt = $askForDebt;
+			$vrdScore->tellConsequence = $tellConsequence;
+			$vrdScore->negotiatePay = $negotiatePay;
+			$vrdScore->provideSolution = $provideSolution;
+			$vrdScore->specificCollect = $specificCollect;
+			$vrdScore->payHierarchy = $payHierarchy;
+			$vrdScore->updateDT = $updateDT;
+			$vrdScore->cashCollect = $cashCollect;			
+			
+			$vrdScore->duration = $duration;
+			$vrdScore->remark = $remark;
+			$vrdScore->score = $score;
+			
+			$vrdScore->videoCreateDate=$videoCreateDate;
+			$vrdScore->videoCreateTime=$videoCreateTime;
+			$vrdScore->videoUploadDate=$videoUploadDate;
+			$vrdScore->videoUploadTime=$videoUploadTime;
+			
+			
+			if ($vrdScore->save () == true) {
+				echo '{"result":"success","msg":"' . $vrdScore->id . '"}';
+				/*
+				 * update count of vrdChecked in journals
+				 */
+				$scores=NewVideoScores::findByJournalID($journalID);
+				$journal=Journals::findFirst($journalID);
+				$journal->vrdChecked=$scores->count();
+				$journal->save();
+			} else {
+				throw new exception ( "failed transferring data" );
+			}
+		} catch ( Exception $e ) {
+			echo '{"result":"failed","msg":"' . $e->getMessage () . '"}';
+		}
+	}
+	public function vrdScoreDelOldAction() {
 		$this->view->disable ();
 		try {
 			$QC = $this->session->get ( 'auth' ) ['name'];
@@ -232,7 +351,41 @@ class JournalsController extends ControllerBase {
 			echo '{"result":"failed","msg":"' . $e->getMessage () . '"}';
 		}
 	}
-	public function vrdScoresAction() {
+	public function vrdScoreDelAction(){
+		$this->view->disable ();
+		try {
+			$QC = $this->session->get ( 'auth' ) ['name'];
+			$id = $this->request->getPost ( "id" );
+			
+			if ($QC == "") {
+				throw new exception ( "Login session expired!" );
+			}
+			
+			$score = NewVideoScores::findFirst ( $id );
+			$journalID=$score->journalID;
+			if ($score == null) {
+				throw new exception ( "数据不存在！" );
+			}
+			if (strtolower($QC) != strtolower($score->QC)) {
+				throw new Exception ( "你只能修改自己的数据。" );
+			}
+			if ($score->delete () === true) {
+				echo '{"result":"success","msg":"' . $id . '"}';
+				/*
+				 * update count of vrdChecked in journals
+				 */
+				$scores=NewVideoScores::findByJournalID($journalID);
+				$journal=Journals::findFirst($journalID);
+				$journal->vrdChecked=$scores->count();
+				$journal->save();
+			} else {
+				throw new exception ( "删除失败！请重试！" );
+			}
+		} catch ( Exception $e ) {
+			echo '{"result":"failed","msg":"' . $e->getMessage () . '"}';
+		}
+	}
+	public function vrdScoresOldAction() {
 		$this->tag->appendTitle ( '|Scores' );
 		$this->view->setTemplateBefore ( "vrd" );
 		$numberPage = 1;
@@ -309,6 +462,87 @@ class JournalsController extends ControllerBase {
 				"data" => $journals,
 				"limit" => 20,
 				"page" => $numberPage 
+		) );
+		
+		$this->view->page = $paginator->getPaginate ();
+	}
+	public function vrdScoresAction(){
+		$this->tag->appendTitle ( '|Scores' );
+		$this->view->setTemplateBefore ( "vrd" );
+		$numberPage = 1;
+		if ($this->request->isPost ()) {
+			$visit_date = $this->request->getPost ( 'visit_date', 'string' );
+			$journal_creator = $this->request->getPost ( 'journal_creator', 'string' );
+			$contract_no = $this->request->getPost ( 'contract_no', 'string' );
+			$QC = $this->request->getPost ( 'QC', 'string' );
+			$auditResult = $this->request->getPost ( 'auditResult', 'string' );
+			$query = new Criteria ();
+			$query->setModelName ( "VideoScores" );
+			$query->where ( "1=1" );
+			$hasRequest = false;
+			if ($visit_date) {
+				$query->andWhere ( "visitDate=:visit_date: ", [
+						"visit_date" => "$visit_date"
+				] );
+				$hasRequest = true;
+			}
+			if ($auditResult) {
+				$query->andWhere ( "auditResult=:auditResult: ", [
+						"auditResult" => "$auditResult"
+				] );
+				$hasRequest = true;
+			}
+			if ($journal_creator) {
+				$query->andWhere ( "LLI like :journal_creator:", [
+						"journal_creator" => "$journal_creator%"
+				] );
+				$hasRequest = true;
+			}
+			if ($this->session->get ( 'auth' ) ['level'] > 9) {
+				if ($QC) {
+					$query->andWhere ( "QC like :QC:", [
+							"QC" => "$QC%"
+					] );
+					$hasRequest = true;
+				}
+			} else {
+				$query->andWhere ( "QC = :QC:", [
+						"QC" => $this->session->get ( 'auth' ) ['name']
+				] );
+			}
+			if ($contract_no) {
+				$query->andWhere ( "contractNo = :contract_no:", [
+						"contract_no" => "$contract_no"
+				] );
+				$hasRequest = true;
+			}
+			$this->persistent->mySearchParams = $query->getParams ();
+		} else {
+			$hasRequest = true;
+			$numberPage = $this->request->getQuery ( "page", "int" );
+		}
+		
+		$parameters = array ();
+		if ($this->persistent->mySearchParams && $hasRequest) {
+			$parameters = $this->persistent->mySearchParams;
+		} else {
+			$parameters = [
+					"conditions" => "1=2"
+			];
+		}
+		if ($parameters ['conditions'] == "1=1") {
+			$parameters = [
+					"conditions" => "1=2"
+			];
+		}
+		$journals = NewVideoScores::find ( $parameters );
+		if (count ( $journals ) == 0) {
+			$this->flash->notice ( "The search did not find any scores" );
+		}
+		$paginator = new Paginator ( array (
+				"data" => $journals,
+				"limit" => 20,
+				"page" => $numberPage
 		) );
 		
 		$this->view->page = $paginator->getPaginate ();

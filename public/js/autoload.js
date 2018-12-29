@@ -94,26 +94,21 @@ $(document).ready(
                             VideoScoreCard.onObjectChange(object);
 
                             // get scores
-                            announceRec = table.find('.announceRec').val();
-                            visitLocation = table.find('.visitLocation').val();
-                            objectionHandling = table.find('.objectionHandling').val();
-                            InfoInvestigation = table.find('.InfoInvestigation').val();
-                            matchedVisitResult = table.find('.matchedVisitResult').val();
-                            uploadOntime = table.find('.uploadOntime').val();
-                            IDVerification = table.find('.IDVerification').val();
-                            selfIntroduction = table.find('.selfIntroduction').val();
-                            infoProviding = table.find('.infoProviding').val();
-                            paymentChannel = table.find('.paymentChannel').val();
-                            approvedCashCollect = table.find('.approvedCashCollect').val();
-                            dataIntegrality = table.find('.dataIntegrality').val();
-                            wrongInfo = table.find('.wrongInfo').val();
-                            attitude = table.find('.attitude').val();
                             cheating = table.find('.cheating').val();
-                            informationLeakage = table.find('.informationLeakage').val();
-                            urgentNoReport = table.find('.urgentNoReport').val();
-                            acceptWaiving = table.find('.acceptWaiving').val();
-                            sensitiveWording = table.find('.sensitiveWording').val();
-                            description = table.find('.description').val();
+                            recSurrounding = table.find('.recSurrounding').val();
+                            announceContract = table.find('.announceContract').val();
+                            selfIntro = table.find('.selfIntro').val();
+                            RPCEndRec = table.find('.RPCEndRec').val();
+                            askOthers = table.find('.askOthers').val();
+                            leaveMsg = table.find('.leaveMsg').val();
+                            askForDebt = table.find('.askForDebt').val();
+                            tellConsequence = table.find('.tellConsequence').val();
+                            negotiatePay = table.find('.negotiatePay').val();
+                            provideSolution = table.find('.provideSolution').val();
+                            specificCollect = table.find('.specificCollect').val();
+                            payHierarchy = table.find('.payHierarchy').val();
+                            updateDT = table.find('.updateDT').val();
+                            cashCollect = table.find('.cashCollect').val();
 
                             // show the signIns
 
@@ -134,26 +129,22 @@ $(document).ready(
                             $("#score").text(score);
 
                             // set score
-                            $('#announceRec').text(announceRec);
-                            $('#visitLocation').text(visitLocation);
-                            $('#objectionHandling').text(objectionHandling);
-                            $('#InfoInvestigation').text(InfoInvestigation);
-                            $('#matchedVisitResult').text(matchedVisitResult);
-                            $('#uploadOntime').text(uploadOntime);
-                            $('#IDVerification').text(IDVerification);
-                            $('#selfIntroduction').text(selfIntroduction);
-                            $('#infoProviding').text(infoProviding);
-                            $('#paymentChannel').text(paymentChannel);
-                            $('#approvedCashCollect').text(approvedCashCollect);
-                            $('#dataIntegrality').text(dataIntegrality);
-                            $('#wrongInfo').text(wrongInfo);
-                            $('#attitude').text(attitude);
                             $('#cheating').text(cheating);
-                            $('#informationLeakage').text(informationLeakage);
-                            $('#urgentNoReport').text(urgentNoReport);
-                            $('#acceptWaiving').text(acceptWaiving);
-                            $('#sensitiveWording').text(sensitiveWording);
-                            $('#description').text(description);
+                            $('#recSurrounding').text(recSurrounding);
+                            $('#announceContract').text(announceContract);
+                            $('#selfIntro').text(selfIntro);
+                            $('#RPCEndRec').text(RPCEndRec);
+                            $('#askOthers').text(askOthers);
+                            $('#leaveMsg').text(leaveMsg);
+                            $('#askForDebt').text(askForDebt);
+                            $('#tellConsequence').text(tellConsequence);
+                            $('#negotiatePay').text(negotiatePay);
+                            $('#provideSolution').text(provideSolution);
+                            $('#specificCollect').text(specificCollect);
+                            $('#payHierarchy').text(payHierarchy);
+                            $('#updateDT').text(updateDT);
+                            $('#cashCollect').text(cashCollect);
+
 
                             // initialize user input box
                             $("#object").val(object);

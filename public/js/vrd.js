@@ -78,39 +78,28 @@ var VideoScore = {
 	    $("#tips").text("Object不能为空！");
 	    return;
 	}
-	// score items
-	// @TODO: send result to back end
-	announceRec=$('#announceRec').text();
-	visitLocation=$('#visitLocation').text();
-	objectionHandling=$('#objectionHandling').text();
-	InfoInvestigation=$('#InfoInvestigation').text();
-	score=$('#score').text();
-	matchedVisitResult=$('#matchedVisitResult').text();
-	uploadOntime=$('#uploadOntime').text();
-	IDVerification=$('#IDVerification').text();
-	selfIntroduction=$('#selfIntroduction').text();
-	infoProviding=$('#infoProviding').text();
-	paymentChannel=$('#paymentChannel').text();
-	approvedCashCollect=$('#approvedCashCollect').text();
-	dataIntegrality=$('#dataIntegrality').text();
-	wrongInfo=$('#wrongInfo').text();
-	attitude=$('#attitude').text();
+	// score items *15 
 	cheating=$('#cheating').text();
-	informationLeakage=$('#informationLeakage').text();
-	urgentNoReport=$('#urgentNoReport').text();
-	acceptWaiving=$('#acceptWaiving').text();
-	sensitiveWording=$('#sensitiveWording').text();
+	recSurrounding=$('#recSurrounding').text();
+	announceContract=$('#announceContract').text();
+	selfIntro=$('#selfIntro').text();
+	RPCEndRec=$('#RPCEndRec').text();
+	askOthers=$('#askOthers').text();
+	leaveMsg=$('#leaveMsg').text();
+	askForDebt=$('#askForDebt').text();
+	tellConsequence=$('#tellConsequence').text();
+	negotiatePay=$('#negotiatePay').text();
+	provideSolution=$('#provideSolution').text();
+	specificCollect=$('#specificCollect').text();
+	payHierarchy=$('#payHierarchy').text();
+	updateDT=$('#updateDT').text();
+	cashCollect=$('#cashCollect').text();
 
-	description = $('#description').text();
+	
 	remark = ($('#remark').val()).replace(/[\"]/g,"''");
 	score = $('#score').text();
 	QC = $('#qc').text();
 	journalID = $('#journalID').val();
-	
-	if(dataIntegrality==''){
-	    $("#tips").text("Data Integrality必填！").css("color","red");
-	    return;
-	}
 
 	args = {
 	        'id':id,
@@ -125,28 +114,24 @@ var VideoScore = {
 	        'visitResult':visitResult,
 	        'negotiator':negotiator,
 	        'object':obj,
-	        'announceRec':announceRec,
-	        'visitLocation':visitLocation,
-	        'objectionHandling':objectionHandling,
-	        'InfoInvestigation':InfoInvestigation,
-	        'score':score,
-	        'matchedVisitResult':matchedVisitResult,
-	        'uploadOntime':uploadOntime,
-	        'IDVerification':IDVerification,
-	        'selfIntroduction':selfIntroduction,
-	        'infoProviding':infoProviding,
-	        'paymentChannel':paymentChannel,
-	        'approvedCashCollect':approvedCashCollect,
-	        'dataIntegrality':dataIntegrality,
-	        'wrongInfo':wrongInfo,
-	        'attitude':attitude,
+	        
 	        'cheating':cheating,
-	        'informationLeakage':informationLeakage,
-	        'urgentNoReport':urgentNoReport,
-	        'acceptWaiving':acceptWaiving,
-	        'sensitiveWording':sensitiveWording,
+	        'recSurrounding':recSurrounding,
+	        'announceContract':announceContract,
+	        'selfIntro':selfIntro,
+	        'RPCEndRec':RPCEndRec,
+	        'askOthers':askOthers,
+	        'leaveMsg':leaveMsg,
+	        'askForDebt':askForDebt,
+	        'tellConsequence':tellConsequence,
+	        'negotiatePay':negotiatePay,
+	        'provideSolution':provideSolution,
+	        'specificCollect':specificCollect,
+	        'payHierarchy':payHierarchy,
+	        'updateDT':updateDT,
+	        'cashCollect':cashCollect,	        
+	        
 	        'duration':duration,
-	        'description':description,
 	        'remark':remark,
 	        'score':score,
 	        'QC':QC,
@@ -161,6 +146,7 @@ var VideoScore = {
 	$('#tips').text("提交中...");
 	$("#scoreSubmitBtn").attr("disabled", true);
 	$.post(url, args, function(data) {
+	    console.log(data);
 	    res=JSON.parse(data);
 	    if(res.result=="success"){
 		if(id>0){
@@ -316,10 +302,7 @@ var VideoScoreCard = {
         },
         judge:function(id,result){
             str=$("#"+id).text().replace(/[\(\)\/]+/g,'');
-            if(str.match(result.replace(/[\(\)\/]+/g,'')) !=null){
-                return;
-            }
-            if(result=='清除'){
+            if(result==str){
                 $("#"+id).text('');                
             }else if(Number($("#"+id).text())==0 || result==0){
                 $("#"+id).text(result);      
@@ -329,35 +312,54 @@ var VideoScoreCard = {
             VideoScoreCard.calcScore();
         },
         onObjectChange:function(obj){
-            $(".NOTPC").show();
-            $(".NONPC").show();
-            $(".NOWPC").show();
+            $(".rpc_only").hide();
+            $(".non_rpc_only").hide();
+            $(".both").hide();
             
-            if(obj=="TPC"){
-                $(".NOTPC").hide();
-                $(".NOTPC").find(".judgeResults").text('');
+            if(obj=="Non_RPC"){
+                $(".non_rpc_only").show();
+                $(".both").show();
+                $(".rpc_only").hide();
+                $(".rpc_only").find(".judgeResults").text('');
             }
-            if(obj=="NPC"){
-                $(".NONPC").hide();
-                $(".NONPC").find(".judgeResults").text('');
-            }
-            if(obj=="WPC"){
-                $(".NOWPC").hide();
-                $(".NOWPC").find(".judgeResults").text('');
+            if(obj=="RPC"){
+                $(".rpc_only").show();
+                $(".both").show();
+                $(".non_rpc_only").hide();
+                $(".non_rpc_only").find(".judgeResults").text('');
             }
             if(obj=="-"){
-                $(".NOTPC").hide();
-                $(".NOTPC").find(".judgeResults").text('');
-                $(".NONPC").hide();
-                $(".NONPC").find(".judgeResults").text('');
-                $(".NOWPC").hide();
-                $(".NOWPC").find(".judgeResults").text('');                
+                $(".non_rpc_only").hide();
+                $(".non_rpc_only").find(".judgeResults").text('');
+                $(".rpc_only").hide();
+                $(".rpc_only").find(".judgeResults").text('');    
+                $(".both").hide();
+                $(".both").find(".judgeResults").text('');           
             }
             VideoScoreCard.calcScore();
         },
         calcScore:function(){
             obj = $("#object").val();
             scoreArr = $(".judgeResults")
+            deductCount=0
+            for(i=0;i<scoreArr.length;i++){
+                if(scoreArr[i].textContent==="0"){
+                    deductCount++
+                }
+            }
+            totalCount=0
+            if(obj=='Non_RPC'){
+                totalCount=6
+            }else if(obj=='RPC'){
+                totalCount=13
+            }
+            console.log(deductCount);
+            finalScore=(totalCount-deductCount)/totalCount * 100;
+            if(obj=="-"){
+                finalScore=0
+            }
+            $("#score").text(finalScore.toFixed(2));
+            return;
             scoreRef = {
                 "RPC" : {
                     'description' : 10,

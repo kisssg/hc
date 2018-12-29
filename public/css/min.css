@@ -456,3 +456,17 @@ textarea.q_remark {
 	top: 30px;
 	right: 5px;
 }
+.coverShow:hover{
+	opacity:90;
+}
+.coverShow{
+	opacity:0;
+}
+.vintage4{
+background: none;
+  border: none;
+  padding: 0 8px !important;
+color: black;
+letter-spacing: 0;
+font-size:25px;
+text-shadow: 0px 1px 0px #999, 0px 2px 0px #777, 0px 3px 0px #333, 0px 4px 3px #001135 }
