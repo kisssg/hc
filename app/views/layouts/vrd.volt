@@ -71,10 +71,7 @@
 								<tr>
 									<td colspan="2">签到地址：<span id="signInAddr"><span id="addr_detail"></span><span id="addr_sign_in"></span></span></td>
 									<td>外访时间：<span id="visit_time"></span></td>
-								</tr>
-								<tr>
-									<td colspan="3" style="font-size:30px;color:red;">老版视频评分请登陆：<a href='http://10.65.72.149' target='_blank'>http://10.65.72.149</a>
-									</td></tr>									
+								</tr>									
 									<tr id="objectTr">
 										<td colspan="3">
 											<div class="form-group">
