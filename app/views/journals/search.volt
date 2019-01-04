@@ -45,8 +45,8 @@
     <tbody>
         <tr>
             <td colspan="9" align="right">
+                    <span class="help-inline">{{ page.current }}/{{ page.total_pages }}</span>
                 <div class="btn-group">
-                    <span class="help-inline">{{ page.current }} of {{ page.total_pages }}</span>
                     {{ link_to("journals/search", '&laquo; 首页', "class": "btn btn-default") }}
                     {{ link_to("journals/search?page=" ~ page.before, '&lsaquo; 上一页', "class": "btn btn-default") }}
                     {{ link_to("journals/search?page=" ~ page.next, '下一页 &rsaquo;', "class": "btn btn-default") }}

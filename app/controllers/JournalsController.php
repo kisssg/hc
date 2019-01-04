@@ -476,6 +476,7 @@ class JournalsController extends ControllerBase {
 			$contract_no = $this->request->getPost ( 'contract_no', 'string' );
 			$QC = $this->request->getPost ( 'QC', 'string' );
 			$auditResult = $this->request->getPost ( 'auditResult', 'string' );
+			$obj = $this->request->getPost ( 'object', 'string' );
 			$query = new Criteria ();
 			$query->setModelName ( "VideoScores" );
 			$query->where ( "1=1" );
@@ -515,6 +516,11 @@ class JournalsController extends ControllerBase {
 						"contract_no" => "$contract_no"
 				] );
 				$hasRequest = true;
+			}
+			if($hasRequest && $obj){
+				$query->andWhere ( "object = :obj:", [
+						"obj" => "$obj"
+				] );
 			}
 			$this->persistent->mySearchParams = $query->getParams ();
 		} else {

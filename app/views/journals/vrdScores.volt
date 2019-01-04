@@ -1,10 +1,16 @@
 {{ content()}}
 <form action="" method="post">
-日期：<input type="text" class="datepicker" name="visit_date" id="visit_date" value="{{request.getQuery("visitDate")}}"/>
+日期：<input type="text" class="datepicker" name="visit_date" id="visit_date" value=""/>
 催收员：<input type="text" name="journal_creator" id ="" value=""/>
 质检：<input type="text" name="QC" id ="" value=""/>
 内审结果：<input type="text" name="auditResult" id ="" value=""/>
-合同号：<input type="text" name="contract_no" id ="" value="{{request.getQuery("srvID")}}"/>
+合同号：<input type="text" name="contract_no" id ="" value=""/>
+对象：<select name="object" >
+		<option></option>
+		<option>RPC</option>													
+		<option>Non_RPC</option>
+		<option>-</option>
+	</select>
 <input type="submit" class="btn btn-default btn-xs" value="搜索"/>
 </form>
 {% for vrdScore in page.items %}
@@ -15,6 +21,7 @@
             <th>合同号</th>
             <th>外催员</th>
             <th>外访结果</th>
+            <th>对象</th>
             <th>外访日期</th>
             <th>外访时间</th>
             <th>评分</th>
@@ -27,6 +34,7 @@
             <td class="contractNo">{{ vrdScore.contractNo }}</td>
             <td class="LLI">{{ vrdScore.LLI }}</td>
             <td class="visitResult">{{ vrdScore.visitResult }}</td>
+            <td>{{ vrdScore.object }}</td>
             <td class="visitDate">{{ vrdScore.visitDate }}</td>
             <td class="visitTime">{{ vrdScore.visitTime }}</td>
             <td class="score">{{ vrdScore.score }}</td>
@@ -74,8 +82,8 @@
     <tbody>
         <tr>
             <td colspan="9" align="right">
+                    <span class="in-line">{{ page.current }}/{{ page.total_pages }}</span>
                 <div class="btn-group">
-                    <span class="help-inline">{{ page.current }} of {{ page.total_pages }}</span>
                     {{ link_to("journals/vrdScores", '&laquo; 首页', "class": "btn btn-default") }}
                     {{ link_to("journals/vrdScores?page=" ~ page.before, '&lsaquo; 上一页', "class": "btn btn-default") }}
                     {{ link_to("journals/vrdScores?page=" ~ page.next, '下一页 &rsaquo;', "class": "btn btn-default") }}
