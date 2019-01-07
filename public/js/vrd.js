@@ -342,20 +342,20 @@ var VideoScoreCard = {
             obj = $("#object").val();
             scoreArr = $(".judgeResults")
             deductCount=0
+            okCount=0
             for(i=0;i<scoreArr.length;i++){
                 if(scoreArr[i].textContent==="0"){
                     deductCount++
+                }else if(scoreArr[i].textContent==="1"){
+                    okCount++
                 }
             }
-            totalCount=0
-            if(obj=='Non_RPC'){
-                totalCount=6
-            }else if(obj=='RPC'){
-                totalCount=13
-            }
-            console.log(deductCount);
-            finalScore=(totalCount-deductCount)/totalCount * 100;
-            if(obj=="-"){
+            console.log("-" + deductCount);
+            console.log("+" + okCount);
+            
+            totalCount=okCount + deductCount;
+            finalScore=okCount/totalCount * 100;
+            if(isNaN(finalScore)){
                 finalScore=0
             }
             $("#score").text(finalScore.toFixed(2));
