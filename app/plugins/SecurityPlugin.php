@@ -89,6 +89,10 @@ class SecurityPlugin extends Plugin {
 							'delete',
 							'show'
 					],
+					'camera'=>[
+							'search',
+							'scoreSave',
+					],
 					'issues'=>[
 							'addViolation',
 							'delViolation',
