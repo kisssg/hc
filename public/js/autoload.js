@@ -21,13 +21,6 @@ $(document).ready(
                         var action = button.data("action");
                         var table = $("#" + id);
                         
-                        QC=table.find(".QC").val();
-                        if(QC==""){
-                            action="add";
-                        }else{
-                            action="edit";
-                        }
-                        
                         CameraScoreCard.onObjectChange('hideAllNoShow');
                         if (action == "add") {
                             // find text;
@@ -89,6 +82,12 @@ $(document).ready(
                             // initialize the html tag for video info adding
                             $(".videoInfoFrame").remove();
                             $(".auditFrame").remove();
+
+                            $("#object").prop("disabled", false);
+                            $("#remark").prop("disabled", false);
+                            $("#scoreSubmitBtn").attr("onclick", "return CameraScore.add();");
+                            $("#scoreSubmitBtn").text("提交");
+                            
                             //CameraScoreCard.addVideoInfo();
                         } else {
                          // find text;
@@ -114,6 +113,7 @@ $(document).ready(
                             score=table.find(".score").val();
                             object=table.find(".object").val();
                             remark=table.find(".remark").val();
+                            auditResult = table.find(".auditResult").val();
 
                             // call onObjectChange();
                             CameraScoreCard.onObjectChange(object);
@@ -196,12 +196,12 @@ $(document).ready(
                                 $(".auditDelBtn").remove();
                                 if (auditResult != "blank") {
                                     // if the score has audited,show the audit result.
-                                    VideoAudits.fillData(id);
+                                    CameraAudits.fillData(id);
                                     CameraScoreCard.showAuditDelBtn(id);
                                 }
                                 $("#object").prop("disabled", true);
                                 $("#remark").prop("disabled", true);
-                                $("#scoreSubmitBtn").attr("onclick", "return VideoAudits.Add(" + id + ");");
+                                $("#scoreSubmitBtn").attr("onclick", "return CameraAudits.Add(" + id + ");");
                                 $("#scoreSubmitBtn").text("提交内审结果");
                             }
                         }

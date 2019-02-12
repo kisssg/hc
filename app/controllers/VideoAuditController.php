@@ -54,7 +54,7 @@ class VideoAuditController extends ControllerBase {
 			}
 			
 			// update score's auditResult
-			$score = NewVideoScores::findFirst ( $vsID );
+			$score = CameraScores::findFirst ( $vsID );
 			if ($score == null) {
 				throw new Exception ( "不存在对应的评分数据。" );
 			} else {
@@ -96,7 +96,7 @@ class VideoAuditController extends ControllerBase {
 				throw new Exception ( "你只能修改自己的数据" );
 			}	
 			// update score's auditResult
-			$score = NewVideoScores::findFirst ( $vsID );
+			$score = CameraScores::findFirst ( $vsID );
 			if (null === $score) {
 				throw new Exception ( "不存在对应的评分数据。" );
 			} else {

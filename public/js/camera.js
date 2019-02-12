@@ -158,10 +158,13 @@ var CameraScore = {
 
     },
     delete: function(id) {
-	cf=confirm("确定要删除吗？");
+	cf=confirm("确定清除评分数据吗？");
+	if(id==null){
+	    return;
+	}
 	if(cf===true){
 	arg={"id":id}
-	url="vrdScoreDel";
+	url="scoreDel";
 	$.post(url,arg,function(data){
 	    res=JSON.parse(data);
 	    if(res.result=="success"){
@@ -289,7 +292,7 @@ var CameraScoreCard = {
             $("#auditResult").val("");
         },
         showAuditDelBtn:function(vsID){
-            auditDelBtn='<button class="btn auditDelBtn" onclick="return VideoAudits.delete('+vsID+')">删除内审</button>';
+            auditDelBtn='<button class="btn auditDelBtn" onclick="return CameraAudits.delete('+vsID+')">删除内审</button>';
             $("#scoreSubmitBtn").before(auditDelBtn);
         },
         judge:function(id,result){
@@ -482,7 +485,7 @@ var CameraScoreCard = {
             $("#score").text(totalScore);
         }
 }
-var VideoAudits={
+var CameraAudits={
         Add:function(vsID){
             contractNo = $("#contract_no").text();
             visitDate = $('#visit_date_card').text();

@@ -67,11 +67,19 @@ QC：<input type="text" name="QC" id ="" value=""/>
 			<input type='hidden' class='updateDT' value='{{journal.updateDT}}'/>
 			<input type='hidden' class='cashCollect' value='{{journal.cashCollect}}'/>
 			<input type='hidden' class='week' value='{{journal.week}}'/>
+			<input type='hidden' class='auditResult' value='{{journal.auditResult}}'/>
 
             {%if journal.QC==""%}
-            <td width="7%">{{ link_to("#", '评分', "class": "btn btn-default btn-xs","data-toggle":"modal","data-target":"#cameraScoreBoard","data-backdrop":"static","data-id":journal.id,"data-action":journal.scored) }}</td>
+            <td width="7%">{{ link_to("#", '评分', "class": "btn btn-default btn-xs","data-toggle":"modal","data-target":"#cameraScoreBoard","data-backdrop":"static","data-id":journal.id,"data-action":"add") }}</td>
  			{%else%}
- 			<td width="7%">{{ link_to("#", journal.QC, "class": "btn btn-primary btn-xs","data-toggle":"modal","data-target":"#cameraScoreBoard","data-backdrop":"static","data-id":journal.id,"data-action":journal.scored) }}</td>
+ 			<td width="10%">{{ link_to("#", '修改', "class": "btn btn-primary btn-xs","data-toggle":"modal","data-target":"#cameraScoreBoard","data-backdrop":"static","data-id":journal.id,"data-action":"edit") }}
+ 			<button class="btn btn-default btn-xs" onclick="return CameraScore.delete({{journal.id}});">清除</button>
+            	{%if journal.auditResult=="blank"%}
+            		{{ link_to("#", '审核', "class": "btn btn-default btn-xs","data-toggle":"modal","data-target":"#cameraScoreBoard","data-backdrop":"static","data-id":journal.id,"data-action":"audit") }}
+ 				{%else%}
+					{{ link_to("#", '审核'~journal.auditResult, "class": "btn btn-primary btn-xs","data-toggle":"modal","data-target":"#cameraScoreBoard","data-backdrop":"static","data-id":journal.id,"data-action":"audit") }}
+ 				{%endif%}  
+ 			</td>
  			{%endif%}       
         </tr>
     {% if loop.last %}

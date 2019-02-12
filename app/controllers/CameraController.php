@@ -13,7 +13,7 @@ class CameraController extends ControllerBase {
 			$visit_date = $this->request->getPost ( 'visit_date', 'string' );
 			$journal_creator = $this->request->getPost ( 'journal_creator', 'string' );
 			$contract_no = $this->request->getPost ( 'contract_no', 'string' );
-			$QC=$this->request->getPost('QC');
+			$QC = $this->request->getPost ( 'QC' );
 			$query = new Criteria ();
 			$query->setModelName ( "CameraScores" );
 			$query->where ( "status='ok'" );
@@ -26,14 +26,14 @@ class CameraController extends ControllerBase {
 				$hasRequest = true;
 			}
 			if ($journal_creator) {
-				$query->andWhere ( "NAME_COLLECTOR = :journal_creator: ", [
-						"journal_creator" => "$journal_creator"
+				$query->andWhere ( "NAME_COLLECTOR = :journal_creator: ", [ 
+						"journal_creator" => "$journal_creator" 
 				] );
 				$hasRequest = true;
 			}
 			if ($QC) {
-				$query->andWhere ( "QC = :QC: ", [
-						"QC" => "$QC"
+				$query->andWhere ( "QC = :QC: ", [ 
+						"QC" => "$QC" 
 				] );
 				$hasRequest = true;
 			}
@@ -121,22 +121,21 @@ class CameraController extends ControllerBase {
 			$camera->updateDT = $updateDT;
 			$camera->cashCollect = $cashCollect;
 			if (date ( "W", strtotime ( $camera->ACTION_DATE ) ) == 0) {
-				$difday=-6;
+				$difday = - 6;
 			} else {
-				$date = date_create ( $camera->ACTION_DATE);
-				$difday=1-date ( "w", strtotime ( $camera->ACTION_DATE ) );
-				date_add ( $date, date_interval_create_from_date_string ( $difday.' days' ) );
-				$week =  date_format ( $date, 'Y-m-d' );
+				$date = date_create ( $camera->ACTION_DATE );
+				$difday = 1 - date ( "w", strtotime ( $camera->ACTION_DATE ) );
+				date_add ( $date, date_interval_create_from_date_string ( $difday . ' days' ) );
+				$week = date_format ( $date, 'Y-m-d' );
 			}
-			$camera->week=$week;
-			if($camera->QC == ""){
+			$camera->week = $week;
+			if ($camera->QC == "") {
 				$camera->QSCcreateDate = date ( "Y-m-d" );
 				$camera->QSCcreateTime = date ( "H:i:s" );
-			}else{				
+			} else {
 				$camera->QSCeditDate = date ( "Y-m-d" );
 				$camera->QSCeditTime = date ( "H:i:s" );
 			}
-			
 			
 			if ($camera->QC != $submitQC && $camera->QC != "") {
 				throw new exception ( "你只能修改自己的数据，这条数据属于" . $camera->QC );
@@ -152,7 +151,54 @@ class CameraController extends ControllerBase {
 			echo '{"result":"failed","msg":"' . $e->getMessage () . '"}';
 		}
 	}
-	public function batchManageAction(){
-		
+	public function batchManageAction() {
+		echo 'batchManage';
+	}
+	public function scoreDelAction() {
+		$this->view->disable ();
+		try {
+			$id=$this->request->getPost("id");
+			$camera = CameraScores::findFirst ( $id );			
+			$submitQC = trim ( $this->session->get ( 'auth' ) ['name'] );
+			
+			if ($camera->QC != $submitQC ) {
+				throw new exception ( "你只能修改自己的数据，这条数据属于" . $camera->QC );
+			}
+			
+			if ($camera->authority != 'delete') {
+				throw new exception ( "请申请删除权限先！" );
+			}
+			
+			$camera->object = "";
+			$camera->score = "";
+			$camera->remark = "";
+			$camera->cheating = "";
+			$camera->recSurrounding = "";
+			$camera->announceContract = "";
+			$camera->selfIntro = "";
+			$camera->RPCEndRec = "";
+			$camera->askOthers = "";
+			$camera->leaveMsg = "";
+			$camera->askForDebt = "";
+			$camera->tellConsequence = "";
+			$camera->negotiatePay = "";
+			$camera->provideSolution = "";
+			$camera->specificCollect = "";
+			$camera->payHierarchy = "";
+			$camera->updateDT = "";
+			$camera->cashCollect = "";
+			$camera->QSCeditDate = date ( "Y-m-d" );
+			$camera->QSCeditTime = date ( "H:i:s" );
+			$camera->authority = "-";
+			$camera->editLog=$camera->editLog."del-".$camera->QC.date("Ymd");
+			$camera->QC="";
+			if ($camera->save () == false) {
+				throw new exception ( "删除失败！请重试。" );
+			} else {
+				echo '{"result":"success","msg":""}';
+			}
+		} catch ( Exception $e ) {
+			echo '{"result":"failed","msg":"' . $e->getMessage () . '"}';
+		}
 	}
 }

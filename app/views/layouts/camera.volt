@@ -23,7 +23,7 @@
 
             {%- set menus = [
               'Camera Scoring': 'camera/search',
-              'Vrd Scoring': 'camera/search#'
+              'Batch Manage': 'camera/batchManage'
             ] -%}
 
             {%- for key, value in menus %}
@@ -80,7 +80,6 @@
 													<select class="form-control input-sm" id="object" onchange="return CameraScoreCard.onObjectChange(this.value);">
 													<option>RPC</option>													
 													<option>Non_RPC</option>
-													<option>-</option>
 													</select>
 												</div>
 											</div>
@@ -239,5 +238,5 @@
 					</div>
 				</div>
 <!-- end of modal -->
-        {{ javascript_include('js/camera.js?99') }}
+        {{ javascript_include('js/camera.js?101') }}
 
