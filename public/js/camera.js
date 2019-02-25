@@ -185,6 +185,13 @@ var CameraScore = {
                 window.location.reload();
             },"json")
         }
+    },
+    addIssue:function(date){
+        if(confirm("注意确认核查完所有数据再执行此操作。确定批量添加异常吗？"+date)){
+            alert("将独立打开两个网页，请至对应网页查看批量添加的结果。");
+            window.open('addIssue/'+date);
+            window.open('addCheatIssue/'+date);
+        }
     }
     
 }

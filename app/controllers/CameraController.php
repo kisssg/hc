@@ -207,7 +207,16 @@ class CameraController extends ControllerBase {
 	public function checkCheatingAction() {
 		$this->view->disable ();
 		try {
-			$user = trim ( $this->session->get ( 'auth' ) ['name'] );
+			$user = trim ( $this->session->get ( 'auth' ) ['name'] );			
+			$authority = Authorities::findFirst ( [
+					"user=:user: and module='cameraScores' and authority='checkCheating'",
+					"bind" => [
+							"user" => $user
+					]
+			] );
+			if ($authority == null) {
+				throw new exception ( "您没有这个权限！请找管理员获取权限。" );
+			}
 			$date = $this->request->getPost ( 'date' );
 			$manager = $this->db;
 			$sql = "update
@@ -258,7 +267,7 @@ class CameraController extends ControllerBase {
 			} else {
 				$enableBtn = "<button onclick='return CameraScore.batchEnable(\"" . $item->date . "\")'>启用</button>";
 			}
-			echo "<tr><td>" . $item->date . "</td><td>" . $item->count . "</td><td>" . $item->countOk . "</td><td>" . $item->autoCheck . "</td><td>" . $item->uploadTime . "</td><td>" . $enableBtn . "<button onclick='return CameraScore.checkCheating(\"" . $item->date . "\")'>录音作假核查</button>" . "<button onclick='return CameraScore.batchDelete(\"" . $item->date . "\")'>删除</button>" . "</td></tr>";
+			echo "<tr><td>" . $item->date . "</td><td>" . $item->count . "</td><td>" . $item->countOk . "</td><td>" . $item->autoCheck . "</td><td>" . $item->uploadTime . "</td><td>" . $enableBtn . "<button onclick='return CameraScore.checkCheating(\"" . $item->date . "\")'>录音作假核查</button>" ."<button onclick='return CameraScore.addIssue(\"" . $item->date . "\")'>批量添加异常</button>" ."<button onclick='return CameraScore.batchDelete(\"" . $item->date . "\")'>删除</button>" . "</td></tr>";
 		}
 		echo "</table>";
 		echo '<div class="clearfix pagination">
@@ -321,7 +330,15 @@ class CameraController extends ControllerBase {
 		try {
 			//$date = '2019-02-15';
 			$submitQC = trim ( $this->session->get ( 'auth' ) ['name'] );
-			
+			$authority = Authorities::findFirst ( [
+					"user=:user: and module='cameraScores' and authority='addIssue'",
+					"bind" => [
+							"user" => $submitQC
+					]
+			] );
+			if ($authority == null) {
+				throw new exception ( "您没有这个权限！请找管理员获取权限。" );
+			}
 			$query = new Criteria ();
 			$query->setModelName ( "CameraScores" );
 			$query->where ( "(updateDT = '0' OR cheating = '0')" );
@@ -389,7 +406,7 @@ class CameraController extends ControllerBase {
 				}
 			}
 		} catch ( Exception $e ) {
-			echo "出了点意外，任务可能没有成功完成：" . $e->getMessage ();
+			echo   $e->getMessage ();
 		}
 	}
 	public function addCheatIssueAction($date) {
@@ -397,7 +414,15 @@ class CameraController extends ControllerBase {
 		try {
 			//$date = '2019-02-15';
 			$submitQC = trim ( $this->session->get ( 'auth' ) ['name'] );
-			
+			$authority = Authorities::findFirst ( [
+					"user=:user: and module='cameraScores' and authority='addIssue'",
+					"bind" => [
+							"user" => $submitQC
+					]
+			] );
+			if ($authority == null) {
+				throw new exception ( "您没有这个权限！请找管理员获取权限。" );
+			}			
 			$query = new Criteria ();
 			$query->setModelName ( "CameraScores" );
 			$query->where ( "cheating = '0'" );
@@ -454,7 +479,7 @@ class CameraController extends ControllerBase {
 				}
 			}
 		} catch ( Exception $e ) {
-			echo "出了点意外，任务可能没有成功完成：" . $e->getMessage ();
+			echo  $e->getMessage ();
 		}
 	}
 }
