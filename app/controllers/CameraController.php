@@ -1,6 +1,7 @@
 <?php
 use Phalcon\Mvc\Model\Criteria;
 use Phalcon\Paginator\Adapter\Model as Paginator;
+use Phalcon\Mvc\Model\Manager;
 class CameraController extends ControllerBase {
 	public function initialize() {
 		$this->tag->setTitle ( "Camera Scoring" );
@@ -151,22 +152,136 @@ class CameraController extends ControllerBase {
 			echo '{"result":"failed","msg":"' . $e->getMessage () . '"}';
 		}
 	}
+	public function batchDeleteAction() {
+		$this->view->disable ();
+		try {
+			$user = trim ( $this->session->get ( 'auth' ) ['name'] );
+			$authority = Authorities::findFirst ( [ 
+					"user=:user: and module='cameraScores' and authority='batchDelete'",
+					"bind" => [ 
+							"user" => $user 
+					] 
+			] );
+			if ($authority == null) {
+				throw new exception ( "你没有该权限。请找管理员申请。" );
+			}
+			$date = $this->request->getPost ( "date" );
+			$connection = $this->db;
+			$sql = "update `fc_camera_scores` set status='obsoleted' where action_date='$date' #and status=''";
+			$result = $connection->query ( $sql );
+			if ($result === false) {
+				throw new Exception ( "Failed updating data in base" );
+			} else {
+				echo '{"result":"success","msg":"成功删除批次：' . $date . '"}';
+			}
+		} catch ( Exception $e ) {
+			echo '{"result":"failed","msg":"' . $e->getMessage () . '"}';
+		}
+	}
+	public function batchEnableAction() {
+		$this->view->disable ();
+		try {
+			$user = trim ( $this->session->get ( 'auth' ) ['name'] );
+			$authority = Authorities::findFirst ( [ 
+					"user=:user: and module='cameraScores' and authority='batchEnable'",
+					"bind" => [ 
+							"user" => $user 
+					] 
+			] );
+			if ($authority == null) {
+				throw new exception ( "您没有这个权限！请找管理员获取权限。" );
+			}
+			$date = $this->request->getPost ( "date" );
+			$connection = $this->db;
+			$sql = "update `fc_camera_scores` set status='ok' where action_date='$date' and status=''";
+			$result = $connection->query ( $sql );
+			if ($result === false) {
+				throw new Exception ( "Failed updating data in base" );
+			} else {
+				echo '{"result":"success","msg":"成功启用' . $date . '"}';
+			}
+		} catch ( exeption $e ) {
+			echo '{"result":"failed","msg":"' . $e->getMessage () . '"}';
+		}
+	}
+	public function checkCheatingAction() {
+		$this->view->disable ();
+		try {
+			$user = trim ( $this->session->get ( 'auth' ) ['name'] );
+			$date = $this->request->getPost ( 'date' );
+			$manager = $this->db;
+			$sql = "update
+					`fc_camera_scores`
+				set cheating='0',object='-',score=0,qc='system',remark='有录音无录像',
+				QSCCREATEDATE=CURDATE(),QSCCREATETIME=CURTIME()
+				WHERE
+					flag_with_audio = '1'
+				AND flag_with_vidio = '0'
+				and action_date='$date';";
+			$result = $manager->query ( $sql );
+			if ($result === false) {
+				throw new exception ( 'Failed updating data in base' );
+			} else {
+				echo '{"result":"success","msg":"' . $date . '数据已核查完有录音无视频数据。"}';
+			}
+		} catch ( exception $e ) {
+			echo '{"result":"failed","msg":"' . $e->getMessage () . '"}';
+		}
+	}
 	public function batchManageAction() {
-		echo 'batchManage';
+		$batchList = CameraScores::find ( [ 
+				"columns" => "distinct (ACTION_DATE) AS date,count(ACTION_DATE) AS count,count(nullif(status,'')) as countOk,(count(QC)-count(nullif(QC,'system'))) autoCheck,uploadTime",
+				"conditions" => "status != 'obsoleted'",
+				"order" => "ACTION_DATE DESC",
+				"group" => "ACTION_DATE" 
+		] );
+		$currentPage = $this->request->getQuery ( "page", "int" );
+		$paginator = new Paginator ( [ 
+				"data" => $batchList,
+				"limit" => "50",
+				"page" => $currentPage 
+		] );
+		
+		$page = $paginator->getPaginate ();
+		echo "<table class='contracts' style='width:auto;'>
+		<tr>
+		<td>Action Date</td>
+		<td>Count</td>
+		<td>Count OK</td>
+		<td>Auto checked</td>
+		<td>Upload Time</td>
+		<td>Action</td>
+		</tr>";
+		foreach ( $page->items as $item ) {
+			if ($item->count == $item->countOk) {
+				$enableBtn = "";
+			} else {
+				$enableBtn = "<button onclick='return CameraScore.batchEnable(\"" . $item->date . "\")'>启用</button>";
+			}
+			echo "<tr><td>" . $item->date . "</td><td>" . $item->count . "</td><td>" . $item->countOk . "</td><td>" . $item->autoCheck . "</td><td>" . $item->uploadTime . "</td><td>" . $enableBtn . "<button onclick='return CameraScore.checkCheating(\"" . $item->date . "\")'>录音作假核查</button>" . "<button onclick='return CameraScore.batchDelete(\"" . $item->date . "\")'>删除</button>" . "</td></tr>";
+		}
+		echo "</table>";
+		echo '<div class="clearfix pagination">
+	<a class="number" href="?page=1">&laquo;</a>' . '
+	<a class="number" href="?page=' . $page->before . '">&lsaquo;</a>
+	<a class="number" href="?page=' . $page->next . '">&rsaquo;</a>
+	<a class="number" href="?page=' . $page->last . '">&raquo;</a>
+	</div>
+	' . $page->current, "/", $page->total_pages;
 	}
 	public function scoreDelAction() {
 		$this->view->disable ();
 		try {
-			$id=$this->request->getPost("id");
-			$camera = CameraScores::findFirst ( $id );			
+			$id = $this->request->getPost ( "id" );
+			$camera = CameraScores::findFirst ( $id );
 			$submitQC = trim ( $this->session->get ( 'auth' ) ['name'] );
 			
-			if ($camera->QC != $submitQC ) {
+			if ($camera->QC != $submitQC) {
 				throw new exception ( "你只能修改自己的数据，这条数据属于" . $camera->QC );
 			}
 			
 			if ($camera->authority != 'delete') {
-				throw new exception ( "请申请删除权限先！" );
+				// throw new exception ( "请申请删除权限先！" );
 			}
 			
 			$camera->object = "";
@@ -190,8 +305,8 @@ class CameraController extends ControllerBase {
 			$camera->QSCeditDate = date ( "Y-m-d" );
 			$camera->QSCeditTime = date ( "H:i:s" );
 			$camera->authority = "-";
-			$camera->editLog=$camera->editLog."del-".$camera->QC.date("Ymd");
-			$camera->QC="";
+			$camera->editLog = $camera->editLog . "del-" . $camera->QC . date ( "Ymd" );
+			$camera->QC = "";
 			if ($camera->save () == false) {
 				throw new exception ( "删除失败！请重试。" );
 			} else {
@@ -199,6 +314,147 @@ class CameraController extends ControllerBase {
 			}
 		} catch ( Exception $e ) {
 			echo '{"result":"failed","msg":"' . $e->getMessage () . '"}';
+		}
+	}
+	public function addIssueAction($date) {
+		$this->view->disable ();
+		try {
+			//$date = '2019-02-15';
+			$submitQC = trim ( $this->session->get ( 'auth' ) ['name'] );
+			
+			$query = new Criteria ();
+			$query->setModelName ( "CameraScores" );
+			$query->where ( "(updateDT = '0' OR cheating = '0')" );
+			$query->inWhere ( "VISIT_RESULT", [
+					'Promise to pay',
+					'PTP DD',
+					'Payment with collector',
+					'Already Paid',
+					'LFC - Pay later',
+					'LFC - Promise to pay - Non DD',
+					'LFC - Promise to pay',
+					'LFC - Payment with collector',
+					'LFC - Already Paid'
+			] );
+			$query->andWhere ( "ACTION_DATE=:date:", [
+					"date" => "$date"
+			] );
+			$toAdd = CameraScores::find ( $query->getParams () );
+			foreach ( $toAdd as $item ) {
+				$issueAdded=json_decode($item->issueAdded);
+				if(is_object($issueAdded) && $issueAdded->payRelated==1){
+					echo $item->TEXT_CONTRACT_NUMBER."之前已添加同类异常，不再添加。"."<br/>";
+				}else{
+					echo $item->id.$item->VISIT_RESULT . $item->ACTION_DATE . $item->updateDT . "-" . $item->cheating . '<br/>';
+					//TODO: add issue here;
+					$issue=new Issues();
+					$issue->date=$date;
+					$issue->contract_no=$item->TEXT_CONTRACT_NUMBER;
+					$issue->client_name='';
+					$issue->phone='';
+					$issue->object='外催员/法律调查员';
+					$issue->city=$item->SH_CITY;
+					$issue->region='';
+					$issue->collector=$item->NAME_COLLECTOR;
+					$issue->employeeID=$item->ID_EMPLOYEE;
+					$issue->issue_type="Collector's mistake 催收员过错";
+					$issue->issue='Invalid video recording';
+					$issue->remark=$item->id.$item->remark.'('.$item->VISIT_RESULT.')'. $item->updateDT . "-" . $item->cheating;
+					$issue->responsible_person=$item->TL_NAME;
+					$issue->feedback='';
+					$issue->qc_name=$item->QC;
+					$issue->result='有效';
+					$issue->close_reason='';
+					$issue->callback_id='';
+					$issue->add_time=date("Y-m-d H:i:s");
+					$issue->close_person='system';
+					$issue->close_time=date("Y-m-d H:i:s");
+					$issue->edit_log='auto created by'.$submitQC;
+					$issue->source='VRD checking';
+					$issue->harassment_type='Other cheating behavior';
+					$issue->uploader='system';
+					
+					if($issue->save()===false){
+						throw new exception ("添加失败！");
+					}
+					
+					if(is_object($issueAdded)){
+						$issueAdded->payRelated=1;
+						$item->issueAdded=json_encode($issueAdded);
+						$item->save();
+					}else{
+						$item->issueAdded='{"payRelated":1,"cheating":0}';
+						$item->save();
+					}
+				}
+			}
+		} catch ( Exception $e ) {
+			echo "出了点意外，任务可能没有成功完成：" . $e->getMessage ();
+		}
+	}
+	public function addCheatIssueAction($date) {
+		$this->view->disable ();
+		try {
+			//$date = '2019-02-15';
+			$submitQC = trim ( $this->session->get ( 'auth' ) ['name'] );
+			
+			$query = new Criteria ();
+			$query->setModelName ( "CameraScores" );
+			$query->where ( "cheating = '0'" );
+			$query->andWhere ( "ACTION_DATE=:date:", [
+					"date" => "$date"
+			] );
+			$toAdd = CameraScores::find ( $query->getParams () );
+			foreach ( $toAdd as $item ) {
+				$issueAdded=json_decode($item->issueAdded);
+				if(is_object($issueAdded) && $issueAdded->cheating==1){
+					echo $item->TEXT_CONTRACT_NUMBER."之前已添加同类异常，不再添加。"."<br/>";
+				}else{
+					echo $item->id.$item->VISIT_RESULT . $item->ACTION_DATE . $item->updateDT . "-" . $item->cheating . '<br/>';
+					//TODO: add issue here;
+					$issue=new Issues();
+					$issue->date=$date;
+					$issue->contract_no=$item->TEXT_CONTRACT_NUMBER;
+					$issue->client_name='';
+					$issue->phone='';
+					$issue->object='外催员/法律调查员';
+					$issue->city=$item->SH_CITY;
+					$issue->region='';
+					$issue->collector=$item->NAME_COLLECTOR;
+					$issue->employeeID=$item->ID_EMPLOYEE;
+					$issue->issue_type="Collector's mistake 催收员过错";
+					$issue->issue='Fake visit/video';
+					$issue->remark=$item->id.$item->remark.'('.$item->VISIT_RESULT.')'. $item->updateDT . "-" . $item->cheating;
+					$issue->responsible_person=$item->TL_NAME;
+					$issue->feedback='';
+					$issue->qc_name=$item->QC;
+					$issue->result='有效';
+					$issue->close_reason='';
+					$issue->callback_id='';
+					$issue->add_time=date("Y-m-d H:i:s");
+					$issue->close_person='system';
+					$issue->close_time=date("Y-m-d H:i:s");
+					$issue->edit_log='auto created by'.$submitQC;
+					$issue->source='VRD checking';
+					$issue->harassment_type='Other cheating behavior';
+					$issue->uploader='system';
+					
+					if($issue->save()===false){
+						throw new exception ("添加失败！");
+					}
+					
+					if(is_object($issueAdded)){
+						$issueAdded->cheating=1;
+						$item->issueAdded=json_encode($issueAdded);
+						$item->save();
+					}else{
+						$item->issueAdded='{"payRelated":0,"cheating":1}';
+						$item->save();
+					}
+				}
+			}
+		} catch ( Exception $e ) {
+			echo "出了点意外，任务可能没有成功完成：" . $e->getMessage ();
 		}
 	}
 }

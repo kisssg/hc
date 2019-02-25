@@ -94,6 +94,16 @@ class SecurityPlugin extends Plugin {
 							'scoreSave',
 							'batchManage',
 							'scoreDel',
+							'batchDelete',
+							'batchEnable',
+							'checkCheating',
+							'addIssue',
+							'addCheatIssue'
+					],
+					'applications'=>[
+							'apply',
+							'approve',
+							'reject',
 					],
 					'issues'=>[
 							'addViolation',

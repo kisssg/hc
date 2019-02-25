@@ -59,7 +59,16 @@ class CameraScores extends Model{
 	public $payHierarchy;
 	public $updateDT;
 	public $cashCollect;
+	public $auditResult;
 	public $week;
-	public $scored;
+	public $status;
+	public $authority;
+	public $editLog;
+	public $uploadTime;
+	public $issueAdded;
+	function grant($auth){
+		$this->authority=$auth;
+		return $this->save();
+	}
 	
 }

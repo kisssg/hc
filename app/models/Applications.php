@@ -6,10 +6,15 @@ class Applications extends Model{
 	public $action;
 	public $actID;
 	public $msg;
-	public $applyDate;
-	public $applyTime;
-	public $approveDate;
-	public $approveTime;
+	public $createDate;
+	public $createTime;
+	public $endDate;
+	public $endTime;
 	public $applicator;
-	public $approver;	
+	public $approver;
+	public $status;
+	public function reject(){
+		$this->status ='rejected';
+		return $this->save();
+	}
 }

@@ -7,61 +7,29 @@ var CameraScore = {
 	eachCreateTime=$('.videoCreateTime');
 	eachUploadTime=$('.videoUploadTime');
 	/*
-	videoCreateDate=eachCreateDate[0].value.trim();
-	videoCreateTime=eachCreateTime[0].value.trim();
-	videoUploadDate=eachUploadDate[0].value.trim();
-	videoUploadTime=eachUploadTime[0].value.trim();
-	*/
+     * videoCreateDate=eachCreateDate[0].value.trim(); videoCreateTime=eachCreateTime[0].value.trim(); videoUploadDate=eachUploadDate[0].value.trim();
+     * videoUploadTime=eachUploadTime[0].value.trim();
+     */
 
-	//duration=0;
-	/* videoInfo getting
-	var videoInfo=[];
-	for (i = 0; i < eachDuration.length; i++) {
-	    vName = (eachVideoName[i].value).replace(/[\]\[\|\'\\\/\"]/g,"").trim();
-	    vDuration = eachDuration[i].value.trim();
-	    if (vName == "" || !Validator.checkLongTimeFormat(vDuration)) {
-		$("#tips").text(
-			"videoName和duration不能为空,duration格式为hh:mm:ss,如01:05:26！");
-		return;
-	    }
-	    ms = vDuration.split(":");
-	    h=Number(ms[0]);
-        m=Number(ms[1]);
-        s=Number(ms[2]);
-	    duration += h*3600 + m*60 +s;
-	    
-	    vCreateDate=(eachCreateDate[i].value).trim();
-	    vUploadDate=(eachUploadDate[i].value).trim();
-	    vCreateTime=(eachCreateTime[i].value).trim();
-	    vUploadTime=(eachUploadTime[i].value).trim();
-
-	    if(vCreateTime==''){
-	        vCreateTime='null';}
-	    if(vUploadTime==''){
-	        vUploadTime='null';}
-	    
-	    if(!Validator.checkDateFormat(vCreateDate)||
-	            !Validator.checkLongTimeFormat(vCreateTime)||
-	            !Validator.checkDateFormat(vUploadDate)||
-	            !Validator.checkLongTimeFormat(vUploadTime)){
-        $("#tips").text(
-            "时间日期格式不对。");
-        return;	        
-	    }
-	    
-	    var info={
-		    "name":vName,
-		    "duration":vDuration,
-		    'createDate':vCreateDate,
-		    'uploadDate':vUploadDate,
-		    'createTime':vCreateTime,
-		    'uploadTime':vUploadTime
-	    }
-	    videoInfo.push(info );
-	}
-    videoInfo getting */
+	// duration=0;
+	/*
+     * videoInfo getting var videoInfo=[]; for (i = 0; i < eachDuration.length; i++) { vName = (eachVideoName[i].value).replace(/[\]\[\|\'\\\/\"]/g,"").trim(); vDuration =
+     * eachDuration[i].value.trim(); if (vName == "" || !Validator.checkLongTimeFormat(vDuration)) { $("#tips").text( "videoName和duration不能为空,duration格式为hh:mm:ss,如01:05:26！");
+     * return; } ms = vDuration.split(":"); h=Number(ms[0]); m=Number(ms[1]); s=Number(ms[2]); duration += h*3600 + m*60 +s;
+     * 
+     * vCreateDate=(eachCreateDate[i].value).trim(); vUploadDate=(eachUploadDate[i].value).trim(); vCreateTime=(eachCreateTime[i].value).trim();
+     * vUploadTime=(eachUploadTime[i].value).trim();
+     * 
+     * if(vCreateTime==''){ vCreateTime='null';} if(vUploadTime==''){ vUploadTime='null';}
+     * 
+     * if(!Validator.checkDateFormat(vCreateDate)|| !Validator.checkLongTimeFormat(vCreateTime)|| !Validator.checkDateFormat(vUploadDate)||
+     * !Validator.checkLongTimeFormat(vUploadTime)){ $("#tips").text( "时间日期格式不对。"); return; }
+     * 
+     * var info={ "name":vName, "duration":vDuration, 'createDate':vCreateDate, 'uploadDate':vUploadDate, 'createTime':vCreateTime, 'uploadTime':vUploadTime } videoInfo.push(info ); }
+     * videoInfo getting
+     */
 	
-	//videoInfo=JSON.stringify(videoInfo);
+	// videoInfo=JSON.stringify(videoInfo);
 	city = $("#city").text();
 	LLI = $("#journal_creator").text();
 	contractNo = $("#contract_no").text();
@@ -76,7 +44,7 @@ var CameraScore = {
 	    $("#tips").text("Object不能为空！");
 	    return;
 	}
-	// score items *15 
+	// score items *15
 	cheating=$('#cheating').text();
 	recSurrounding=$('#recSurrounding').text();
 	announceContract=$('#announceContract').text();
@@ -136,7 +104,7 @@ var CameraScore = {
 	console.log(args);
 	url = "scoreSave";
 	$('#tips').text("提交中...");
-	//$("#scoreSubmitBtn").attr("disabled", true);
+	// $("#scoreSubmitBtn").attr("disabled", true);
 	$.post(url, args, function(data) {
 	    console.log(data);
 	    res=JSON.parse(data);
@@ -153,7 +121,7 @@ var CameraScore = {
 	    }else{
 	        $("#tips").text(res.msg);
 	    }
-	    //$("#scoreSubmitBtn").attr("disabled", false);	    
+	    // $("#scoreSubmitBtn").attr("disabled", false);
 	});
 
     },
@@ -178,7 +146,47 @@ var CameraScore = {
     },
     update: function(id) {
 	this.add(id);
+    },
+    batchDelete:function(date){
+        if(confirm("确定删除该批次数据吗？"+date)){
+            if(date==null){
+                return;
+            }
+            url='batchDelete';
+            arg={"date":date};
+            $.post(url,arg,function(data){
+                alert(data.msg);
+                window.location.reload();
+            },"json")
+        }        
+    },
+    batchEnable:function(date){
+        if(confirm("确定启用"+date +"？")){
+            if(date==null){
+                return;
+            }
+            url='batchEnable';
+            arg={"date":date};
+            $.post(url,arg,function(data){
+                alert(data.msg);
+                window.location.reload();
+            },"json")
+        }        
+    },
+    checkCheating:function(date){
+        if(confirm("确定自动标记有录音无录像的数据吗？"+date)){
+            if(date==null){
+                return;
+            }
+            url='checkCheating';
+            arg={"date":date};
+            $.post(url,arg,function(data){
+                alert(data.msg);
+                window.location.reload();
+            },"json")
+        }
     }
+    
 }
 var CameraScoreCard = {
     addVideoInfo : function(name,duration,createDate,createTime,uploadDate,uploadTime) {
