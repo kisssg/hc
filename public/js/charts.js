@@ -25,109 +25,191 @@ var Charts = {
 	$("#canvasDiv").text("");
     },
     visitOverview : function() {
-	var startDate = $("#startDate").val(), endDate = $("#endDate").val();
-	if (startDate == "" || endDate == "") {
-	    alert("Select range first.");
-	    return;
-	}
-	;
-	var args = {
-	    "startDate" : startDate,
-	    "endDate" : endDate
-	};
+        var startDate = $("#startDate").val(), endDate = $("#endDate").val();
+        if (startDate == "" || endDate == "") {
+            alert("Select range first.");
+            return;
+        }
+        ;
+        var args = {
+            "startDate" : startDate,
+            "endDate" : endDate
+        };
 
-	$
-		.post(
-			"dingCheck",
-			args,
-			function(data) {
-			    if (data == '[]') {// no data.
-				alert("无可显示数据！");
-				return;
-			    }
-			    console.log(data);
-			    var qcs = [], A = [], B = [], C = [], D = [], total = [], checked = [], uncheck = [], res = JSON
-				    .parse(data);
-			    for (i = 0; i < res.length; i++) {
-				qcs[i] = res[i].qc;
-				total[i] = res[i].total;
-				checked[i] = res[i].checked;
-				uncheck[i] = total[i] - checked[i];
-				A[i] = total[i] - res[i].NA;
-				B[i] = total[i] - res[i].NB;
-				C[i] = total[i] - res[i].NC;
-				D[i] = total[i] - res[i].ND;
-			    }
-			    var canvasHeight = (res.length + 1) * 7;
-			    var rndnum = Math.ceil(Math.random() * 100);
-			    var canvasID = "newChartCanvas" + rndnum;
-			    $("#canvasDiv").append(
-				    "<canvas id='" + canvasID + "' height='"
-					    + canvasHeight + "px'></canvas>");
-			    var ctx = document.getElementById(canvasID)
-				    .getContext('2d');
+        $
+            .post(
+                "dingCheck",
+                args,
+                function(data) {
+                    if (data == '[]') {// no data.
+                    alert("无可显示数据！");
+                    return;
+                    }
+                    console.log(data);
+                    var qcs = [], A = [], B = [], C = [], D = [], total = [], checked = [], uncheck = [], res = JSON
+                        .parse(data);
+                    for (i = 0; i < res.length; i++) {
+                    qcs[i] = res[i].qc;
+                    total[i] = res[i].total;
+                    checked[i] = res[i].checked;
+                    uncheck[i] = total[i] - checked[i];
+                    A[i] = total[i] - res[i].NA;
+                    B[i] = total[i] - res[i].NB;
+                    C[i] = total[i] - res[i].NC;
+                    D[i] = total[i] - res[i].ND;
+                    }
+                    var canvasHeight = (res.length + 1) * 7;
+                    var rndnum = Math.ceil(Math.random() * 100);
+                    var canvasID = "newChartCanvas" + rndnum;
+                    $("#canvasDiv").append(
+                        "<canvas id='" + canvasID + "' height='"
+                            + canvasHeight + "px'></canvas>");
+                    var ctx = document.getElementById(canvasID)
+                        .getContext('2d');
 
-			    var dr = Drawer;
-			    var options = {
-				type : "horizontalBar",
-				data : {
-				    labels : qcs,
-				    datasets : [ {
-					label : "A",
-					data : A,
-					borderWidth : 1,
-					stack : "stack 0",
-					backgroundColor : dr.randomColor(0.8),
-				    }, {
-					label : "B",
-					data : B,
-					borderWidth : 1,
-					stack : "stack 0",
-					backgroundColor : dr.randomColor(0.8),
-				    }, {
-					label : "C",
-					data : C,
-					borderWidth : 1,
-					stack : "stack 0",
-					backgroundColor : dr.randomColor(0.8),
-				    }, {
-					label : "D",
-					data : D,
-					borderWidth : 1,
-					stack : "stack 0",
-					backgroundColor : dr.randomColor(0.8),
-				    }, {
-					label : "uncheck",
-					data : uncheck,
-					borderWidth : 1,
-					stack : "stack 0",
-					backgroundColor : dr.randomColor(0.8),
-				    } ]
-				},
-				options : {
-				    title : {
-					display : true,
-					text : "Dingcheck overview :"
-						+ startDate + " - " + endDate
-				    },
-				    scales : {
-					yAxes : [ {
-					    beginAtZero : true,
-					    stacked : true
-					} ],
-					xAxes : [ {
-					    stacked : true
+                    var dr = Drawer;
+                    var options = {
+                    type : "horizontalBar",
+                    data : {
+                        labels : qcs,
+                        datasets : [ {
+                        label : "A",
+                        data : A,
+                        borderWidth : 1,
+                        stack : "stack 0",
+                        backgroundColor : dr.randomColor(0.8),
+                        }, {
+                        label : "B",
+                        data : B,
+                        borderWidth : 1,
+                        stack : "stack 0",
+                        backgroundColor : dr.randomColor(0.8),
+                        }, {
+                        label : "C",
+                        data : C,
+                        borderWidth : 1,
+                        stack : "stack 0",
+                        backgroundColor : dr.randomColor(0.8),
+                        }, {
+                        label : "D",
+                        data : D,
+                        borderWidth : 1,
+                        stack : "stack 0",
+                        backgroundColor : dr.randomColor(0.8),
+                        }, {
+                        label : "uncheck",
+                        data : uncheck,
+                        borderWidth : 1,
+                        stack : "stack 0",
+                        backgroundColor : dr.randomColor(0.8),
+                        } ]
+                    },
+                    options : {
+                        title : {
+                        display : true,
+                        text : "Dingcheck overview :"
+                            + startDate + " - " + endDate
+                        },
+                        scales : {
+                        yAxes : [ {
+                            beginAtZero : true,
+                            stacked : true
+                        } ],
+                        xAxes : [ {
+                            stacked : true
 
-					}, ]
-				    }
-				}
-			    };
-			    dr.drawChart(ctx, options).update();
-			    scrollHeight = document.body.offsetHeight
-				    - canvasHeight;
-			    window.scrollTo(0, scrollHeight);
-			});
-    },
+                        }, ]
+                        }
+                    }
+                    };
+                    dr.drawChart(ctx, options).update();
+                    scrollHeight = document.body.offsetHeight
+                        - canvasHeight;
+                    window.scrollTo(0, scrollHeight);
+                });
+        },
+        cameraOverview : function() {
+            var startDate = $("#startDate").val(), endDate = $("#endDate").val();
+            if (startDate == "" || endDate == "") {
+                alert("Select range first.");
+                return;
+            }
+            ;
+            var args = {
+                "startDate" : startDate,
+                "endDate" : endDate
+            };
+
+            $
+                .post(
+                    "cameraSum",
+                    args,
+                    function(data) {
+                        if (data == '[]') {// no data.
+                        alert("无可显示数据！");
+                        return;
+                        }
+                        console.log(data);
+                        var qcs = [], total = [], checked = [], uncheck = [], res = JSON
+                            .parse(data);
+                        for (i = 0; i < res.length; i++) {
+                        qcs[i] = res[i].qc;
+                        total[i] = res[i].total;
+                        checked[i] = res[i].checked;
+                        uncheck[i] = total[i] - checked[i];
+                        }
+                        var canvasHeight = (res.length + 1) * 7;
+                        var rndnum = Math.ceil(Math.random() * 100);
+                        var canvasID = "newChartCanvas" + rndnum;
+                        $("#canvasDiv").append(
+                            "<canvas id='" + canvasID + "' height='"
+                                + canvasHeight + "px'></canvas>");
+                        var ctx = document.getElementById(canvasID)
+                            .getContext('2d');
+
+                        var dr = Drawer;
+                        var options = {
+                        type : "horizontalBar",
+                        data : {
+                            labels : qcs,
+                            datasets : [ {
+                            label : "checked",
+                            data : checked,
+                            borderWidth : 1,
+                            stack : "stack 0",
+                            backgroundColor : dr.randomColor(0.8),
+                            },  {
+                            label : "uncheck",
+                            data : uncheck,
+                            borderWidth : 1,
+                            stack : "stack 0",
+                            backgroundColor : dr.randomColor(0.8),
+                            } ]
+                        },
+                        options : {
+                            title : {
+                            display : true,
+                            text : "Camera overview :"
+                                + startDate + " - " + endDate
+                            },
+                            scales : {
+                            yAxes : [ {
+                                beginAtZero : true,
+                                stacked : true
+                            } ],
+                            xAxes : [ {
+                                stacked : true
+
+                            }, ]
+                            }
+                        }
+                        };
+                        dr.drawChart(ctx, options).update();
+                        scrollHeight = document.body.offsetHeight
+                            - canvasHeight;
+                        window.scrollTo(0, scrollHeight);
+                    });
+            },
     batchOverview : function() {
 	var startDate = $("#startDate").val(), endDate = $("#endDate").val();
 	if (startDate == "" || endDate == "") {

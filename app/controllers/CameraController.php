@@ -387,7 +387,7 @@ class CameraController extends ControllerBase {
 					$issue->close_person='system';
 					$issue->close_time=date("Y-m-d H:i:s");
 					$issue->edit_log='auto created by'.$submitQC;
-					$issue->source='VRD checking';
+					$issue->source='VRD scoring';
 					$issue->harassment_type='Other cheating behavior';
 					$issue->uploader='system';
 					
@@ -460,7 +460,7 @@ class CameraController extends ControllerBase {
 					$issue->close_person='system';
 					$issue->close_time=date("Y-m-d H:i:s");
 					$issue->edit_log='auto created by'.$submitQC;
-					$issue->source='VRD checking';
+					$issue->source='VRD scoring';
 					$issue->harassment_type='Other cheating behavior';
 					$issue->uploader='system';
 					
