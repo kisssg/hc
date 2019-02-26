@@ -260,13 +260,13 @@ class CallBackController extends ControllerBase {
 			$level = $this->session->auth ['level'];
 			if ($level < 10) {
 				throw new exception ( "Not authorized" );
-			}
-			
+			}	
 			$list = Callback::find ( [ 
 					"columns" => "distinct(action_id) as action_id,count(action_id) as count,delete_user as operator,qc_name as currentQC",
-					"conditions" => "action_id is not null",
+					"conditions" => "action_id is not null ",
 					"order" => "action_id desc",
-					"group" => "action_id" 
+					"group" => "action_id" ,
+					"limit" =>"100"
 			] );
 			// Create a Model paginator, show 10 rows by page starting from $currentPage
 			$currentPage = $this->request->getQuery ( "page", "int" );
