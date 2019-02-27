@@ -333,11 +333,11 @@ class ChartsController extends ControllerBase {
 	}
 	public function cameraSumAction(){
 		$this->view->disable();
-		$startDate='2019-01-01';//$this->request->getPost("startDate");
-		$endDate='2019-02-17';//$this->request->getPost("endDate");//"2018-06-05";//
+		$startDate=$this->request->getPost("startDate");
+		$endDate=$this->request->getPost("endDate");//"2018-06-05";//
 		$group=CameraScores::find([
-				"columns"=>"distinct(QC) as qc, count(QC) as total, count(nullif(score,'')) as checked",
-				"conditions"=>"ACTION_DATE between :startDate: and :endDate: and QC != ''",
+				"columns"=>"distinct(QC) as qc, count(QC) as total, count(score) as checked",
+				"conditions"=>"ACTION_DATE between :startDate: and :endDate: and qc != '' and status='ok'",
 				"group"=>"qc",
 				"order"=>"total desc",
 				"bind"=>[

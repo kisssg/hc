@@ -138,7 +138,7 @@ class CameraController extends ControllerBase {
 				$camera->QSCeditTime = date ( "H:i:s" );
 			}
 			
-			if ($camera->QC != $submitQC && $camera->QC != "") {
+			if (strtolower($camera->QC) != strtolower($submitQC) && $camera->QC != "") {
 				throw new exception ( "你只能修改自己的数据，这条数据属于" . $camera->QC );
 			}
 			
