@@ -242,6 +242,7 @@ class CameraController extends ControllerBase {
 				"columns" => "distinct (ACTION_DATE) AS date,count(ACTION_DATE) AS count,count(nullif(status,'')) as countOk,(count(QC)-count(nullif(QC,'system'))) autoCheck,uploadTime",
 				"conditions" => "status != 'obsoleted'",
 				"order" => "ACTION_DATE DESC",
+				"limit"=>"50",
 				"group" => "ACTION_DATE" 
 		] );
 		$currentPage = $this->request->getQuery ( "page", "int" );

@@ -191,6 +191,9 @@ class CallBackController extends ControllerBase {
 	}
 	public function transferAction() {
 		try {
+			if($this->session->get ( 'auth' )['level']<10){
+				throw new exception('您暂无法执行此，请找资深帮忙。');
+			}
 			$ids = $this->request->getPost ( 'ids' );
 			$receiver = $this->request->getPost ( 'to' );
 			$receiver = str_replace ( " ", ".", $receiver ); // need to check if object user exists, so replace those input username separated by space with dot.
@@ -213,7 +216,7 @@ class CallBackController extends ControllerBase {
 							"ids" => $ids 
 					] 
 			] );
-			// @FIXME it can transfer only one record while there actually are multiple;
+			//it can transfer only one record while there actually are multiple;
 			$action_id = date ( "YmdHis" ) . rand ( 1, 999 );
 			$count = 0;
 			foreach ( $items as $item ) {
