@@ -78,6 +78,10 @@ $(document).ready(
                             $("#videoName").val("");
                             $("#remark").val("");
                             $("#tips").text("");
+                            
+
+                            $('#cheatType').val("");
+                            $('#noIntroAnno').val("");
 
                             // initialize the html tag for video info adding
                             $(".videoInfoFrame").remove();
@@ -134,6 +138,9 @@ $(document).ready(
                             payHierarchy = table.find('.payHierarchy').val();
                             updateDT = table.find('.updateDT').val();
                             cashCollect = table.find('.cashCollect').val();
+                            
+                            cheatType=table.find('.cheatType').val();
+                            noIntroAnno=table.find('.noIntroAnno').val();
 
                             // show the signIns
 
@@ -173,7 +180,9 @@ $(document).ready(
                             $('#payHierarchy').text(payHierarchy);
                             $('#updateDT').text(updateDT);
                             $('#cashCollect').text(cashCollect);
-
+                            
+                            $('#cheatType').val(cheatType);
+                            $('#noIntroAnno').val(noIntroAnno);
 
                             // initialize user input box
                             $("#object").val(object);

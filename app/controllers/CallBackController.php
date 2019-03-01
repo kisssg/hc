@@ -192,7 +192,7 @@ class CallBackController extends ControllerBase {
 	public function transferAction() {
 		try {
 			if($this->session->get ( 'auth' )['level']<10){
-				throw new exception('您暂无法执行此，请找资深帮忙。');
+				throw new exception('您暂时无法执行此操作，请找资深帮忙。');
 			}
 			$ids = $this->request->getPost ( 'ids' );
 			$receiver = $this->request->getPost ( 'to' );

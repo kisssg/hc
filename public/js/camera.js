@@ -60,7 +60,24 @@ var CameraScore = {
 	payHierarchy=$('#payHierarchy').text();
 	updateDT=$('#updateDT').text();
 	cashCollect=$('#cashCollect').text();
-
+	
+	cheatType=$('#cheatType').val();
+	noIntroAnno=$('#noIntroAnno').val();
+	
+	if(cheating=='0' && cheatType==""){
+	    $('#cheatType').focus();
+	    $("#tips").text("请选不合格类型！");
+	    return;
+	}else{
+	    cheatType="";
+	}
+	if(announceContract=='0' && noIntroAnno==""){
+        $('#noIntroAnno').focus();
+        $("#tips").text("请选不合格类型！");
+        return;
+    }else{
+        noIntroAnno="";
+    }
 	
 	remark = ($('#remark').val()).replace(/[\"]/g,"''");
 	score = $('#score').text();
@@ -94,7 +111,9 @@ var CameraScore = {
 	        'specificCollect':specificCollect,
 	        'payHierarchy':payHierarchy,
 	        'updateDT':updateDT,
-	        'cashCollect':cashCollect,	        
+	        'cashCollect':cashCollect,
+	        'cheatType':cheatType,
+	        'noIntroAnno':noIntroAnno,
 	        
 	        'remark':remark,
 	        'score':score,

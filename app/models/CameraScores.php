@@ -59,6 +59,8 @@ class CameraScores extends Model{
 	public $payHierarchy;
 	public $updateDT;
 	public $cashCollect;
+	public $cheatType;
+	public $noIntroAnno;
 	public $auditResult;
 	public $week;
 	public $status;

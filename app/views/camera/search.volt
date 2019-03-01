@@ -19,8 +19,9 @@ QC：<input type="text" name="QC" id ="" value=""/>
             <th>视频</th>
             <th>录音</th>
             <th>录制开始</th>
-            <th>录制线束</th>
+            <th>录制结束</th>
             <th>评分</th>
+            <th>QC</th>
             <th colspan="2">操作</th>            
         </tr>
     </thead>
@@ -36,7 +37,8 @@ QC：<input type="text" name="QC" id ="" value=""/>
             <td class="CNT_AUDIO_RECORDS">{{ journal.CNT_AUDIO_RECORDS }}</td>       
             <td class="CREATE_TIME">{{ journal.CREATE_TIME }}</td>       
             <td class="ENDING_TIME">{{ journal.ENDING_TIME }}</td>       
-            <td>{{ journal.score }}</td>
+            <td>{{ journal.score }}</td>      
+            <td>{{ journal.QC }}</td>
             <input type="hidden" class="employee_code" value="{{journal.ID_EMPLOYEE}}"/>
             <input type="hidden" class="city" value="{{journal.SH_CITY}}"/>
             <input type="hidden" class="journalID" value="{{journal.id}}"/>
@@ -66,10 +68,15 @@ QC：<input type="text" name="QC" id ="" value=""/>
 			<input type='hidden' class='payHierarchy' value='{{journal.payHierarchy}}'/>
 			<input type='hidden' class='updateDT' value='{{journal.updateDT}}'/>
 			<input type='hidden' class='cashCollect' value='{{journal.cashCollect}}'/>
+			
+			
+			<input type='hidden' class='cheatType' value='{{journal.cheatType}}'/>
+			<input type='hidden' class='noIntroAnno' value='{{journal.noIntroAnno}}'/>
+			
 			<input type='hidden' class='week' value='{{journal.week}}'/>
 			<input type='hidden' class='auditResult' value='{{journal.auditResult}}'/>
 
-            {%if journal.QC==""%}
+            {%if journal.score==""%}
             <td width="7%">{{ link_to("#", '评分', "class": "btn btn-default btn-xs","data-toggle":"modal","data-target":"#cameraScoreBoard","data-backdrop":"static","data-id":journal.id,"data-action":"add") }}</td>
  			{%else%}
  			<td width="10%">{{ link_to("#", '修改', "class": "btn btn-primary btn-xs","data-toggle":"modal","data-target":"#cameraScoreBoard","data-backdrop":"static","data-id":journal.id,"data-action":"edit") }}
@@ -86,8 +93,8 @@ QC：<input type="text" name="QC" id ="" value=""/>
     </tbody>
     <tbody>
         <tr>
-            <td colspan="11" align="right">
-                    <span class="help-inline">{{page.total_items}}条 {{ page.current }}/{{ page.total_pages }}</span>
+            <td colspan="12" align="right">
+                    <span title='最多显示3000条结果' class='glyphicon glyphicon-info-sign'></span>   <span class="help-inline">{{page.total_items}}条 {{ page.current }}/{{ page.total_pages }}</span>
                 <div class="btn-group">
                     {{ link_to("camera/search", '&laquo; 首页', "class": "btn btn-default") }}
                     {{ link_to("camera/search?page=" ~ page.before, '&lsaquo; 上一页', "class": "btn btn-default") }}

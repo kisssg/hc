@@ -108,6 +108,21 @@
 										<button onclick="return CameraScoreCard.judge('selfIntro',this.innerHTML);" class='vintage4'>0</button>
 										<button onclick="return CameraScoreCard.judge('selfIntro',this.innerHTML);" class='vintage4'>1</button>
 										</td>
+									</tr>							
+									<tr class="rpc_only">
+										<td colspan="3">
+										<div class="row">
+												<div class="col-md-9">未介绍自己或申明合同号：</div>
+												<div class="col-xs-2">
+													<select class="form-control input-sm" id="noIntroAnno">
+													<option></option>
+													<option>No introduce</option>													
+													<option>No announce</option>													
+													<option>Neither</option>
+													</select>
+												</div>
+										</div>
+										</td>
 									</tr>
 									<tr class="rpc_only">
 										<td colspan="1">4. If recording finished earlier, was disagreement of RPC with both video and audio recorded on video?</td><td>
@@ -131,6 +146,21 @@
 										<td colspan="1" class="coverShow">
 										<button onclick="return CameraScoreCard.judge('cheating',this.innerHTML);" class='vintage4'>0</button>
 										<button onclick="return CameraScoreCard.judge('cheating',this.innerHTML);" class='vintage4'>1</button>
+										</td>
+									</tr>							
+									<tr class="both">
+										<td colspan="3">
+										<div class="row">
+												<div class="col-md-9">作假类型：</div>
+												<div class="col-xs-2">
+													<select class="form-control input-sm" id="cheatType">
+													<option></option>
+													<option>No collection action</option>													
+													<option>No image but voice</option>													
+													<option>Fake video</option>
+													</select>
+												</div>
+										</div>
 										</td>
 									</tr>
 									<tr class="non_rpc_only">
@@ -238,5 +268,5 @@
 					</div>
 				</div>
 <!-- end of modal -->
-        {{ javascript_include('js/camera.js?108') }}
+        {{ javascript_include('js/camera.js?114') }}
 

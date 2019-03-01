@@ -18,6 +18,7 @@ class CameraController extends ControllerBase {
 			$query = new Criteria ();
 			$query->setModelName ( "CameraScores" );
 			$query->where ( "status='ok'" );
+			$query->limit("3000");
 			$query->orderBy ( "NAME_COLLECTOR,ACTION_DATE,TEXT_CONTRACT_NUMBER" );
 			$hasRequest = false;
 			if ($visit_date) {
@@ -101,6 +102,10 @@ class CameraController extends ControllerBase {
 			$payHierarchy = $this->request->getPost ( 'payHierarchy' );
 			$updateDT = $this->request->getPost ( 'updateDT' );
 			$cashCollect = $this->request->getPost ( 'cashCollect' );
+			
+			//remarks
+			$cheatType=$this->request->getPost('cheatType');
+			$noIntroAnno=$this->request->getPost('noIntroAnno');
 			// $week=$this->request->getPost('week');
 			$camera = CameraScores::findFirst ( $id );
 			$camera->object = $object;
@@ -121,6 +126,8 @@ class CameraController extends ControllerBase {
 			$camera->payHierarchy = $payHierarchy;
 			$camera->updateDT = $updateDT;
 			$camera->cashCollect = $cashCollect;
+			$camera->cheatType=$cheatType;
+			$camera->noIntroAnno=$noIntroAnno;
 			if (date ( "W", strtotime ( $camera->ACTION_DATE ) ) == 0) {
 				$difday = - 6;
 			} else {
@@ -312,6 +319,10 @@ class CameraController extends ControllerBase {
 			$camera->payHierarchy = "";
 			$camera->updateDT = "";
 			$camera->cashCollect = "";
+			
+			$camera->cheatType="";
+			$camera->noIntroAnno="";
+			
 			$camera->QSCeditDate = date ( "Y-m-d" );
 			$camera->QSCeditTime = date ( "H:i:s" );
 			$camera->authority = "-";
