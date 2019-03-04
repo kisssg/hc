@@ -112,7 +112,7 @@
 									<tr class="rpc_only">
 										<td colspan="3">
 										<div class="row">
-												<div class="col-md-9">未介绍自己或申明合同号：</div>
+												<div class="col-md-9">Disqualify Type：</div>
 												<div class="col-xs-2">
 													<select class="form-control input-sm" id="noIntroAnno">
 													<option></option>
@@ -151,7 +151,7 @@
 									<tr class="both">
 										<td colspan="3">
 										<div class="row">
-												<div class="col-md-9">作假类型：</div>
+												<div class="col-md-9">Cheating Type：</div>
 												<div class="col-xs-2">
 													<select class="form-control input-sm" id="cheatType">
 													<option></option>
@@ -268,5 +268,5 @@
 					</div>
 				</div>
 <!-- end of modal -->
-        {{ javascript_include('js/camera.js?114') }}
+        {{ javascript_include('js/camera.js?116') }}
 

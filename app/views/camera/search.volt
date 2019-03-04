@@ -2,6 +2,7 @@
 <form action="" method="post">
 日期：<input type="text" class="datepicker" name="visit_date" id="visit_date" value=""/>
 催收员：<input type="text" name="journal_creator" id ="" value=""/>
+工号：<input type="text" name="ID_employee" id ="" value=""/>
 合同号：<input type="text" name="contract_no" id ="" value=""/>
 QC：<input type="text" name="QC" id ="" value=""/>
 <input type="submit" class="btn btn-default btn-xs" value="搜索"/>
@@ -13,6 +14,7 @@ QC：<input type="text" name="QC" id ="" value=""/>
         <tr>
             <th>合同号</th>
             <th>外催员</th>
+            <th>工号</th>
             <th>外访结果</th>
             <th>外访日期</th>
             <th>外访时间</th>
@@ -29,7 +31,8 @@ QC：<input type="text" name="QC" id ="" value=""/>
     {% endif %}
         <tr id="{{journal.id}}">
             <td class="contract_no">{{ journal.TEXT_CONTRACT_NUMBER }}</td>
-            <td class="journal_creator">{{ journal.NAME_COLLECTOR }}</td>            
+            <td class="journal_creator">{{ journal.NAME_COLLECTOR }}</td>
+            <td>{{ journal.ID_EMPLOYEE }}</td>            
             <td class="visit_result_cn">{{ journal.VISIT_RESULT }}</td>
             <td class="visit_date">{{ journal.ACTION_DATE }}</td>       
             <td class="visit_time">{{ journal.ACTION_TIME }}</td>       

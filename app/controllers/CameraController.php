@@ -15,11 +15,13 @@ class CameraController extends ControllerBase {
 			$journal_creator = $this->request->getPost ( 'journal_creator', 'string' );
 			$contract_no = $this->request->getPost ( 'contract_no', 'string' );
 			$QC = $this->request->getPost ( 'QC' );
+			$ID_employee=$this->request->getPost('ID_employee');
+			
 			$query = new Criteria ();
 			$query->setModelName ( "CameraScores" );
 			$query->where ( "status='ok'" );
 			$query->limit("3000");
-			$query->orderBy ( "NAME_COLLECTOR,ACTION_DATE,TEXT_CONTRACT_NUMBER" );
+			$query->orderBy ( "score ASC,NAME_COLLECTOR,ACTION_DATE,ACTION_TIME,TEXT_CONTRACT_NUMBER" );
 			$hasRequest = false;
 			if ($visit_date) {
 				$query->andWhere ( "ACTION_DATE=:visit_date: ", [ 
@@ -42,6 +44,12 @@ class CameraController extends ControllerBase {
 			if ($contract_no) {
 				$query->andWhere ( "TEXT_CONTRACT_NUMBER = :contract_no:", [ 
 						"contract_no" => "$contract_no" 
+				] );
+				$hasRequest = true;
+			}
+			if ($ID_employee) {
+				$query->andWhere ( "ID_EMPLOYEE = :ID_EMPLOYEE:", [
+						"ID_EMPLOYEE" => "$ID_employee"
 				] );
 				$hasRequest = true;
 			}

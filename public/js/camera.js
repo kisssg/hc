@@ -68,14 +68,19 @@ var CameraScore = {
 	    $('#cheatType').focus();
 	    $("#tips").text("请选不合格类型！");
 	    return;
-	}else{
-	    cheatType="";
 	}
-	if(announceContract=='0' && noIntroAnno==""){
+	if(selfIntro=='0' && noIntroAnno==""){
         $('#noIntroAnno').focus();
         $("#tips").text("请选不合格类型！");
         return;
-    }else{
+    }
+	
+
+    if(cheating !='0'){
+        cheatType="";
+    }
+    
+	if(selfIntro !='0'){
         noIntroAnno="";
     }
 	
