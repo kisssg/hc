@@ -175,6 +175,7 @@ class CameraController extends ControllerBase {
 			$toPick=CameraScores::findFirst($id);
 			if($toPick->QC==''){
 				$toPick->QC=$QC;
+				$toPick->editLog=$toPick->editLog."|".$QC."pick".date('ymdHis');
 				if($toPick->save()){
 					echo '{"result":"success","msg":""}';
 				}else{
@@ -427,7 +428,7 @@ class CameraController extends ControllerBase {
 					$issue->close_person='system';
 					$issue->close_time=date("Y-m-d H:i:s");
 					$issue->edit_log='auto created by'.$submitQC;
-					$issue->source='VRD scoring';
+					$issue->source='camera checking';
 					$issue->harassment_type='Other cheating behavior';
 					$issue->uploader='system';
 					
@@ -500,7 +501,7 @@ class CameraController extends ControllerBase {
 					$issue->close_person='system';
 					$issue->close_time=date("Y-m-d H:i:s");
 					$issue->edit_log='auto created by'.$submitQC;
-					$issue->source='VRD scoring';
+					$issue->source='camera checking';
 					$issue->harassment_type='Other cheating behavior';
 					$issue->uploader='system';
 					
