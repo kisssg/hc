@@ -167,6 +167,26 @@ class CameraController extends ControllerBase {
 			echo '{"result":"failed","msg":"' . $e->getMessage () . '"}';
 		}
 	}
+	public function pickAction(){
+		$this->view->disable();
+		try{
+			$id=$this->request->getPost('id');			
+			$QC = trim ( $this->session->get ( 'auth' ) ['name'] );
+			$toPick=CameraScores::findFirst($id);
+			if($toPick->QC==''){
+				$toPick->QC=$QC;
+				if($toPick->save()){
+					echo '{"result":"success","msg":""}';
+				}else{
+					throw new exception('Failed Picking');
+				}
+			}else{
+				throw new exception($toPick->QC." 快人一步。");
+			}
+		}catch (Exception $e){
+			echo '{"result":"failed","msg":"'.$e->getMessage().'"}';
+		}
+	}
 	public function batchDeleteAction() {
 		$this->view->disable ();
 		try {

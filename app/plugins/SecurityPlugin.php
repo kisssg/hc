@@ -92,6 +92,7 @@ class SecurityPlugin extends Plugin {
 					'camera'=>[
 							'search',
 							'scoreSave',
+							'pick',
 							'batchManage',
 							'scoreDel',
 							'batchDelete',

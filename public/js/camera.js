@@ -171,6 +171,21 @@ var CameraScore = {
     update: function(id) {
 	this.add(id);
     },
+    pick:function(id){
+      if(id==null){
+          return;
+      }
+      url='pick';
+      arg={"id":id};
+      $.post(url,arg,function(data){
+          if(data.result=='success'){
+              window.location.reload();
+          }else{
+              alert(data.msg);
+              window.location.reload();
+          }
+      },"json")
+    },
     batchDelete:function(date){
         if(confirm("确定删除该批次数据吗？"+date)){
             if(date==null){

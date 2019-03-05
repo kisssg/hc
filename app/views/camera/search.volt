@@ -79,7 +79,9 @@ QC：<input type="text" name="QC" id ="" value=""/>
 			<input type='hidden' class='week' value='{{journal.week}}'/>
 			<input type='hidden' class='auditResult' value='{{journal.auditResult}}'/>
 
-            {%if journal.score==""%}
+            {%if journal.QC==""%}
+            <td width="7%"><button class="btn btn-default btn-xs" onclick="return CameraScore.pick({{journal.id}});">拾取</button></td>
+          	{%elseif journal.score==""%}
             <td width="7%">{{ link_to("#", '评分', "class": "btn btn-default btn-xs","data-toggle":"modal","data-target":"#cameraScoreBoard","data-backdrop":"static","data-id":journal.id,"data-action":"add") }}</td>
  			{%else%}
  			<td width="10%">{{ link_to("#", '修改', "class": "btn btn-primary btn-xs","data-toggle":"modal","data-target":"#cameraScoreBoard","data-backdrop":"static","data-id":journal.id,"data-action":"edit") }}
@@ -96,7 +98,7 @@ QC：<input type="text" name="QC" id ="" value=""/>
     </tbody>
     <tbody>
         <tr>
-            <td colspan="12" align="right">
+            <td colspan="13" align="right">
                     <span title='最多显示3000条结果' class='glyphicon glyphicon-info-sign'></span>   <span class="help-inline">{{page.total_items}}条 {{ page.current }}/{{ page.total_pages }}</span>
                 <div class="btn-group">
                     {{ link_to("camera/search", '&laquo; 首页', "class": "btn btn-default") }}
