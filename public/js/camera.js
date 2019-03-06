@@ -212,6 +212,15 @@ var CameraScore = {
             },"json")
         }        
     },
+    delUnenable:function(){
+        if(confirm("确定删除所有未启用的数据吗？")){
+            url='delUnenable';
+            $.post(url,'',function(data){
+                alert(data.msg);
+                window.location.reload();
+            },'json')
+        }
+    },
     checkCheating:function(date){
         if(confirm("确定自动标记有录音无录像的数据吗？"+date)){
             if(date==null){

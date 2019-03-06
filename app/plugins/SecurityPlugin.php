@@ -97,6 +97,7 @@ class SecurityPlugin extends Plugin {
 							'scoreDel',
 							'batchDelete',
 							'batchEnable',
+							'delUnenable',
 							'checkCheating',
 							'addIssue',
 							'addCheatIssue'
