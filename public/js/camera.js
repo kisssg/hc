@@ -136,11 +136,13 @@ var CameraScore = {
 		if(id>0){
 			$("#tips").text("成功保存！");
             $("#cameraScoreBoard").modal("hide");
-			window.location.reload();		    
+            window.location.href=window.location.href; 
+            window.location.reload;   
 		}else{
 			$("#tips").text("添加成功！");
 			$("#cameraScoreBoard").modal("hide");
-            window.location.reload();            
+            window.location.href=window.location.href; 
+            window.location.reload;           
 		}
 	    }else{
 	        $("#tips").text(res.msg);
@@ -161,7 +163,8 @@ var CameraScore = {
 	    res=JSON.parse(data);
 	    if(res.result=="success"){
 		alert("success");
-		window.location.reload();
+        window.location.href=window.location.href; 
+        window.location.reload; 
 	    }else{
 		alert("删除失败！"+res.msg);
 	    }
@@ -182,7 +185,8 @@ var CameraScore = {
               window.location.reload();
           }else{
               alert(data.msg);
-              window.location.reload();
+              window.location.href=window.location.href; 
+              window.location.reload; 
           }
       },"json")
     },
@@ -195,7 +199,8 @@ var CameraScore = {
             arg={"date":date};
             $.post(url,arg,function(data){
                 alert(data.msg);
-                window.location.reload();
+                window.location.href=window.location.href; 
+                window.location.reload; 
             },"json")
         }        
     },
@@ -208,7 +213,8 @@ var CameraScore = {
             arg={"date":date};
             $.post(url,arg,function(data){
                 alert(data.msg);
-                window.location.reload();
+                window.location.href=window.location.href; 
+                window.location.reload; 
             },"json")
         }        
     },
@@ -217,7 +223,8 @@ var CameraScore = {
             url='delUnenable';
             $.post(url,'',function(data){
                 alert(data.msg);
-                window.location.reload();
+                window.location.href=window.location.href; 
+                window.location.reload; 
             },'json')
         }
     },
@@ -230,7 +237,8 @@ var CameraScore = {
             arg={"date":date};
             $.post(url,arg,function(data){
                 alert(data.msg);
-                window.location.reload();
+                window.location.href=window.location.href; 
+                window.location.reload; 
             },"json")
         }
     },
