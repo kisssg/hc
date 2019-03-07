@@ -410,6 +410,11 @@ var CameraScoreCard = {
             }
             console.log("-" + deductCount);
             console.log("+" + okCount);
+            if($("#cheating").text()==="0"){
+                console.log("cheating");
+                $("#score").text("0.00");
+                return;
+            }
             
             totalCount=okCount + deductCount;
             finalScore=okCount/totalCount * 100;
