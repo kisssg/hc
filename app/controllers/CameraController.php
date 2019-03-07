@@ -339,7 +339,7 @@ class CameraController extends ControllerBase {
 	<a class="number" href="?page=' . $page->last . '">&raquo;</a>
 	</div>
 	' . $page->current, "/", $page->total_pages;
-		echo "<button class='btn btn-primary' onclick='return CameraScore.delUnenable();'>删除所胡未启用的数据</button>";
+		echo "<button class='btn btn-primary' onclick='return CameraScore.delUnenable();'>删除全部未启用的数据</button>";
 	}
 	public function scoreDelAction() {
 		$this->view->disable ();
