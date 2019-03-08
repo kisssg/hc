@@ -158,6 +158,7 @@
 													<option>No collection action</option>													
 													<option>No image but voice</option>													
 													<option>Fake video</option>
+													<option>No voice but image</option>
 													</select>
 												</div>
 										</div>
