@@ -182,7 +182,8 @@ var CameraScore = {
       arg={"id":id};
       $.post(url,arg,function(data){
           if(data.result=='success'){
-              window.location.reload();
+              window.location.href=window.location.href; 
+              window.location.reload;
           }else{
               alert(data.msg);
               window.location.href=window.location.href; 

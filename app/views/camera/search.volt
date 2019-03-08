@@ -1,6 +1,6 @@
 {{ content()}}
 <form action="" method="post">
-日期：<input type="text" class="datepicker" name="visit_date" id="visit_date" value=""/>
+日期：<input type="text" class="datepicker" name="visit_date" id="" value=""/>
 催收员：<input type="text" name="journal_creator" id ="" value=""/>
 工号：<input type="text" name="ID_employee" id ="" value=""/>
 合同号：<input type="text" name="contract_no" id ="" value=""/>

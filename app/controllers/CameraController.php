@@ -442,7 +442,7 @@ class CameraController extends ControllerBase {
 					$issue->collector = $item->NAME_COLLECTOR;
 					$issue->employeeID = $item->ID_EMPLOYEE;
 					$issue->issue_type = "Collector's mistake 催收员过错";
-					$issue->issue = 'Invalid video recording';
+					$issue->issue = 'Invalid video recording 无效录像';
 					$issue->remark = $item->id . $item->remark . '(' . $item->VISIT_RESULT . ')' . $item->updateDT . "-" . $item->cheating;
 					$issue->responsible_person = $item->TL_NAME;
 					$issue->feedback = '';
@@ -515,7 +515,7 @@ class CameraController extends ControllerBase {
 					$issue->collector = $item->NAME_COLLECTOR;
 					$issue->employeeID = $item->ID_EMPLOYEE;
 					$issue->issue_type = "Collector's mistake 催收员过错";
-					$issue->issue = 'Fake visit/video';
+					$issue->issue = 'Fake visit/video 虚假外访/视频';
 					$issue->remark = $item->id . $item->remark . '(' . $item->VISIT_RESULT . ')' . $item->updateDT . "-" . $item->cheating;
 					$issue->responsible_person = $item->TL_NAME;
 					$issue->feedback = '';
