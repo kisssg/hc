@@ -410,15 +410,23 @@ class CameraController extends ControllerBase {
 			$query->setModelName ( "CameraScores" );
 			$query->where ( "(updateDT = '0' OR cheating = '0')" );
 			$query->inWhere ( "VISIT_RESULT", [ 
+					'Pay later',
 					'Promise to pay',
 					'PTP DD',
+					'Settlement',
 					'Payment with collector',
 					'Already Paid',
 					'LFC - Pay later',
 					'LFC - Promise to pay - Non DD',
+					'LFC - Settlement',
 					'LFC - Promise to pay',
 					'LFC - Payment with collector',
-					'LFC - Already Paid' 
+					'LFC - Already Paid',
+					'EFC - Pay later',
+					'EFC - Promise to pay',
+					'EFC - Promise to pay - Non DD',
+					'EFC - Payment with collector',
+					'EFC - Already Paid' 
 			] );
 			$query->andWhere ( "ACTION_DATE=:date:", [ 
 					"date" => "$date" 
@@ -443,7 +451,7 @@ class CameraController extends ControllerBase {
 					$issue->employeeID = $item->ID_EMPLOYEE;
 					$issue->issue_type = "Collector's mistake 催收员过错";
 					$issue->issue = 'Invalid video recording 无效录像';
-					$issue->remark = $item->id . $item->remark . '(' . $item->VISIT_RESULT . ')' . $item->updateDT . "-" . $item->cheating;
+					$issue->remark = $item->id . $item->remark . ', 外访结果：' . $item->VISIT_RESULT . ',如实登记外访结果得分：' . $item->updateDT . "，Did LLI record fake collection video？" . $item->cheating . "," . $item->cheatType;
 					$issue->responsible_person = $item->TL_NAME;
 					$issue->feedback = '';
 					$issue->qc_name = $item->QC;
@@ -516,7 +524,7 @@ class CameraController extends ControllerBase {
 					$issue->employeeID = $item->ID_EMPLOYEE;
 					$issue->issue_type = "Collector's mistake 催收员过错";
 					$issue->issue = 'Fake visit/video 虚假外访/视频';
-					$issue->remark = $item->id . $item->remark . '(' . $item->VISIT_RESULT . ')' . $item->updateDT . "-" . $item->cheating;
+					$issue->remark = $item->id . $item->remark . '，外访结果：' . $item->VISIT_RESULT . "，作假类型：" . $item->cheatType;
 					$issue->responsible_person = $item->TL_NAME;
 					$issue->feedback = '';
 					$issue->qc_name = $item->QC;
