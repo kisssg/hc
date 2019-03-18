@@ -82,6 +82,10 @@ $(document).ready(
 
                             $('#cheatType').val("");
                             $('#noIntroAnno').val("");
+                            boxes=document.getElementsByName("noIntroAnnoTypes");
+                            for(i=0;i<boxes.length;i++){
+                                boxes.checked=false;
+                            }
 
                             // initialize the html tag for video info adding
                             $(".videoInfoFrame").remove();
@@ -183,6 +187,17 @@ $(document).ready(
                             
                             $('#cheatType').val(cheatType);
                             $('#noIntroAnno').val(noIntroAnno);
+                            compound=noIntroAnno.split(",");
+                            boxes=document.getElementsByName("noIntroAnnoTypes");
+                            for(i=0;i<compound.length;i++){
+                                for(j=0;j<boxes.length;j++){
+                                    if(boxes[j].value==compound[i]){
+                                        boxes[j].checked=true;
+                                    }else{
+                                        boxes[j].checked=false;
+                                    }
+                                }
+                            }
 
                             // initialize user input box
                             $("#object").val(object);

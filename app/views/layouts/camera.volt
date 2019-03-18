@@ -101,7 +101,7 @@
 										<button onclick="return CameraScoreCard.judge('recSurrounding',this.innerHTML);" class='vintage4'>1</button>
 										</td>
 									</tr>
-									<tr class="rpc_only">
+									<tr class="both">
 										<td colspan="1">3. Did LLI introduce himself, company and announced recording to client? (any failure=0)</td><td>
 										<span class="vintage4 judgeResults" id="selfIntro" ></span></td>
 										<td colspan="1" class="coverShow">
@@ -109,17 +109,14 @@
 										<button onclick="return CameraScoreCard.judge('selfIntro',this.innerHTML);" class='vintage4'>1</button>
 										</td>
 									</tr>							
-									<tr class="rpc_only">
+									<tr class="both">
 										<td colspan="3">
 										<div class="row">
-												<div class="col-md-9">Disqualify Type：</div>
-												<div class="col-xs-2">
-													<select class="form-control input-sm" id="noIntroAnno">
-													<option></option>
-													<option>No introduce</option>													
-													<option>No announce</option>													
-													<option>Neither</option>
-													</select>
+												<div class="col-md-5">Disqualify Type：</div>
+												<div class="col-xs-6">
+													<input type="checkbox" name="noIntroAnnoTypes" value="No introduce" \>No introduce &nbsp;&nbsp;													
+													<input type="checkbox" name="noIntroAnnoTypes" value="No announce" \>No announce &nbsp;&nbsp;													
+													<input type="checkbox" name="noIntroAnnoTypes" value="No identity verification" \>No identity verification &nbsp;&nbsp;
 												</div>
 										</div>
 										</td>
@@ -269,5 +266,5 @@
 					</div>
 				</div>
 <!-- end of modal -->
-        {{ javascript_include('js/camera.js?129') }}
+        {{ javascript_include('js/camera.js?130') }}
 

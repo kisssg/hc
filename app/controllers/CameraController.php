@@ -557,4 +557,47 @@ class CameraController extends ControllerBase {
 			echo $e->getMessage ();
 		}
 	}
+	public function addVisitResultIndexAction($date) {
+		$this->view->disable ();
+		try {
+			$user = trim ( $this->session->get ( 'auth' ) ['name'] );
+			$authority = Authorities::findFirst ( [ 
+					"user=:user: and module='cameraScores' and authority='addVisitResultIndex'",
+					"bind" => [ 
+							"user" => $user 
+					] 
+			] );
+			if ($authority == null) {
+				throw new exception ( "你没有该权限。请找管理员申请。" );
+			}
+			//$date = $this->request->getPost ( "date" );
+			$connection = $this->db;
+			$sql = "update `fc_camera_scores` set visitResultIndex=1 where ACTION_DATE='$date' and VISIT_RESULT in ('Pay later',
+				'Promise to pay',
+				'PTP DD',
+				'Settlement',
+				'Payment with collector',
+				'Already Paid',
+				'LFC - Pay later',
+				'LFC - Promise to pay - Non DD',
+				'LFC - Settlement',
+				'LFC - Promise to pay',
+				'LFC - Payment with collector',
+				'LFC - Already Paid',
+				'EFC - Pay later',
+				'EFC - Promise to pay',
+				'EFC - Promise to pay - Non DD',
+				'EFC - Payment with collector',
+				'EFC - Already Paid'
+				);";
+			$result = $connection->query ( $sql );
+			if ($result === false) {
+				throw new Exception ( "Failed updating data in base" );
+			} else {
+				echo '{"result":"success","msg":"外访结果序列号添加成功：' . $date . '"}';
+			}
+		} catch ( Exception $e ) {
+			echo '{"result":"FAILED","msg":"' . $e->getMessage () . '"}';
+		}
+	}
 }

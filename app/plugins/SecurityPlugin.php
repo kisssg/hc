@@ -100,7 +100,8 @@ class SecurityPlugin extends Plugin {
 							'delUnenable',
 							'checkCheating',
 							'addIssue',
-							'addCheatIssue'
+							'addCheatIssue',
+							'addVisitResultIndex'
 					],
 					'applications'=>[
 							'apply',

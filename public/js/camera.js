@@ -62,7 +62,16 @@ var CameraScore = {
 	cashCollect=$('#cashCollect').text();
 	
 	cheatType=$('#cheatType').val();
-	noIntroAnno=$('#noIntroAnno').val();
+	
+	checkedBoxes=document.getElementsByName("noIntroAnnoTypes");
+	noIntroAnnoTypes=[];
+	for(i=0;i<checkedBoxes.length;i++){
+	    if(checkedBoxes[i].checked){
+	        noIntroAnnoTypes.push(checkedBoxes[i].value);
+	    }
+	}
+	noIntroAnno=noIntroAnnoTypes.join(",");
+	console.log(noIntroAnno);
 	
 	if(cheating=='0' && cheatType==""){
 	    $('#cheatType').focus();
