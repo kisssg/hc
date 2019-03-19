@@ -188,13 +188,14 @@ $(document).ready(
                             $('#cheatType').val(cheatType);
                             $('#noIntroAnno').val(noIntroAnno);
                             compound=noIntroAnno.split(",");
-                            boxes=document.getElementsByName("noIntroAnnoTypes");
+                            boxes=document.getElementsByName("noIntroAnnoTypes");                
+                            for(i=0;i<boxes.length;i++){
+                                boxes[i].checked=false;
+                            }
                             for(i=0;i<compound.length;i++){
                                 for(j=0;j<boxes.length;j++){
                                     if(boxes[j].value==compound[i]){
                                         boxes[j].checked=true;
-                                    }else{
-                                        boxes[j].checked=false;
                                     }
                                 }
                             }

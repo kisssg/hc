@@ -18,6 +18,6 @@
         {{ javascript_include('js/bootstrap.min.js') }}
         {{ javascript_include('js/Chart.bundle.min.js') }}
         {{ javascript_include('js/jquery.datetimepicker.min.js') }}
-        {{ javascript_include('js/autoload.js?201920') }}
+        {{ javascript_include('js/autoload.js?201921') }}
     </body>
 </html>

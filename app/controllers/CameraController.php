@@ -188,6 +188,17 @@ class CameraController extends ControllerBase {
 			echo '{"result":"failed","msg":"' . $e->getMessage () . '"}';
 		}
 	}
+	public function pickLLIAction(){
+		$this->view->disable();
+		try{
+			$date=$this->request->getPost('date');
+			$lli=$this->request->getPost('lli');
+			$sql="";
+			
+		}catch(exception $e){
+			
+		}
+	}
 	public function batchDeleteAction() {
 		$this->view->disable ();
 		try {
