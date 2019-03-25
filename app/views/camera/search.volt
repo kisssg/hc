@@ -80,7 +80,8 @@ QC：<input type="text" name="QC" id ="" value=""/>
 			<input type='hidden' class='auditResult' value='{{journal.auditResult}}'/>
 
             {%if journal.QC==""%}
-            <td width="7%"><button class="btn btn-primary btn-xs" onclick="return CameraScore.pick({{journal.id}});">拾取</button></td>
+            <td width="12%"><button class="btn btn-primary btn-xs" onclick="return CameraScore.pick({{journal.id}});">拾取</button>
+            			   <button class="btn btn-primary btn-xs" title="请在收到通知后再使用此项" onclick="return CameraScore.pickLLI({{"'"~journal.ACTION_DATE ~ "','" ~ journal.NAME_COLLECTOR ~"'" }});">拾取此人</button></td>
           	{%elseif journal.score==""%}
             <td width="7%">{{ link_to("#", '评分', "class": "btn btn-default btn-xs","data-toggle":"modal","data-target":"#cameraScoreBoard","data-backdrop":"static","data-id":journal.id,"data-action":"add") }}</td>
  			{%else%}

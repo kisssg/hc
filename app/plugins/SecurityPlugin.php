@@ -93,6 +93,7 @@ class SecurityPlugin extends Plugin {
 							'search',
 							'scoreSave',
 							'pick',
+							'pickLLI',
 							'batchManage',
 							'scoreDel',
 							'batchDelete',

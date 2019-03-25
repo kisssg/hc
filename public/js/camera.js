@@ -200,6 +200,23 @@ var CameraScore = {
           }
       },"json")
     },
+    pickLLI:function(date,lli){
+      if(confirm("确定拾取 " + lli + " " + date + " 的全部数据吗？")){
+          url='pickLLI';
+          args={
+                  "date":date,
+                  "lli":lli,
+          }
+          $.post(url,args,function(data){
+              if(data.result=="success"){
+                  window.location.href=window.location.href; 
+                  window.location.reload;
+              }else{
+                  alert(data.msg);
+              }
+          },"json")
+      }
+    },
     batchDelete:function(date){
         if(confirm("确定删除该批次数据吗？"+date)){
             if(date==null){

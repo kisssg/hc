@@ -191,12 +191,19 @@ class CameraController extends ControllerBase {
 	public function pickLLIAction(){
 		$this->view->disable();
 		try{
+			$QC = trim ( $this->session->get ( 'auth' ) ['name'] );
 			$date=$this->request->getPost('date');
 			$lli=$this->request->getPost('lli');
-			$sql="";
-			
+			$connection=$this->db;
+			$sql="update fc_camera_scores set QC='$QC' where ACTION_DATE='$date' AND NAME_COLLECTOR='$lli' and score is null and QC=''";
+			$result=$connection->query($sql);
+			if($result===false){
+				throw new exception('Failed');
+			}else{
+				echo '{"result":"success","msg":""}';
+			}
 		}catch(exception $e){
-			
+			echo '{"result":"failed","msg":"'.$e->getMessage().'"}';
 		}
 	}
 	public function batchDeleteAction() {
