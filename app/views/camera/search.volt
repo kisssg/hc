@@ -22,9 +22,10 @@ QC：<input type="text" name="QC" id ="" value=""/>
             <th>录音</th>
             <th>录制开始</th>
             <th>录制结束</th>
+            <th>录像时长</th>
             <th>评分</th>
             <th>QC</th>
-            <th colspan="2">操作</th>            
+            <th colspan="2" style="cover:;">操作<input type="checkbox" onclick="return CameraScore.switchSelectAll(this)" /></th>            
         </tr>
     </thead>
     <tbody>
@@ -40,6 +41,7 @@ QC：<input type="text" name="QC" id ="" value=""/>
             <td class="CNT_AUDIO_RECORDS">{{ journal.CNT_AUDIO_RECORDS }}</td>       
             <td class="CREATE_TIME">{{ journal.CREATE_TIME }}</td>       
             <td class="ENDING_TIME">{{ journal.ENDING_TIME }}</td>       
+            <td>{{ journal.SUM_VIDIO_TIME_DURATION }}</td>       
             <td>{{ journal.score }}</td>      
             <td>{{ journal.QC }}</td>
             <input type="hidden" class="employee_code" value="{{journal.ID_EMPLOYEE}}"/>
@@ -81,9 +83,9 @@ QC：<input type="text" name="QC" id ="" value=""/>
 
             {%if journal.QC==""%}
             <td width="12%"><button class="btn btn-primary btn-xs" onclick="return CameraScore.pick({{journal.id}});">拾取</button>
-            			   <button class="btn btn-primary btn-xs" title="请在收到通知后再使用此项" onclick="return CameraScore.pickLLI({{"'"~journal.ACTION_DATE ~ "','" ~ journal.NAME_COLLECTOR ~"'" }});">拾取此人</button></td>
+            			   <button class="btn btn-primary btn-xs" title="请在收到通知后再使用此项" onclick="return CameraScore.pickLLI({{"'"~journal.ACTION_DATE ~ "','" ~ journal.NAME_COLLECTOR ~"'" }});">拾取此人</button>
           	{%elseif journal.score==""%}
-            <td width="7%">{{ link_to("#", '评分', "class": "btn btn-default btn-xs","data-toggle":"modal","data-target":"#cameraScoreBoard","data-backdrop":"static","data-id":journal.id,"data-action":"add") }}</td>
+            <td width="7%">{{ link_to("#", '评分', "class": "btn btn-default btn-xs","data-toggle":"modal","data-target":"#cameraScoreBoard","data-backdrop":"static","data-id":journal.id,"data-action":"add") }}
  			{%else%}
  			<td width="10%">{{ link_to("#", '修改', "class": "btn btn-primary btn-xs","data-toggle":"modal","data-target":"#cameraScoreBoard","data-backdrop":"static","data-id":journal.id,"data-action":"edit") }}
  			<button class="btn btn-default btn-xs" onclick="return CameraScore.delete({{journal.id}});">清除</button>
@@ -91,15 +93,15 @@ QC：<input type="text" name="QC" id ="" value=""/>
             		{{ link_to("#", '审核', "class": "btn btn-default btn-xs","data-toggle":"modal","data-target":"#cameraScoreBoard","data-backdrop":"static","data-id":journal.id,"data-action":"audit") }}
  				{%else%}
 					{{ link_to("#", '审核'~journal.auditResult, "class": "btn btn-primary btn-xs","data-toggle":"modal","data-target":"#cameraScoreBoard","data-backdrop":"static","data-id":journal.id,"data-action":"audit") }}
- 				{%endif%}  
- 			</td>
- 			{%endif%}       
+ 				{%endif%}			
+ 			{%endif%}
+ 			<input type="checkbox" name="ids" value="{{journal.id}}"/></td>     
         </tr>
     {% if loop.last %}
     </tbody>
     <tbody>
         <tr>
-            <td colspan="13" align="right">
+            <td colspan="14" align="right">
                     <span title='最多显示3000条结果' class='glyphicon glyphicon-info-sign'></span>   <span class="help-inline">{{page.total_items}}条 {{ page.current }}/{{ page.total_pages }}</span>
                 <div class="btn-group">
                     {{ link_to("camera/search", '&laquo; 首页', "class": "btn btn-default") }}
@@ -107,6 +109,7 @@ QC：<input type="text" name="QC" id ="" value=""/>
                     {{ link_to("camera/search?page=" ~ page.next, '下一页 &rsaquo;', "class": "btn btn-default") }}
                     {{ link_to("camera/search?page=" ~ page.last, '末页 &raquo;', "class": "btn btn-default") }}
                 </div>
+                <button class="btn btn-primary" onclick="return CameraScore.transfer()">转交</button>
             </td>
         </tr>
     </tbody>

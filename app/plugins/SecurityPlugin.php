@@ -21,19 +21,15 @@ class SecurityPlugin extends Plugin {
 	 * @returns AclList
 	 */
 	public function getAcl() {
-		if (! isset ( $this->persistent->acl )) {
-			
-			$acl = new AclList ();
-			
-			$acl->setDefaultAction ( Acl::DENY );
-			
+		if (! isset ( $this->persistent->acl )) {			
+			$acl = new AclList ();			
+			$acl->setDefaultAction ( Acl::DENY );			
 			// Register roles
 			$roles = [ 
 					'users' => new Role ( 'Users', 'Member privileges, granted after sign in.' ),
 					'admins' => new Role ( 'Administrators', 'Admin privileges, granted after sign in.' ),
 					'guests' => new Role ( 'Guests', 'Anyone browsing the site who is not signed in is considered to be a "Guest".' ) 
-			];
-			
+			];			
 			foreach ( $roles as $role ) {
 				$acl->addRole ( $role );
 			}
@@ -102,7 +98,8 @@ class SecurityPlugin extends Plugin {
 							'checkCheating',
 							'addIssue',
 							'addCheatIssue',
-							'addVisitResultIndex'
+							'addVisitResultIndex',
+							'transfer'
 					],
 					'applications'=>[
 							'apply',

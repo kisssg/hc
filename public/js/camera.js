@@ -275,8 +275,44 @@ var CameraScore = {
             window.open('addIssue/'+date);
             window.open('addCheatIssue/'+date);
         }
+    },
+    transfer:function(){
+        to=prompt("转交给谁？　格式如：fangzhi.liao");
+        if(to == (undefined ||'')){
+            return;
+        }
+        ids=document.getElementsByName("ids");
+        arr=[];
+        for(i=0;i<ids.length;i++){
+            if(ids[i].checked){
+                arr.push(ids[i].value);
+            }
+        }   
+        if(arr.length==0){
+            return;
+        }
+        console.log(arr);
+        url="transfer";
+        args={
+                "ids":arr,
+                "to":to               
+        }
+        $.post(url,args,function(data){
+            if(data.result=='success'){
+                alert("已将" +data.msg + "条数据转移至" + to +".");
+                window.location.href=window.location.href; 
+                window.location.reload;                 
+            }else{
+                alert(data.msg)
+            }
+        },'json')
+    },
+    switchSelectAll:function(btn){
+        ids=document.getElementsByName("ids");
+        for(i=0;i<ids.length;i++){
+            ids[i].checked=btn.checked;
+        }
     }
-    
 }
 var CameraScoreCard = {
     addVideoInfo : function(name,duration,createDate,createTime,uploadDate,uploadTime) {

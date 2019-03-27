@@ -188,22 +188,22 @@ class CameraController extends ControllerBase {
 			echo '{"result":"failed","msg":"' . $e->getMessage () . '"}';
 		}
 	}
-	public function pickLLIAction(){
-		$this->view->disable();
-		try{
+	public function pickLLIAction() {
+		$this->view->disable ();
+		try {
 			$QC = trim ( $this->session->get ( 'auth' ) ['name'] );
-			$date=$this->request->getPost('date');
-			$lli=$this->request->getPost('lli');
-			$connection=$this->db;
-			$sql="update fc_camera_scores set QC='$QC' where ACTION_DATE='$date' AND NAME_COLLECTOR='$lli' and score is null and QC=''";
-			$result=$connection->query($sql);
-			if($result===false){
-				throw new exception('Failed');
-			}else{
+			$date = $this->request->getPost ( 'date' );
+			$lli = $this->request->getPost ( 'lli' );
+			$connection = $this->db;
+			$sql = "update fc_camera_scores set QC='$QC' where ACTION_DATE='$date' AND NAME_COLLECTOR='$lli' and score is null and QC='' and SUM_VIDIO_TIME_DURATION <'120' and ignoreReason=''";
+			$result = $connection->query ( $sql );
+			if ($result === false) {
+				throw new exception ( 'Failed' );
+			} else {
 				echo '{"result":"success","msg":""}';
 			}
-		}catch(exception $e){
-			echo '{"result":"failed","msg":"'.$e->getMessage().'"}';
+		} catch ( exception $e ) {
+			echo '{"result":"failed","msg":"' . $e->getMessage () . '"}';
 		}
 	}
 	public function batchDeleteAction() {
@@ -588,7 +588,7 @@ class CameraController extends ControllerBase {
 			if ($authority == null) {
 				throw new exception ( "你没有该权限。请找管理员申请。" );
 			}
-			//$date = $this->request->getPost ( "date" );
+			// $date = $this->request->getPost ( "date" );
 			$connection = $this->db;
 			$sql = "update `fc_camera_scores` set visitResultIndex=1 where ACTION_DATE='$date' and VISIT_RESULT in ('Pay later',
 				'Promise to pay',
@@ -616,6 +616,50 @@ class CameraController extends ControllerBase {
 			}
 		} catch ( Exception $e ) {
 			echo '{"result":"FAILED","msg":"' . $e->getMessage () . '"}';
+		}
+	}
+	function transferAction() {
+		try {
+			$this->view->disable ();
+			$user = trim ( $this->session->get ( 'auth' ) ['name'] );
+			$authority = Authorities::findFirst ( [ 
+					"user=:user: and module='cameraScores' and authority='transfer'",
+					"bind" => [ 
+							"user" => $user 
+					] 
+			] );
+			if ($authority == null) {
+				throw new exception ( "你没有该权限。请找管理员申请。" );
+			}
+			$to = $this->request->getPost ( "to" );
+			$to = str_replace ( " ", ".", $to );
+			$exist_user = Users::count ( [ 
+					"username = :username:",
+					"bind" => [ 
+							"username" => "$to" 
+					] 
+			] );
+			if ($exist_user == 0) {
+				throw new exception ( "User not exist" );
+			}
+			$ids = $this->request->getPost ( "ids" );
+			$toTrans = CameraScores::find ( [ 
+					"conditions" => "id in ({ids:array}) and nullif(score,'') is null",
+					"bind" => [ 
+							"ids" => $ids 
+					] 
+			] );
+			$count = 0;
+			foreach ( $toTrans as $item ) {
+				$item->QC = $to;
+				$item->editLog = $item->editLog . "|from " . $item->QC . " by " . $user . " on " . date ( "YmdHis" );
+				if ($item->save () === true) {
+					$count ++;
+				}
+			}
+			echo '{"result":"success","msg":"' . $count . '"}';
+		} catch ( Exception $e ) {
+			echo '{"result":"failed","msg":"' . $e->getMessage () . '"}';
 		}
 	}
 }
