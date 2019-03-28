@@ -651,8 +651,8 @@ class CameraController extends ControllerBase {
 			] );
 			$count = 0;
 			foreach ( $toTrans as $item ) {
-				$item->QC = $to;
 				$item->editLog = $item->editLog . "|from " . $item->QC . " by " . $user . " on " . date ( "YmdHis" );
+				$item->QC = $to;
 				if ($item->save () === true) {
 					$count ++;
 				}

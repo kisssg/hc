@@ -278,7 +278,7 @@ var CameraScore = {
     },
     transfer:function(){
         to=prompt("转交给谁？　格式如：fangzhi.liao");
-        if(to == (undefined ||'')){
+        if(to == (undefined ||''||null)){
             return;
         }
         ids=document.getElementsByName("ids");
