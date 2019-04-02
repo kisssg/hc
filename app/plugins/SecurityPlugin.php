@@ -174,7 +174,8 @@ class SecurityPlugin extends Plugin {
 							'mysteryContracts',
 							'mysteryAssess',
 							'sumTimeCost',
-							'cameraSum'
+							'cameraSum',
+							'cameraDuration'
 					],
 					'mysterymonitor' => [ 
 							'index' ,
