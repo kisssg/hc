@@ -189,7 +189,7 @@ var Charts = {
                         options : {
                             title : {
                             display : true,
-                            text : "Camera overview :"
+                            text : "Camera check count overview :"
                                 + startDate + " - " + endDate
                             },
                             scales : {
@@ -265,7 +265,7 @@ var Charts = {
                     options : {
                         title : {
                         display : true,
-                        text : "Camera overview :"
+                        text : "Camera duration overview :"
                             + startDate + " - " + endDate
                         },
                         scales : {
