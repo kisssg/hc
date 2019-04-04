@@ -99,7 +99,8 @@ class SecurityPlugin extends Plugin {
 							'addIssue',
 							'addCheatIssue',
 							'addVisitResultIndex',
-							'transfer'
+							'transfer',
+							'getDateRange'
 					],
 					'applications'=>[
 							'apply',

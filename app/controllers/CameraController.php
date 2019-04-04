@@ -84,6 +84,62 @@ class CameraController extends ControllerBase {
 		) );
 		
 		$this->view->page = $paginator->getPaginate ();
+		if ($this->request->isPost ()) {
+			$dateIn = $this->request->getPost ( 'visit_date', 'string' );
+			$this->persistent->dateIn = $dateIn;
+		} else {
+			$dateIn = $this->persistent->dateIn;
+		}
+		if ($dateIn == "") {
+			$dateIn = date ( "Y-m-d" );
+		}
+		$weekday = date ( 'w', strtotime ( $dateIn ) );
+		$startDayOffset = 2;
+		$startWeekDay = $weekday - $startDayOffset;
+		if ($startWeekDay < 0) {
+			$startWeekDay = $startWeekDay + 7;
+		}
+		$actualDate = date_create ( $dateIn );
+		$startDate = date_sub ( $actualDate, date_interval_create_from_date_string ( $startWeekDay . ' days' ) );
+		$this->view->startDate = $startDate->format("Y-m-d");
+		$this->view->endDate=$startDate->add(date_interval_create_from_date_string ( '7 days' ))
+									   ->format("Y-m-d");
+		
+		$loginQC=trim ( $this->session->get ( 'auth' ) ['name'] );
+		$sumQC=CameraScores::sum([
+				"column"=>"SUM_VIDIO_TIME_DURATION",
+				"conditions"=>"ACTION_DATE between :startDate: and :endDate: and QC=:qc: and status='ok'",
+				"bind"=>[
+						"startDate"=>$this->view->startDate,
+						"endDate"=>$this->view->endDate,
+						"qc"=>$loginQC
+				]
+		]);
+		$sumAll=CameraScores::sum([
+				"column"=>"SUM_VIDIO_TIME_DURATION",
+				"conditions"=>"ACTION_DATE between :startDate: and :endDate: and QC !='system' and QC !='' and status='ok'",
+				"bind"=>[
+						"startDate"=>$this->view->startDate,
+						"endDate"=>$this->view->endDate,
+				]
+		]);
+		$countQC=CameraScores::count([
+				"distinct"=>"QC",
+				"conditions"=>"ACTION_DATE between :startDate: and :endDate: and QC !='system' and status='ok'",
+				"bind"=>[
+						"startDate"=>$this->view->startDate,
+						"endDate"=>$this->view->endDate,
+				]
+		]);
+		if($countQC==0){
+			return;
+		}
+		$sumAverage=$sumAll/$countQC;
+									   
+		$this->view->sumQC=$sumQC;
+		$this->view->sumAverage=$sumAverage;
+		$this->view->checked = 100 * $sumQC/($sumAverage+$sumQC);
+		$this->view->averageChecked =100 * $sumAverage/($sumAverage+$sumQC);
 	}
 	public function scoreSaveAction() {
 		$this->view->disable ();
@@ -136,8 +192,11 @@ class CameraController extends ControllerBase {
 			$camera->cashCollect = $cashCollect;
 			$camera->cheatType = $cheatType;
 			$camera->noIntroAnno = $noIntroAnno;
-			if (date ( "W", strtotime ( $camera->ACTION_DATE ) ) == 0) {
+			if (date ( "w", strtotime ( $camera->ACTION_DATE ) ) == 0) {
+				$date = date_create ( $camera->ACTION_DATE );
 				$difday = - 6;
+				date_add ( $date, date_interval_create_from_date_string ( $difday . ' days' ) );
+				$week = date_format ( $date, 'Y-m-d' );
 			} else {
 				$date = date_create ( $camera->ACTION_DATE );
 				$difday = 1 - date ( "w", strtotime ( $camera->ACTION_DATE ) );
@@ -145,7 +204,7 @@ class CameraController extends ControllerBase {
 				$week = date_format ( $date, 'Y-m-d' );
 			}
 			$camera->week = $week;
-			if ($camera->QC == "") {
+			if ($camera->score == "") {
 				$camera->QSCcreateDate = date ( "Y-m-d" );
 				$camera->QSCcreateTime = date ( "H:i:s" );
 			} else {
@@ -574,6 +633,22 @@ class CameraController extends ControllerBase {
 		} catch ( Exception $e ) {
 			echo $e->getMessage ();
 		}
+	}
+	public function getDateRangeAction(){
+		$dateIn="";
+		if ($dateIn == "") {
+			$dateIn = date ( "Y-m-d" );
+		}
+		$weekday = date ( 'w', strtotime ( $dateIn ) );
+		$startDayOffset = 2;
+		$startWeekDay = $weekday - $startDayOffset;
+		if ($startWeekDay < 0) {
+			$startWeekDay = $startWeekDay + 7;
+		}
+		$actualDate = date_create ( $dateIn );
+		$startDate = date_add ( $actualDate, date_interval_create_from_date_string ( $startWeekDay . ' days' ) );
+		$this->view->startDate = $startWeekDay;
+		echo $startDate->format("Y-m-d");
 	}
 	public function addVisitResultIndexAction($date) {
 		$this->view->disable ();
