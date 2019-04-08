@@ -10,9 +10,9 @@ QC：<input type="text" name="QC" id ="" value=""/>
 {% for journal in page.items %}
     {% if loop.first %}
     <div class="progress" style="height:8px;">
-	  <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="{{ checked }}" title="{{ startDate~'～'~endDate~'你核查的录像时长:'~sumQC }}" aria-valuemin="0" aria-valuemax="50" style="width: {{ checked }}%;height:8px;">
+	  <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="{{ checked }}" title="{{ startDate~'～'~endDate~'你核查的录像时长:'~sumQC~'('~checked~'%)' }}" aria-valuemin="0" aria-valuemax="50" style="width: {{ checked }}%;height:8px;">
 	  </div>
-	  <div class="progress-bar progress-bar-notice" role="progressbar" aria-valuenow="{{ averageChecked }}" title="{{ startDate~'～'~endDate~'大家的平均时长:'~sumAverage }}" aria-valuemin="0" aria-valuemax="50" style="width: {{ averageChecked }}%;height:8px;">
+	  <div class="progress-bar progress-bar-notice" role="progressbar" aria-valuenow="{{ averageChecked }}" title="{{ startDate~'～'~endDate~'大家的平均时长:'~sumAverage~'('~averageChecked~'%)' }}" aria-valuemin="0" aria-valuemax="50" style="width: {{ averageChecked }}%;height:8px;">
 	  </div>
 	</div>
 	

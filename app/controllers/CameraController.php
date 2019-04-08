@@ -102,7 +102,7 @@ class CameraController extends ControllerBase {
 		$actualDate = date_create ( $dateIn );
 		$startDate = date_sub ( $actualDate, date_interval_create_from_date_string ( $startWeekDay . ' days' ) );
 		$this->view->startDate = $startDate->format("Y-m-d");
-		$this->view->endDate=$startDate->add(date_interval_create_from_date_string ( '7 days' ))
+		$this->view->endDate=$startDate->add(date_interval_create_from_date_string ( '6 days' ))
 									   ->format("Y-m-d");
 		
 		$loginQC=trim ( $this->session->get ( 'auth' ) ['name'] );
