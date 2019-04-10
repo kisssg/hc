@@ -180,7 +180,8 @@ class SecurityPlugin extends Plugin {
 					],
 					'mysterymonitor' => [ 
 							'index' ,
-							'getLCS'
+							'getLCS',
+							'saveRemark'
 					],
 					'workstatus' => [ 
 							'items',

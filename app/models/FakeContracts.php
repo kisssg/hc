@@ -17,4 +17,5 @@ class FakeContracts extends Model{
 	public $register_town;
 	public $register_street;
 	public $register_section;
+	public $remark;
 }
