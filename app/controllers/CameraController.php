@@ -231,6 +231,15 @@ class CameraController extends ControllerBase {
 		try {
 			$id = $this->request->getPost ( 'id' );
 			$QC = trim ( $this->session->get ( 'auth' ) ['name'] );
+			$unCheck=CameraScores::count([
+					"nullif(object,'') is null and QC=:qc:",
+					"bind"=>[
+							"qc"=>$QC
+					]
+			]);
+			if($unCheck>2){
+				throw new exception("请先核查完已领数据。");
+			}
 			$toPick = CameraScores::findFirst ( $id );
 			if ($toPick->QC == '') {
 				$toPick->QC = $QC;
@@ -251,6 +260,17 @@ class CameraController extends ControllerBase {
 		$this->view->disable ();
 		try {
 			$QC = trim ( $this->session->get ( 'auth' ) ['name'] );
+			
+			$unCheck=CameraScores::count([
+					"nullif(object,'') is null and QC=:qc:",
+					"bind"=>[
+							"qc"=>$QC
+					]
+			]);
+			if($unCheck>2){
+				throw new exception("请先核查完已领数据。");
+			}
+			
 			$date = $this->request->getPost ( 'date' );
 			$lli = $this->request->getPost ( 'lli' );
 			$connection = $this->db;
