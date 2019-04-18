@@ -1,4 +1,4 @@
-var VideoScore = {
+var CameraScore = {
     add: function(id) {
 	eachDuration = $(".duration");
 	eachVideoName = $(".videoName");
@@ -6,64 +6,30 @@ var VideoScore = {
 	eachUploadDate=$('.videoUploadDate');
 	eachCreateTime=$('.videoCreateTime');
 	eachUploadTime=$('.videoUploadTime');
+	/*
+     * videoCreateDate=eachCreateDate[0].value.trim(); videoCreateTime=eachCreateTime[0].value.trim(); videoUploadDate=eachUploadDate[0].value.trim();
+     * videoUploadTime=eachUploadTime[0].value.trim();
+     */
+
+	// duration=0;
+	/*
+     * videoInfo getting var videoInfo=[]; for (i = 0; i < eachDuration.length; i++) { vName = (eachVideoName[i].value).replace(/[\]\[\|\'\\\/\"]/g,"").trim(); vDuration =
+     * eachDuration[i].value.trim(); if (vName == "" || !Validator.checkLongTimeFormat(vDuration)) { $("#tips").text( "videoName和duration不能为空,duration格式为hh:mm:ss,如01:05:26！");
+     * return; } ms = vDuration.split(":"); h=Number(ms[0]); m=Number(ms[1]); s=Number(ms[2]); duration += h*3600 + m*60 +s;
+     * 
+     * vCreateDate=(eachCreateDate[i].value).trim(); vUploadDate=(eachUploadDate[i].value).trim(); vCreateTime=(eachCreateTime[i].value).trim();
+     * vUploadTime=(eachUploadTime[i].value).trim();
+     * 
+     * if(vCreateTime==''){ vCreateTime='null';} if(vUploadTime==''){ vUploadTime='null';}
+     * 
+     * if(!Validator.checkDateFormat(vCreateDate)|| !Validator.checkLongTimeFormat(vCreateTime)|| !Validator.checkDateFormat(vUploadDate)||
+     * !Validator.checkLongTimeFormat(vUploadTime)){ $("#tips").text( "时间日期格式不对。"); return; }
+     * 
+     * var info={ "name":vName, "duration":vDuration, 'createDate':vCreateDate, 'uploadDate':vUploadDate, 'createTime':vCreateTime, 'uploadTime':vUploadTime } videoInfo.push(info ); }
+     * videoInfo getting
+     */
 	
-	videoCreateDate=eachCreateDate[0].value.trim();
-	videoCreateTime=eachCreateTime[0].value.trim();
-	videoUploadDate=eachUploadDate[0].value.trim();
-	videoUploadTime=eachUploadTime[0].value.trim();
-
-
-	// videoInfo1 = "";
-	duration=0;
-	var videoInfo=[];
-	for (i = 0; i < eachDuration.length; i++) {
-	    vName = (eachVideoName[i].value).replace(/[\]\[\|\'\\\/\"]/g,"").trim();
-	    vDuration = eachDuration[i].value.trim();
-	    if (vName == "" || !Validator.checkLongTimeFormat(vDuration)) {
-		$("#tips").text(
-			"videoName和duration不能为空,duration格式为hh:mm:ss,如01:05:26！");
-		return;
-	    }
-	    ms = vDuration.split(":");
-	    h=Number(ms[0]);
-        m=Number(ms[1]);
-        s=Number(ms[2]);
-	    duration += h*3600 + m*60 +s;
-	    
-	    vCreateDate=(eachCreateDate[i].value).trim();
-	    vUploadDate=(eachUploadDate[i].value).trim();
-	    vCreateTime=(eachCreateTime[i].value).trim();
-	    vUploadTime=(eachUploadTime[i].value).trim();
-	    
-	    /*if(vCreateDate==''){
-	        vCreateDate='null';}
-        if(vUploadDate==''){
-            vUploadDate='null';}*/
-	    if(vCreateTime==''){
-	        vCreateTime='null';}
-	    if(vUploadTime==''){
-	        vUploadTime='null';}
-	    
-	    if(!Validator.checkDateFormat(vCreateDate)||
-	            !Validator.checkLongTimeFormat(vCreateTime)||
-	            !Validator.checkDateFormat(vUploadDate)||
-	            !Validator.checkLongTimeFormat(vUploadTime)){
-        $("#tips").text(
-            "时间日期格式不对。");
-        return;	        
-	    }
-	    
-	    var info={
-		    "name":vName,
-		    "duration":vDuration,
-		    'createDate':vCreateDate,
-		    'uploadDate':vUploadDate,
-		    'createTime':vCreateTime,
-		    'uploadTime':vUploadTime
-	    }
-	    videoInfo.push(info );
-	}
-	videoInfo=JSON.stringify(videoInfo);
+	// videoInfo=JSON.stringify(videoInfo);
 	city = $("#city").text();
 	LLI = $("#journal_creator").text();
 	contractNo = $("#contract_no").text();
@@ -78,7 +44,7 @@ var VideoScore = {
 	    $("#tips").text("Object不能为空！");
 	    return;
 	}
-	// score items *15 
+	// score items *15
 	cheating=$('#cheating').text();
 	recSurrounding=$('#recSurrounding').text();
 	announceContract=$('#announceContract').text();
@@ -94,7 +60,38 @@ var VideoScore = {
 	payHierarchy=$('#payHierarchy').text();
 	updateDT=$('#updateDT').text();
 	cashCollect=$('#cashCollect').text();
+	
+	cheatType=$('#cheatType').val();
+	
+	checkedBoxes=document.getElementsByName("noIntroAnnoTypes");
+	noIntroAnnoTypes=[];
+	for(i=0;i<checkedBoxes.length;i++){
+	    if(checkedBoxes[i].checked){
+	        noIntroAnnoTypes.push(checkedBoxes[i].value);
+	    }
+	}
+	noIntroAnno=noIntroAnnoTypes.join(",");
+	console.log(noIntroAnno);
+	
+	if(cheating=='0' && cheatType==""){
+	    $('#cheatType').focus();
+	    $("#tips").text("请选不合格类型！");
+	    return;
+	}
+	if(selfIntro=='0' && noIntroAnno==""){
+        $('#noIntroAnno').focus();
+        $("#tips").text("请选不合格类型！");
+        return;
+    }
+	
 
+    if(cheating !='0'){
+        cheatType="";
+    }
+    
+	if(selfIntro !='0'){
+        noIntroAnno="";
+    }
 	
 	remark = ($('#remark').val()).replace(/[\"]/g,"''");
 	score = $('#score').text();
@@ -103,7 +100,6 @@ var VideoScore = {
 
 	args = {
 	        'id':id,
-	        'videoInfo':videoInfo,
 	        'city':city,
 	        'LLI':LLI,
 	        'contractNo':contractNo,
@@ -129,52 +125,55 @@ var VideoScore = {
 	        'specificCollect':specificCollect,
 	        'payHierarchy':payHierarchy,
 	        'updateDT':updateDT,
-	        'cashCollect':cashCollect,	        
+	        'cashCollect':cashCollect,
+	        'cheatType':cheatType,
+	        'noIntroAnno':noIntroAnno,
 	        
-	        'duration':duration,
 	        'remark':remark,
 	        'score':score,
 	        'QC':QC,
-	        'journalID':journalID,
-	        'videoCreateDate':videoCreateDate,
-	        'videoCreateTime':videoCreateTime,
-	        'videoUploadDate':videoUploadDate,
-	        'videoUploadTime':videoUploadTime,	        
+	        'journalID':journalID,	             
 	};
 	console.log(args);
-	url = "vrdScoreAdd";
+	url = "scoreSave";
 	$('#tips').text("提交中...");
-	$("#scoreSubmitBtn").attr("disabled", true);
+	// $("#scoreSubmitBtn").attr("disabled", true);
 	$.post(url, args, function(data) {
 	    console.log(data);
 	    res=JSON.parse(data);
 	    if(res.result=="success"){
 		if(id>0){
 			$("#tips").text("成功保存！");
-			window.location.reload();		    
+            $("#cameraScoreBoard").modal("hide");
+            window.location.href=window.location.href; 
+            window.location.reload;   
 		}else{
 			$("#tips").text("添加成功！");
-			$("#videoScoreBoard").modal("hide");
-            $("[data-id='"+journalID+"'][data-action='add']").removeClass("btn-default")
-            .addClass("btn-primary").text("评分+1");		    
+			$("#cameraScoreBoard").modal("hide");
+            window.location.href=window.location.href; 
+            window.location.reload;           
 		}
 	    }else{
-		$("#tips").text(res.msg);
+	        $("#tips").text(res.msg);
 	    }
-	    $("#scoreSubmitBtn").attr("disabled", false);	    
+	    // $("#scoreSubmitBtn").attr("disabled", false);
 	});
 
     },
     delete: function(id) {
-	cf=confirm("确定要删除吗？");
+	cf=confirm("确定清除评分数据吗？");
+	if(id==null){
+	    return;
+	}
 	if(cf===true){
 	arg={"id":id}
-	url="vrdScoreDel";
+	url="scoreDel";
 	$.post(url,arg,function(data){
 	    res=JSON.parse(data);
 	    if(res.result=="success"){
 		alert("success");
-		window.location.reload();
+        window.location.href=window.location.href; 
+        window.location.reload; 
 	    }else{
 		alert("删除失败！"+res.msg);
 	    }
@@ -183,9 +182,140 @@ var VideoScore = {
     },
     update: function(id) {
 	this.add(id);
+    },
+    pick:function(id){
+      if(id==null){
+          return;
+      }
+      url='pick';
+      arg={"id":id};
+      $.post(url,arg,function(data){
+          if(data.result=='success'){
+              window.location.href=window.location.href; 
+              window.location.reload;
+          }else{
+              alert(data.msg);
+              window.location.href=window.location.href; 
+              window.location.reload; 
+          }
+      },"json")
+    },
+    pickLLI:function(date,lli){
+      if(confirm("确定拾取 " + lli + " " + date + " 的全部数据吗？")){
+          url='pickLLI';
+          args={
+                  "date":date,
+                  "lli":lli,
+          }
+          $.post(url,args,function(data){
+              if(data.result=="success"){
+                  window.location.href=window.location.href; 
+                  window.location.reload;
+              }else{
+                  alert(data.msg);
+              }
+          },"json")
+      }
+    },
+    batchDelete:function(date){
+        if(confirm("确定删除该批次数据吗？"+date)){
+            if(date==null){
+                return;
+            }
+            url='batchDelete';
+            arg={"date":date};
+            $.post(url,arg,function(data){
+                alert(data.msg);
+                window.location.href=window.location.href; 
+                window.location.reload; 
+            },"json")
+        }        
+    },
+    batchEnable:function(date){
+        if(confirm("确定启用"+date +"？")){
+            if(date==null){
+                return;
+            }
+            url='batchEnable';
+            arg={"date":date};
+            $.post(url,arg,function(data){
+                alert(data.msg);
+                window.location.href=window.location.href; 
+                window.location.reload; 
+            },"json")
+        }        
+    },
+    delUnenable:function(){
+        if(confirm("确定删除所有未启用的数据吗？")){
+            url='delUnenable';
+            $.post(url,'',function(data){
+                alert(data.msg);
+                window.location.href=window.location.href; 
+                window.location.reload; 
+            },'json')
+        }
+    },
+    checkCheating:function(date){
+        if(confirm("确定自动标记有录音无录像的数据吗？"+date)){
+            if(date==null){
+                return;
+            }
+            url='checkCheating';
+            arg={"date":date};
+            $.post(url,arg,function(data){
+                alert(data.msg);
+                window.location.href=window.location.href; 
+                window.location.reload; 
+            },"json")
+        }
+    },
+    addIssue:function(date){
+        if(confirm("注意确认核查完所有数据再执行此操作。确定批量添加异常吗？"+date)){
+            alert("将独立打开两个网页，请至对应网页查看批量添加的结果。");
+            window.open('addIssue/'+date);
+            window.open('addCheatIssue/'+date);
+        }
+    },
+    transfer:function(){
+        to=prompt("转交给谁？　格式如：fangzhi.liao");
+        console.log(to);
+        if(to == (undefined ||""||null)){
+            return;
+        }
+        ids=document.getElementsByName("ids");
+        arr=[];
+        for(i=0;i<ids.length;i++){
+            if(ids[i].checked){
+                arr.push(ids[i].value);
+            }
+        }   
+        if(arr.length==0){
+            return;
+        }
+        console.log(arr);
+        url="transfer";
+        args={
+                "ids":arr,
+                "to":to               
+        }
+        $.post(url,args,function(data){
+            if(data.result=='success'){
+                alert("已将" +data.msg + "条数据转移至" + to +".");
+                window.location.href=window.location.href; 
+                window.location.reload;                 
+            }else{
+                alert(data.msg)
+            }
+        },'json')
+    },
+    switchSelectAll:function(btn){
+        ids=document.getElementsByName("ids");
+        for(i=0;i<ids.length;i++){
+            ids[i].checked=btn.checked;
+        }
     }
 }
-var VideoScoreCard = {
+var CameraScoreCard = {
     addVideoInfo : function(name,duration,createDate,createTime,uploadDate,uploadTime) {
 	rid = Math.ceil(Math.random() * 1000);
 	if(name==undefined || duration== undefined){
@@ -214,11 +344,11 @@ var VideoScoreCard = {
         + '<label for="videoUploadTime" class="control-label">UploadTime：</label>'
         + '<input type="text" class="form-control input-sm videoUploadTime" id="" value="' + uploadTime + '" placeholder="hh:mm:ss">'
 		+ '</div><div class="col-md-5">'
-		+ '<button onclick="return VideoScoreCard.addVideoInfo();"><span class="glyphicon glyphicon-plus"></span></button>'
-        + '<button onclick="return VideoScoreCard.removeVideoInfo('
+		+ '<button onclick="return CameraScoreCard.addVideoInfo();"><span class="glyphicon glyphicon-plus"></span></button>'
+        + '<button onclick="return CameraScoreCard.removeVideoInfo('
         + rid
         + ');"><span class="glyphicon glyphicon-minus"></span></button>'
-        + '<button onclick="return VideoScoreCard.nullVideoInfo('
+        + '<button onclick="return CameraScoreCard.nullVideoInfo('
         + rid
         + ');"><span class="glyphicon glyphicon-eye-close"></span></button>'
 		+ '</div></div></td></tr>';
@@ -272,7 +402,7 @@ var VideoScoreCard = {
                                                         + res[i].addr
                                                         + "</span> <span class='signTime'>"
                                                         + res[i].sign_in_time
-                                                        + "</span><button class='btn btn-primary btn-xs' onclick='VideoScoreCard.replaceSignIn(\"" 
+                                                        + "</span><button class='btn btn-primary btn-xs' onclick='CameraScoreCard.replaceSignIn(\"" 
                                                         + res[i].sign_in_time
                                                         +"\",\"" + res[i].addr_detail
                                                         + res[i].addr                                                        		
@@ -297,7 +427,7 @@ var VideoScoreCard = {
             $("#auditResult").val("");
         },
         showAuditDelBtn:function(vsID){
-            auditDelBtn='<button class="btn auditDelBtn" onclick="return VideoAudits.delete('+vsID+')">删除内审</button>';
+            auditDelBtn='<button class="btn auditDelBtn" onclick="return CameraAudits.delete('+vsID+')">删除内审</button>';
             $("#scoreSubmitBtn").before(auditDelBtn);
         },
         judge:function(id,result){
@@ -309,7 +439,7 @@ var VideoScoreCard = {
             }else{
                 $("#"+id).append(',',result);
             }
-            VideoScoreCard.calcScore();
+            CameraScoreCard.calcScore();
         },
         onObjectChange:function(obj){
             $(".rpc_only").hide();
@@ -336,7 +466,7 @@ var VideoScoreCard = {
                 $(".both").hide();
                 $(".both").find(".judgeResults").text('');           
             }
-            VideoScoreCard.calcScore();
+            CameraScoreCard.calcScore();
         },
         calcScore:function(){
             obj = $("#object").val();
@@ -352,6 +482,11 @@ var VideoScoreCard = {
             }
             console.log("-" + deductCount);
             console.log("+" + okCount);
+            if($("#cheating").text()==="0"){
+                console.log("cheating");
+                $("#score").text("0.00");
+                return;
+            }
             
             totalCount=okCount + deductCount;
             finalScore=okCount/totalCount * 100;
@@ -490,7 +625,7 @@ var VideoScoreCard = {
             $("#score").text(totalScore);
         }
 }
-var VideoAudits={
+var CameraAudits={
         Add:function(vsID){
             contractNo = $("#contract_no").text();
             visitDate = $('#visit_date_card').text();

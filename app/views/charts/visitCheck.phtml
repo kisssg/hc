@@ -1,7 +1,7 @@
 
 <div class="container" style="position: relative; top: 50px;">
 
-	<h1>DingCheck overview</h1>
+	<h1>Field visit QC overview</h1>
 	
 	<div id='canvasDiv' style="width: 100%; height: 100%">
 	</div>
@@ -12,11 +12,13 @@
 	<button class='btn-xs' onclick='return Charts.avgSecCost();'>checking avgSecCost</button>
 	<button class='btn-xs' onclick='return Charts.overAllAvgSecCost();'>team avgSecCost</button>
 	<button class='btn-xs' onclick='return Charts.showSumTimeCost();'>sumTimeCost</button>
+	<button class='btn-xs' onclick='return Charts.cameraOverview();'>cameraCount</button>
+	<button class='btn-xs' onclick='return Charts.cameraDurationOverview();'>cameraDuration</button>
 	<button class='btn-xs' onclick='return Charts.resetCanvas();'>Clear Charts</button>
 	<!--$this->tag->linkTo(['charts/signin', 'SignIn', 'class' => 'btn btn-default','target'=>'_blank']) -->
 
 </div>
 <!-- /container -->
 <?php
-echo $this->tag->javascriptInclude ( 'js/charts.js?t=0525' );
+echo $this->tag->javascriptInclude ( 'js/charts.js?t=01' );
 ?>

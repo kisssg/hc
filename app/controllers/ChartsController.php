@@ -331,7 +331,36 @@ class ChartsController extends ControllerBase {
 		$this->view->disable();		
 		
 	}
-	public function callVolumeAction(){
-		
+	public function cameraSumAction(){
+		$this->view->disable();
+		$startDate=$this->request->getPost("startDate");
+		$endDate=$this->request->getPost("endDate");//"2018-06-05";//
+		$group=CameraScores::find([
+				"columns"=>"distinct(QC) as qc, count(QC) as total, count(score) as checked",
+				"conditions"=>"ACTION_DATE between :startDate: and :endDate: and qc != '' and status='ok'",
+				"group"=>"qc",
+				"order"=>"total desc",
+				"bind"=>[
+						"startDate"=>"$startDate",
+						"endDate"=>"$endDate"
+				]
+		]);
+		echo json_encode($group);		
+	}
+	public function cameraDurationAction(){
+		$this->view->disable();
+		$startDate=$this->request->getPost("startDate");
+		$endDate=$this->request->getPost("endDate");//"2018-06-05";//
+		$group=CameraScores::find([
+				"columns"=>"distinct(QC) as qc, sum(SUM_VIDIO_TIME_DURATION) as total",
+				"conditions"=>"ACTION_DATE between :startDate: and :endDate: and qc != '' and status='ok'",
+				"group"=>"qc",
+				"order"=>"total desc",
+				"bind"=>[
+						"startDate"=>"$startDate",
+						"endDate"=>"$endDate"
+				]
+		]);
+		echo json_encode($group);			
 	}
 }

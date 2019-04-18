@@ -191,6 +191,9 @@ class CallBackController extends ControllerBase {
 	}
 	public function transferAction() {
 		try {
+			if($this->session->get ( 'auth' )['level']<10){
+				throw new exception('您暂时无法执行此操作，请找资深帮忙。');
+			}
 			$ids = $this->request->getPost ( 'ids' );
 			$receiver = $this->request->getPost ( 'to' );
 			$receiver = str_replace ( " ", ".", $receiver ); // need to check if object user exists, so replace those input username separated by space with dot.
@@ -213,7 +216,7 @@ class CallBackController extends ControllerBase {
 							"ids" => $ids 
 					] 
 			] );
-			// @FIXME it can transfer only one record while there actually are multiple;
+			//it can transfer only one record while there actually are multiple;
 			$action_id = date ( "YmdHis" ) . rand ( 1, 999 );
 			$count = 0;
 			foreach ( $items as $item ) {
@@ -260,13 +263,13 @@ class CallBackController extends ControllerBase {
 			$level = $this->session->auth ['level'];
 			if ($level < 10) {
 				throw new exception ( "Not authorized" );
-			}
-			
+			}	
 			$list = Callback::find ( [ 
 					"columns" => "distinct(action_id) as action_id,count(action_id) as count,delete_user as operator,qc_name as currentQC",
-					"conditions" => "action_id is not null",
+					"conditions" => "action_id is not null ",
 					"order" => "action_id desc",
-					"group" => "action_id" 
+					"group" => "action_id" ,
+					"limit" =>"100"
 			] );
 			// Create a Model paginator, show 10 rows by page starting from $currentPage
 			$currentPage = $this->request->getQuery ( "page", "int" );

@@ -1,9 +1,21 @@
 <?php
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+use PhpOffice\PhpSpreadsheet\Reader\Xlsx as XlsxRead;
 class IssuesController extends ControllerBase {
 	public function initialize() {
 	}
 	public function indexAction() {
 		echo "<a href='issues/getList'>" . "List" . "</a>";
+		$spreadsheet = new Spreadsheet();
+		$sheet = $spreadsheet->getActiveSheet();
+		$sheet->setCellValue('A1', 'Hello Sucre.xu !');
+		
+		$writer = new Xlsx($spreadsheet);
+		$rndNo=random_int(5,1000);
+		$file='D:\UPUPW_NP7.2_64\htdocs\uploadfiles\hello world'.$rndNo.'.xlsx';
+		$writer->save($file);
+		header("location:../uploadfiles/hello world".$rndNo.".xlsx");
 	}
 	public function addAction() {
 		echo 'add';
