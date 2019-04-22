@@ -100,7 +100,8 @@ class SecurityPlugin extends Plugin {
 							'addCheatIssue',
 							'addVisitResultIndex',
 							'transfer',
-							'getDateRange'
+							'getDateRange',
+							'checkDuration'
 					],
 					'applications'=>[
 							'apply',

@@ -232,7 +232,7 @@ class CameraController extends ControllerBase {
 			$id = $this->request->getPost ( 'id' );
 			$QC = trim ( $this->session->get ( 'auth' ) ['name'] );
 			$unCheck=CameraScores::count([
-					"nullif(object,'') is null and QC=:qc:",
+					"nullif(object,'') is null and QC=:qc: and status='ok'",
 					"bind"=>[
 							"qc"=>$QC
 					]
@@ -262,7 +262,7 @@ class CameraController extends ControllerBase {
 			$QC = trim ( $this->session->get ( 'auth' ) ['name'] );
 			
 			$unCheck=CameraScores::count([
-					"nullif(object,'') is null and QC=:qc:",
+					"nullif(object,'') is null and QC=:qc: and status='ok'",
 					"bind"=>[
 							"qc"=>$QC
 					]
@@ -274,7 +274,7 @@ class CameraController extends ControllerBase {
 			$date = $this->request->getPost ( 'date' );
 			$lli = $this->request->getPost ( 'lli' );
 			$connection = $this->db;
-			$sql = "update fc_camera_scores set QC='$QC' where ACTION_DATE='$date' AND NAME_COLLECTOR='$lli' and score is null and QC='' and SUM_VIDIO_TIME_DURATION <'120' and ignoreReason=''";
+			$sql = "update fc_camera_scores set QC='$QC' where ACTION_DATE='$date' AND NAME_COLLECTOR='$lli' and score is null and QC='' and SUM_VIDIO_TIME_DURATION <120 and ignoreReason=''";
 			$result = $connection->query ( $sql );
 			if ($result === false) {
 				throw new exception ( 'Failed' );
@@ -376,10 +376,13 @@ class CameraController extends ControllerBase {
 				throw new exception ( "您没有这个权限！请找管理员获取权限。" );
 			}
 			$date = $this->request->getPost ( 'date' );
+			if($this->checkDuration($date)==false){
+				throw new exception("核查时长少于6秒的视频失败了。重新试试？");
+			}
 			$manager = $this->db;
 			$sql = "update
 					`fc_camera_scores`
-				set cheating='0',object='-',score=0,qc='system',remark='有录音无录像',
+				set cheating='0',object='-',score=0,qc='system',cheatType='No video but audio',remark='有录音无录像',
 				QSCCREATEDATE=CURDATE(),QSCCREATETIME=CURTIME()
 				WHERE
 					flag_with_audio = '1'
@@ -393,6 +396,27 @@ class CameraController extends ControllerBase {
 			}
 		} catch ( exception $e ) {
 			echo '{"result":"failed","msg":"' . $e->getMessage () . '"}';
+		}
+	}
+	public function checkDuration($date) {
+		try {			
+			$manager = $this->db;
+			$sql = "update
+			`fc_camera_scores`
+			set cheating='0',object='-',score=0,qc='system',cheatType='No collection action',remark='录像时长少于6秒',
+			QSCCREATEDATE=CURDATE(),QSCCREATETIME=CURTIME()
+			WHERE
+			SUM_VIDIO_TIME_DURATION <= 0.1
+			AND flag_with_vidio = '1'
+			and action_date='$date';";
+			$result = $manager->query ( $sql );
+			if ($result === false) {
+				throw new exception ( 'Failed updating data in base' );
+			} else {
+				return true;
+			}
+		} catch ( exception $e ) {
+			return false;
 		}
 	}
 	public function batchManageAction() {
