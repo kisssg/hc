@@ -156,6 +156,7 @@
 													<option>No image but voice</option>													
 													<option>Fake video</option>
 													<option>No voice but image</option>
+													<option>No video in the corresponding time</option>
 													</select>
 												</div>
 										</div>
