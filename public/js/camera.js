@@ -72,6 +72,11 @@ var CameraScore = {
 	}
 	noIntroAnno=noIntroAnnoTypes.join(",");
 	console.log(noIntroAnno);
+	if(cheating==''){
+	    $('#cheating').focus();
+        $("#tips").text("必须判定是否cheating");
+	    return;
+	}
 	
 	if(cheating=='0' && cheatType==""){
 	    $('#cheatType').focus();

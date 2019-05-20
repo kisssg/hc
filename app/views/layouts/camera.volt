@@ -267,5 +267,5 @@
 					</div>
 				</div>
 <!-- end of modal -->
-        {{ javascript_include('js/camera.js?135') }}
+        {{ javascript_include('js/camera.js?136') }}
 
