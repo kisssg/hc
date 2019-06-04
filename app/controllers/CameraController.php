@@ -174,7 +174,7 @@ class CameraController extends ControllerBase {
 			$camera = CameraScores::findFirst ( $id );
 			$camera->object = $object;
 			$camera->score = $score;
-			$camera->remark = $remark;
+			$camera->remark = str_replace(PHP_EOL, '', $remark); ;
 			$camera->cheating = $cheating;
 			$camera->recSurrounding = $recSurrounding;
 			$camera->announceContract = $announceContract;
@@ -204,7 +204,7 @@ class CameraController extends ControllerBase {
 				$week = date_format ( $date, 'Y-m-d' );
 			}
 			$camera->week = $week;
-			if ($camera->score == "") {
+			if ($camera->QSCcreateDate == null) {
 				$camera->QSCcreateDate = date ( "Y-m-d" );
 				$camera->QSCcreateTime = date ( "H:i:s" );
 			} else {
