@@ -174,7 +174,7 @@ class CameraController extends ControllerBase {
 			$camera = CameraScores::findFirst ( $id );
 			$camera->object = $object;
 			$camera->score = $score;
-			$camera->remark = str_replace(PHP_EOL, '', $remark); ;
+			$camera->remark = str_replace(PHP_EOL, '', $remark);
 			$camera->cheating = $cheating;
 			$camera->recSurrounding = $recSurrounding;
 			$camera->announceContract = $announceContract;

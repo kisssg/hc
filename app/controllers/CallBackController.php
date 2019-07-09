@@ -14,7 +14,7 @@ class CallBackController extends ControllerBase {
 	public function addAction() {
 		try {
 			$type = $this->request->getPost ( 'type_add' );
-			$contract_no = $this->request->getPost ( 'contract_no_add' );
+			$contract_no = trim($this->request->getPost ( 'contract_no_add' ));
 			
 			$client_name = $this->request->getPost ( 'client_name_add' );
 			$contact_info = $this->request->getPost ( 'contact_info_add' );
