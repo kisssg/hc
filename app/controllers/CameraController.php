@@ -16,6 +16,7 @@ class CameraController extends ControllerBase {
 			$contract_no = $this->request->getPost ( 'contract_no', 'string' );
 			$QC = $this->request->getPost ( 'QC' );
 			$ID_employee = $this->request->getPost ( 'ID_employee' );
+                        $remark=$this->request->getPost('remark');
 			
 			$query = new Criteria ();
 			$query->setModelName ( "CameraScores" );
@@ -53,6 +54,12 @@ class CameraController extends ControllerBase {
 				] );
 				$hasRequest = true;
 			}
+                        if($remark){
+                            $query->andWhere("remark like :remark:",[
+                               "remark"=>"%$remark%" 
+                            ]);                            
+				$hasRequest = true;
+                        }
 			$this->persistent->searchParams = $query->getParams ();
 		} else {
 			$hasRequest = true;

@@ -5,6 +5,7 @@
 工号：<input type="text" name="ID_employee" id ="" value=""/>
 合同号：<input type="text" name="contract_no" id ="" value=""/>
 QC：<input type="text" name="QC" id ="" value=""/>
+备注：<input type="text" name="remark" id ="" value=""/>
 <input type="submit" class="btn btn-default btn-xs" value="搜索"/>
 </form>
 {% for journal in page.items %}
