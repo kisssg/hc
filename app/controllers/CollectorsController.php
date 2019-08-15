@@ -12,7 +12,7 @@ class CollectorsController extends ControllerBase {
 			//$keyword="da";
 			$suggestion = Collectors::find ( [ 
 					"columns" => "id,name_en as value,city as city,area as region, employee_id as employeeID, name_cn as name",
-					"conditions" => "name_en like :keyword: ",
+					"conditions" => "name_en like :keyword: or name_cn like :keyword:",
 					"limit"=>"10",
 					"bind" => [ 
 							"keyword" => "$keyword%" 

@@ -23,6 +23,7 @@ class Callback extends Model {
 	public $paid_amt_q4;
 	public $is_contacted;
 	public $contact_type;
+	public $contact_info_collector;
 	public $is_harassed;
 	public $harass_type;
 	public $issue_type;
