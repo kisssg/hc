@@ -393,13 +393,6 @@ class CallBackController extends ControllerBase
             $currentDate = date("Y-m-d");
             $currentTime = date("H:i:s");
 
-            $currentRole = $this->session->get('auth')['role'];
-            $currentTeam = substr($currentRole, 0, 3);
-            $currentPosition = substr($currentRole, -2);
-
-            $old_user = Users::findFirstByUsername($auditor);
-            $old_team = substr($old_user->role, 0, 3);
-            $theTl = ($currentTeam == $old_team && $currentPosition == 'TL');
 
             $recAudit = CallRecAudits::findFirstBycbId($cbId);
             if ($recAudit === FALSE)
@@ -418,9 +411,20 @@ class CallBackController extends ControllerBase
             }
             else
             {
+
+                $currentRole = $this->session->get('auth')['role'];
+                $currentTeam = substr($currentRole, 0, 3);
+                $currentPosition = substr($currentRole, -2);
+                
+                $old_user = Users::findFirstByUsername($recAudit->auditor);
+                $old_team = substr($old_user->role, 0, 3);
+                $theTl = ($currentTeam == $old_team && $currentPosition == 'TL');
+                //how many days passed since last edit
+                $diffDay=date_diff(date_create($currentDate), date_create($recAudit->addDate))->format("%a");
+                
                 if (!$theTl)
                 {
-                    if (date_diff(date_create($currentDate), date_create($recAudit->addDate))->format("%a") > 1)
+                    if ($diffDay > 1)
                     {
                         throw new exception('超过修改时限。');
                     }
@@ -428,6 +432,8 @@ class CallBackController extends ControllerBase
                     {
                         throw new exception("不能修改别人的记录，添加人：" . $recAudit->auditor);
                     }
+                }else{
+                    $recAudit->edit_log=$recAudit->edit_log.$auditor.' edit at '.$currentDate.$currentTime;
                 }
                 $recAudit->editDate = $currentDate;
                 $recAudit->editTime = $currentTime;
