@@ -256,30 +256,31 @@ class CameraController extends ControllerBase
             $datetime1 = new DateTime($camera->QSCcreateDate);
             $datetime2 = new DateTime();
             $interval = $datetime1->diff($datetime2)->format('%a');
-            
+
             $currentRole = $this->session->get('auth')['role'];
-                $currentTeam = substr($currentRole, 0, 3);
-                $currentPosition = substr($currentRole, -2);
-                
-                $old_user = Users::findFirstByUsername($camera->QC);
-                $old_team = substr($old_user->role, 0, 3);
-                $isTheTL = ($currentTeam == $old_team && $currentPosition == 'TL');
+            $currentTeam = substr($currentRole, 0, 3);
+            $currentPosition = substr($currentRole, -2);
+
+            $old_user = Users::findFirstByUsername($camera->QC);
+            $old_team = substr($old_user->role, 0, 3);
+            $isTheTL = ($currentTeam == $old_team && $currentPosition == 'TL');
 
             if (!$isTheTL)
             {
-                
+
                 if (strtolower($camera->QC) != strtolower($submitQC) && $camera->QC != "")
                 {
                     throw new exception("你只能修改自己的数据，这条数据属于" . $camera->QC);
                 }
-                
+
                 if ($interval > 1)
                 {
-                   throw new Exception('超过可更改时限'.$interval);
+                    throw new Exception('超过可更改时限' . $interval);
                 }
-            }            else
+            }
+            else
             {
-                $camera->editLog =  $camera->editLog .$submitQC.' edit '.date('ymd H:i:s');
+                $camera->editLog = $camera->editLog . $submitQC . ' edit ' . date('ymd H:i:s');
             }
             if ($camera->save() == true)
             {
@@ -589,9 +590,20 @@ class CameraController extends ControllerBase
             $camera = CameraScores::findFirst($id);
             $submitQC = trim($this->session->get('auth') ['name']);
 
+            $currentRole = $this->session->get('auth')['role'];
+            $currentTeam = substr($currentRole, 0, 3);
+            $currentPosition = substr($currentRole, -2);
+            $old_user = Users::findFirstByUsername($camera->QC);
+            $old_team = substr($old_user->role, 0, 3);
+            $isTheTL = ($currentTeam == $old_team && $currentPosition == 'TL');
+
+            if(!$isTheTL){
+                throw new exception('请联系组长清除！');
+            }
+
             if ($camera->QC != $submitQC)
             {
-                throw new exception("你只能修改自己的数据，这条数据属于" . $camera->QC);
+                //throw new exception("你只能修改自己的数据，这条数据属于" . $camera->QC);
             }
 
             if ($camera->authority != 'delete')
@@ -620,6 +632,9 @@ class CameraController extends ControllerBase
 
             $camera->cheatType = "";
             $camera->noIntroAnno = "";
+
+            $camera->QSCcreateDate = "";
+            $camera->QSCcreateTime = "";
 
             $camera->QSCeditDate = date("Y-m-d");
             $camera->QSCeditTime = date("H:i:s");
