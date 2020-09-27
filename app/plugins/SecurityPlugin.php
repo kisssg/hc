@@ -202,7 +202,8 @@ class SecurityPlugin extends Plugin {
 							'show'
 					],
 					'collectors'=>[
-							'search'
+							'search',
+                                            'isearch'
 					],
 					'issues'=>[
 							'index',

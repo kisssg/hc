@@ -596,9 +596,11 @@ class CameraController extends ControllerBase
             $old_user = Users::findFirstByUsername($camera->QC);
             $old_team = substr($old_user->role, 0, 3);
             $isTheTL = ($currentTeam == $old_team && $currentPosition == 'TL');
+            $isTheSR= ($currentTeam == $old_team && $currentPosition == 'SR');
 
-            if(!$isTheTL){
-                throw new exception('请联系组长清除！');
+/** @var type $isTheSR check if it's sr */
+            if(!$isTheTL && !$isTheSR){
+                throw new exception('请联系组长或资深清除！');
             }
 
             if ($camera->QC != $submitQC)

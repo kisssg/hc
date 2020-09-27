@@ -27,6 +27,7 @@ class CallBackController extends ControllerBase
     {
         try {
             $type = $this->request->getPost('type_add');
+            $homer_id=trim($this->request->getPost('homer_id'));
             $contract_no = trim($this->request->getPost('contract_no_add'));
 
             $client_name = $this->request->getPost('client_name_add');
@@ -83,6 +84,7 @@ class CallBackController extends ControllerBase
 
             $cb = new Callback ();
             $cb->type = $type;
+            $cb->homer_id=$homer_id;
             $cb->contract_no = $contract_no;
             $cb->client_name = $client_name;
             $cb->contact_info = $contact_info;
@@ -152,6 +154,7 @@ class CallBackController extends ControllerBase
             $remark_detail = $this->request->getPost('remark_detail');
             $remark_phone = $this->request->getPost('remark_phone');
 
+            $homer_id=$this->request->getPost('homer_id');
             $city = $this->request->getPost('city');
             $responsible_person = $this->request->getPost('responsible_person');
             $visit_date = $this->request->getPost('visit_date');
@@ -164,6 +167,7 @@ class CallBackController extends ControllerBase
             $cb->remark_detail = $remark_detail;
             $cb->remark_phone = $remark_phone;
 
+            $cb->homer_id=$homer_id;
             $cb->city = $city;
             $cb->responsible_person = $responsible_person;
             $cb->visit_date = $visit_date;
