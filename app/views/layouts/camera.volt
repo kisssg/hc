@@ -69,7 +69,7 @@
 									<td colspan="2">摄录时段：<span id="CREATE_TIME"></span> - <span id="ENDING_TIME"></span></td>
 								</tr>								
 								<tr>
-									<td colspan="1"></td>
+									<td colspan="1"><button class='btn btn-xs' onclick='return CameraScoreCard.createIssue();'>登记违规</button></td>
 									<td colspan="2">视频：<span id="CNT_VIDEO_RECORDS"></span> 音频：<span id="CNT_AUDIO_RECORDS"></span></td>
 								</tr>									
 									<tr id="objectTr">
@@ -156,6 +156,7 @@
 													<option>No image but voice</option>													
 													<option>Fake video</option>
 													<option>No voice but image</option>
+													<option>No video in the corresponding time</option>
 													</select>
 												</div>
 										</div>
@@ -266,5 +267,5 @@
 					</div>
 				</div>
 <!-- end of modal -->
-        {{ javascript_include('js/camera.js?135') }}
+        {{ javascript_include('js/camera.js?138') }}
 

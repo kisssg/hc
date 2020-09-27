@@ -10,6 +10,7 @@ class Callback extends Model {
 	public $city;
 	public $visit_date;
 	public $responsible_person;
+        public $homer_id;
 	public $remark_phone;
 	public $remark_detail;
 	public $actual_paid_amt;
@@ -23,6 +24,7 @@ class Callback extends Model {
 	public $paid_amt_q4;
 	public $is_contacted;
 	public $contact_type;
+	public $contact_info_collector;
 	public $is_harassed;
 	public $harass_type;
 	public $issue_type;

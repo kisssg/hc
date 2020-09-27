@@ -6,4 +6,5 @@ class Users extends Model {
 	public $email;
 	public $level;
 	public $status;
+        public $role;
 }
